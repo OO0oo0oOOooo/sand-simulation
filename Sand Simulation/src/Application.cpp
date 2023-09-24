@@ -6,6 +6,18 @@
 #include <vector>
 #include "Input.h"
 
+// TODO:
+// - Window class
+// - Shader class
+// - Rendering class
+
+
+struct Vertex
+{
+    glm::vec3 position;
+    glm::vec4 color;
+};
+
 void testInput(GLFWwindow* window)
 {
     if (Input::IsKeyPressed(GLFW_MOUSE_BUTTON_LEFT))
@@ -61,40 +73,101 @@ int main(void)
 
     Input::SetupKeyInputs(window);
 
- //   std::vector<float> positions = {
-	//	-1.0f, -1.0f, // 0
-	//	 0.0f,  1.0f, // 1
-	//	 1.0f, -1.0f, // 2
-	//};
+    Vertex vertices[] = {
+        { glm::vec3(-0.5f, -0.5f, 0.0f), glm::vec4(0.9f, 0.8f, 0.2f, 1.0f) }, // bottom left
+        { glm::vec3(-0.5f,  0.5f, 0.0f), glm::vec4(0.9f, 0.2f, 0.8f, 1.0f) }, // top left
+        { glm::vec3( 0.5f, -0.5f, 0.0f), glm::vec4(0.2f, 0.9f, 0.8f, 1.0f) }, // bottom right
+        { glm::vec3( 0.5f,  0.5f, 0.0f), glm::vec4(0.5f, 0.2f, 0.5f, 1.0f) }, // top right
+    };
 
- //   std::vector<unsigned int> indices = {
- //       0, 1, 2
-	//};
+    unsigned int indices[] = {
+        0, 1, 2,
+        2, 1, 3,
+    };
 
- //   unsigned int vao;
- //   glGenVertexArrays(1, &vao);
- //   glBindVertexArray(vao);
+    unsigned int vao;
+    glGenVertexArrays(1, &vao);
+    glBindVertexArray(vao);
 
- //   unsigned int VertexBuffer;
- //   glGenBuffers(1, &VertexBuffer);
- //   glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer);
- //   glBufferData(GL_ARRAY_BUFFER, positions.size() * sizeof(float), positions.data(), GL_STATIC_DRAW);
+    unsigned int vertexBuffer;
+    glGenBuffers(1, &vertexBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
- //   unsigned int IndexBuffer;
- //   glGenBuffers(1, &IndexBuffer);
- //   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IndexBuffer);
- //   glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), indices.data(), GL_STATIC_DRAW);
- //   
- //   glEnableVertexAttribArray(0);
- //   glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, 0);    
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const void*) 0);
+    glEnableVertexAttribArray(0);
 
+    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const void*) 12);
+    glEnableVertexAttribArray(1);
+
+    unsigned int indexBuffer;
+    glGenBuffers(1, &indexBuffer);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+    const char* vertexShaderSource = R"(
+		#version 430 core
+
+		layout (location = 0) in vec3 a_Position;
+		layout (location = 1) in vec4 a_Color;
+
+        out vec4 v_Color;
+
+		void main()
+		{
+			v_Color = a_Color;
+
+			gl_Position = vec4(a_Position, 1.0);
+		}
+	)";
+
+    const char* fragmentShaderSource = R"(
+        #version 430 core
+
+        out vec4 FragColor;
+
+		in vec4 v_Color;
+
+        void main()
+        {
+           FragColor = v_Color;
+        }
+    )";
+
+    unsigned int vertexShader;
+    vertexShader = glCreateShader(GL_VERTEX_SHADER);
+    glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
+    glCompileShader(vertexShader);
+
+    unsigned int fragmentShader;
+    fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
+    glCompileShader(fragmentShader);
+
+    unsigned int shaderProgram;
+    shaderProgram = glCreateProgram();
+
+    glAttachShader(shaderProgram, vertexShader);
+    glAttachShader(shaderProgram, fragmentShader);
+    glLinkProgram(shaderProgram);
+
+    glDeleteShader(vertexShader);
+    glDeleteShader(fragmentShader);
+
+    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+ 
     glViewport(0, 0, windowWidth, windowHeight);
     while (!glfwWindowShouldClose(window))
     {
+        testInput(window);
+
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        testInput(window);
+        glUseProgram(shaderProgram);
+        glBindVertexArray(vao);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
