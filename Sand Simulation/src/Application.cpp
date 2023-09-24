@@ -4,13 +4,15 @@
 
 #include <iostream>
 #include <vector>
+#include "Window.h"
 #include "Input.h"
 
 // TODO:
-// - Window class
 // - Shader class
 // - Rendering class
 
+unsigned int windowWidth = 1280;
+unsigned int windowHeight = 720;
 
 struct Vertex
 {
@@ -18,7 +20,7 @@ struct Vertex
     glm::vec4 color;
 };
 
-void testInput(GLFWwindow* window)
+void testInput(Window window)
 {
     if (Input::IsKeyPressed(GLFW_MOUSE_BUTTON_LEFT))
     {
@@ -27,43 +29,18 @@ void testInput(GLFWwindow* window)
 
     if (Input::IsKeyPressed(GLFW_KEY_ESCAPE))
     {
-        glfwSetWindowShouldClose(window, GLFW_TRUE);
+        window.Close();
     }
 }
 
 int main(void)
 {
-    GLFWwindow* window;
-
     if (!glfwInit())
         return -1;
 
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    glfwWindowHint(GLFW_SCALE_TO_MONITOR, GLFW_TRUE);
-
-    unsigned int windowWidth = 1280;
-    unsigned int windowHeight = 720;
-
-    GLFWmonitor* monitor = NULL; // glfwGetPrimaryMonitor();
-    const GLFWvidmode* mode;
-
-    if (monitor != NULL)
-    {
-        mode = glfwGetVideoMode(monitor);
-        windowWidth = mode->width;
-        windowHeight = mode->height;
-    }
-
-    window = glfwCreateWindow(windowWidth, windowHeight, "Sand Simulation", monitor, NULL);
-    if (!window)
-    {
-        glfwTerminate();
-        return -1;
-    }
-
-    glfwMakeContextCurrent(window);
+    // This might be copying the window object, but I'm not sure
+    Window window(windowWidth, windowHeight, "Sand Simulation");
+    GLFWwindow* glwindow = window.GetNativeWindow();
 
     GLenum err = glewInit();
     if (GLEW_OK != err)
@@ -71,13 +48,13 @@ int main(void)
 
     std::cout << "OpenGL Version: " << glGetString(GL_VERSION) << std::endl;
 
-    Input::SetupKeyInputs(window);
+    Input::SetupKeyInputs(glwindow);
 
     Vertex vertices[] = {
-        { glm::vec3(-0.5f, -0.5f, 0.0f), glm::vec4(0.9f, 0.8f, 0.2f, 1.0f) }, // bottom left
-        { glm::vec3(-0.5f,  0.5f, 0.0f), glm::vec4(0.9f, 0.2f, 0.8f, 1.0f) }, // top left
-        { glm::vec3( 0.5f, -0.5f, 0.0f), glm::vec4(0.2f, 0.9f, 0.8f, 1.0f) }, // bottom right
-        { glm::vec3( 0.5f,  0.5f, 0.0f), glm::vec4(0.5f, 0.2f, 0.5f, 1.0f) }, // top right
+        { glm::vec3(-0.5f, -0.5f, 0.0f), glm::vec4(0.9f, 0.8f, 0.2f, 1.0f) },
+        { glm::vec3(-0.5f,  0.5f, 0.0f), glm::vec4(0.9f, 0.2f, 0.8f, 1.0f) },
+        { glm::vec3( 0.5f, -0.5f, 0.0f), glm::vec4(0.2f, 0.9f, 0.8f, 1.0f) },
+        { glm::vec3( 0.5f,  0.5f, 0.0f), glm::vec4(0.5f, 0.2f, 0.5f, 1.0f) },
     };
 
     unsigned int indices[] = {
@@ -157,7 +134,7 @@ int main(void)
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
  
     glViewport(0, 0, windowWidth, windowHeight);
-    while (!glfwWindowShouldClose(window))
+    while (!glfwWindowShouldClose(glwindow))
     {
         testInput(window);
 
@@ -169,7 +146,7 @@ int main(void)
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
-        glfwSwapBuffers(window);
+        glfwSwapBuffers(glwindow);
         glfwPollEvents();
     }
 
