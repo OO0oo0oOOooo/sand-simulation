@@ -1,33 +1,38 @@
 #include "shader.h"
 
+#include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
-#include <GL/glew.h>
 #include <vector>
 
-Shader::Shader(const char* vertexPath, const char* fragmentPath)
+Shader::Shader()
 {
-	std::string vertexShaderSource = R"(
+    const char* vertexShaderSource = R"(
 		#version 430 core
 
 		layout (location = 0) in vec3 a_Position;
 		layout (location = 1) in vec4 a_Color;
 
+        uniform mat4 u_ViewProjection;
+        uniform mat4 u_Transform;
+
+        out vec3 v_Position;
         out vec4 v_Color;
 
 		void main()
 		{
+			v_Position = a_Position;
 			v_Color = a_Color;
-
-			gl_Position = vec4(a_Position, 1.0);
+			gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);
 		}
 	)";
 
-	std::string fragmentShaderSource = R"(
+    const char* fragmentShaderSource = R"(
         #version 430 core
 
         out vec4 FragColor;
 
+        in vec3 v_Position;
 		in vec4 v_Color;
 
         void main()
@@ -73,4 +78,64 @@ void Shader::Bind()
 void Shader::Unbind()
 {
 	glUseProgram(0);
+}
+
+unsigned int Shader::CompileShader(unsigned int type, const char* filePath)
+{
+    return 0;
+}
+
+void Shader::SetUniform1f(const char* name, float value)
+{
+    glUniform1f(glGetUniformLocation(m_ProgramID, name), value);
+}
+
+void Shader::SetUniform2f(const char* name, glm::vec2 value)
+{
+	glUniform2f(glGetUniformLocation(m_ProgramID, name), value.x, value.y);
+}
+
+void Shader::SetUniform3f(const char* name, glm::vec3 value)
+{
+	glUniform3f(glGetUniformLocation(m_ProgramID, name), value.x, value.y, value.z);
+}
+
+void Shader::SetUniform4f(const char* name, glm::vec4 value)
+{
+	glUniform4f(glGetUniformLocation(m_ProgramID, name), value.x, value.y, value.z, value.w);
+}
+
+void Shader::SetUniform1i(const char* name, int value)
+{
+    glUniform1i(glGetUniformLocation(m_ProgramID, name), value);
+}
+
+void Shader::SetUniform2i(const char* name, glm::ivec2 value)
+{
+    glUniform2i(glGetUniformLocation(m_ProgramID, name), value.x, value.y);
+}
+
+void Shader::SetUniform3i(const char* name, glm::ivec3 value)
+{
+	glUniform3i(glGetUniformLocation(m_ProgramID, name), value.x, value.y, value.z);
+}
+
+void Shader::SetUniform4i(const char* name, glm::ivec4 value)
+{
+	glUniform4i(glGetUniformLocation(m_ProgramID, name), value.x, value.y, value.z, value.w);
+}
+
+void Shader::SetUniformMat2f(const char* name, const glm::mat2& matrix)
+{
+    glUniformMatrix2fv(glGetUniformLocation(m_ProgramID, name), 1, GL_FALSE, &matrix[0][0]);
+}
+
+void Shader::SetUniformMat3f(const char* name, const glm::mat3& matrix)
+{
+    glUniformMatrix3fv(glGetUniformLocation(m_ProgramID, name), 1, GL_FALSE, &matrix[0][0]);
+}
+
+void Shader::SetUniformMat4f(const char* name, const glm::mat4& matrix)
+{
+    glUniformMatrix4fv(glGetUniformLocation(m_ProgramID, name), 1, GL_FALSE, &matrix[0][0]);
 }

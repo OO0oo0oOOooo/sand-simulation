@@ -1,11 +1,15 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include <glm/glm.hpp>
 
 #include <iostream>
 #include <vector>
+
 #include "Window.h"
 #include "Input.h"
+#include "Shader.h"
+
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 // TODO:
 // - Shader class
@@ -82,58 +86,22 @@ int main(void)
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
-    const char* vertexShaderSource = R"(
-		#version 430 core
+    Shader shader;
 
-		layout (location = 0) in vec3 a_Position;
-		layout (location = 1) in vec4 a_Color;
+    glm::mat4 proj = glm::ortho(0.0f, (float)windowWidth, -0.0f, (float)windowHeight, -1.0f, 1.0f);
+    glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f));
+    glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f));
 
-        out vec4 v_Color;
+    model = glm::scale(model, glm::vec3(100.0f));
 
-		void main()
-		{
-			v_Color = a_Color;
+    glm::mat4 VP = proj * view;
 
-			gl_Position = vec4(a_Position, 1.0);
-		}
-	)";
-
-    const char* fragmentShaderSource = R"(
-        #version 430 core
-
-        out vec4 FragColor;
-
-		in vec4 v_Color;
-
-        void main()
-        {
-           FragColor = v_Color;
-        }
-    )";
-
-    unsigned int vertexShader;
-    vertexShader = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-    glCompileShader(vertexShader);
-
-    unsigned int fragmentShader;
-    fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-    glCompileShader(fragmentShader);
-
-    unsigned int shaderProgram;
-    shaderProgram = glCreateProgram();
-
-    glAttachShader(shaderProgram, vertexShader);
-    glAttachShader(shaderProgram, fragmentShader);
-    glLinkProgram(shaderProgram);
-
-    glDeleteShader(vertexShader);
-    glDeleteShader(fragmentShader);
+    shader.Bind();
+    shader.SetUniformMat4f("u_ViewProjection", VP);
+    shader.SetUniformMat4f("u_Transform", model);
 
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
- 
-    glViewport(0, 0, windowWidth, windowHeight);
+    //glViewport(0, 0, windowWidth, windowHeight);
     while (!glfwWindowShouldClose(glwindow))
     {
         testInput(window);
@@ -141,7 +109,7 @@ int main(void)
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        glUseProgram(shaderProgram);
+        shader.Bind();
         glBindVertexArray(vao);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);

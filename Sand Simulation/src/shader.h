@@ -4,14 +4,13 @@
 
 class Shader {
 public:
-	Shader(const char* vertexPath, const char* fragmentPath);
+	Shader();
 	~Shader();
 
 	void Bind();
 	void Unbind();
 
 	unsigned int CompileShader(unsigned int type, const char* filePath);
-
 
 	void SetUniform1f(const char* name, float value);
 	void SetUniform2f(const char* name, glm::vec2 value);
