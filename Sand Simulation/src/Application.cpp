@@ -3,20 +3,44 @@
 
 #include <iostream>
 #include <vector>
+#include <climits>
+#include <list>
 
 #include "Window.h"
 #include "Input.h"
 #include "Shader.h"
+#include "MeshData.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
 // TODO:
-// - Shader class
 // - Rendering class
+// - Grid Resolution
+// - Grid class
+// - Update loop
+
+// - Chunks
+// - each chunk has a grid map. 2D array of bytes, 0 air, 1 sand, 2 water, 3 stone, 4 dirt, 5 grass
+
+// - tick and late tick
+// - every tick, update the grid map
+// - every late tick, render the new grid map if it has changed
+
+struct TerrainData {
+	unsigned char type;
+};
 
 unsigned int windowWidth = 1280;
 unsigned int windowHeight = 720;
+
+unsigned int gridResolution = 16;
+unsigned int tileSize = windowWidth / gridResolution;
+
+unsigned int tilesX = windowWidth / tileSize;
+unsigned int tilesY = windowHeight / tileSize;
+
+std::vector<std::vector<TerrainData>> TerrainMap (tilesX, std::vector<TerrainData>(tilesY));
 
 struct Vertex
 {
@@ -54,17 +78,29 @@ int main(void)
 
     Input::SetupKeyInputs(glwindow);
 
-    Vertex vertices[] = {
-        { glm::vec3(-0.5f, -0.5f, 0.0f), glm::vec4(0.9f, 0.8f, 0.2f, 1.0f) },
-        { glm::vec3(-0.5f,  0.5f, 0.0f), glm::vec4(0.9f, 0.2f, 0.8f, 1.0f) },
-        { glm::vec3( 0.5f, -0.5f, 0.0f), glm::vec4(0.2f, 0.9f, 0.8f, 1.0f) },
-        { glm::vec3( 0.5f,  0.5f, 0.0f), glm::vec4(0.5f, 0.2f, 0.5f, 1.0f) },
-    };
+    std::vector<Vertex> vertices;
+    std::vector<unsigned int> indices;
 
-    unsigned int indices[] = {
-        0, 1, 2,
-        2, 1, 3,
-    };
+    for (int x = 0; x < tilesX; x++)
+    {
+        for (int y = 0; y < tilesY; y++)
+        {
+            TerrainMap[x][y].type = 1;
+
+            if (TerrainMap[x][y].type == 1)
+            {
+                for (int i = 0; i < 4; i++)
+                {
+                    vertices.push_back({ glm::vec3(x, y, 0) * (float)tileSize + vertexPositions[i] * (float)tileSize, vertexColors[i] });
+                }
+
+                for (int i = 0; i < 6; i++)
+                {
+                    indices.push_back(meshTriangles[i] + vertices.size());
+                }
+            }
+        }
+    }
 
     unsigned int vao;
     glGenVertexArrays(1, &vao);
@@ -73,7 +109,7 @@ int main(void)
     unsigned int vertexBuffer;
     glGenBuffers(1, &vertexBuffer);
     glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), vertices.data(), GL_STATIC_DRAW);
 
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const void*) 0);
     glEnableVertexAttribArray(0);
@@ -84,15 +120,13 @@ int main(void)
     unsigned int indexBuffer;
     glGenBuffers(1, &indexBuffer);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), indices.data(), GL_STATIC_DRAW);
 
     Shader shader;
 
-    glm::mat4 proj = glm::ortho(0.0f, (float)windowWidth, -0.0f, (float)windowHeight, -1.0f, 1.0f);
+    glm::mat4 proj = glm::ortho(0.0f, (float)windowWidth, 0.0f, (float)windowHeight, -1.0f, 1.0f);
     glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f));
     glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f));
-
-    model = glm::scale(model, glm::vec3(100.0f));
 
     glm::mat4 VP = proj * view;
 
@@ -106,13 +140,13 @@ int main(void)
     {
         testInput(window);
 
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        //glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
         shader.Bind();
         glBindVertexArray(vao);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
 
         glfwSwapBuffers(glwindow);
         glfwPollEvents();
