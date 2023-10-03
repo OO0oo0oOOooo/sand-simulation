@@ -33,8 +33,8 @@ struct TerrainData {
 
 unsigned int windowWidth = 1280;
 unsigned int windowHeight = 720;
+unsigned int gridResolution = 32;
 
-unsigned int gridResolution = 16;
 unsigned int tileSize = windowWidth / gridResolution;
 
 unsigned int tilesX = windowWidth / tileSize;
@@ -48,11 +48,19 @@ struct Vertex
     glm::vec4 color;
 };
 
+glm::ivec2 GetTileAtPos(glm::vec2 pos)
+{
+	return glm::ivec2((int)(pos.x / tileSize), (int)(pos.y / tileSize));
+}
+
 void testInput(Window window)
 {
     if (Input::IsKeyPressed(GLFW_MOUSE_BUTTON_LEFT))
     {
-		std::cout << "LMB pressed" << std::endl;
+		glm::vec2 mouse = GetTileAtPos(Input::mousePosition);
+		std::cout << "Tile at mouse pos: " << mouse.x << ", " << mouse.y << std::endl;
+
+		TerrainMap[mouse.x][mouse.y].type = 1;
 	}
 
     if (Input::IsKeyPressed(GLFW_KEY_ESCAPE))
@@ -85,18 +93,18 @@ int main(void)
     {
         for (int y = 0; y < tilesY; y++)
         {
-            TerrainMap[x][y].type = 1;
+            TerrainMap[x][y].type = 0;
 
             if (TerrainMap[x][y].type == 1)
             {
                 for (int i = 0; i < 4; i++)
                 {
-                    vertices.push_back({ glm::vec3(x, y, 0) * (float)tileSize + vertexPositions[i] * (float)tileSize, vertexColors[i] });
+                    vertices.push_back({ (glm::vec3(x, y, 0) + vertexPositions[i]) * (float)tileSize, vertexColors[i] });
                 }
 
                 for (int i = 0; i < 6; i++)
                 {
-                    indices.push_back(meshTriangles[i] + vertices.size());
+                    indices.push_back(meshTriangles[i] + (vertices.size() - 4));
                 }
             }
         }
@@ -135,7 +143,7 @@ int main(void)
     shader.SetUniformMat4f("u_Transform", model);
 
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    //glViewport(0, 0, windowWidth, windowHeight);
+    glViewport(0, 0, windowWidth, windowHeight);
     while (!glfwWindowShouldClose(glwindow))
     {
         testInput(window);
