@@ -9,14 +9,13 @@
 #include "Window.h"
 #include "Input.h"
 #include "Shader.h"
-#include "MeshData.h"
+#include "grid.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
 // TODO:
 // - Rendering class
-// - Grid Resolution
 // - Grid class
 // - Update loop
 
@@ -27,41 +26,18 @@
 // - every tick, update the grid map
 // - every late tick, render the new grid map if it has changed
 
-struct TerrainData {
-	unsigned char type;
-};
-
 unsigned int windowWidth = 1280;
 unsigned int windowHeight = 720;
-unsigned int gridResolution = 32;
-
-unsigned int tileSize = windowWidth / gridResolution;
-
-unsigned int tilesX = windowWidth / tileSize;
-unsigned int tilesY = windowHeight / tileSize;
-
-std::vector<std::vector<TerrainData>> TerrainMap (tilesX, std::vector<TerrainData>(tilesY));
-
-struct Vertex
-{
-    glm::vec3 position;
-    glm::vec4 color;
-};
-
-glm::ivec2 GetTileAtPos(glm::vec2 pos)
-{
-	return glm::ivec2((int)(pos.x / tileSize), (int)(pos.y / tileSize));
-}
 
 void testInput(Window window)
 {
-    if (Input::IsKeyPressed(GLFW_MOUSE_BUTTON_LEFT))
+    /*if (Input::IsKeyPressed(GLFW_MOUSE_BUTTON_LEFT))
     {
-		glm::vec2 mouse = GetTileAtPos(Input::mousePosition);
+		glm::vec2 mouse = GetTileIndexFromPos(Input::mousePosition);
 		std::cout << "Tile at mouse pos: " << mouse.x << ", " << mouse.y << std::endl;
 
 		TerrainMap[mouse.x][mouse.y].type = 1;
-	}
+	}*/
 
     if (Input::IsKeyPressed(GLFW_KEY_ESCAPE))
     {
@@ -85,30 +61,8 @@ int main(void)
     std::cout << "OpenGL Version: " << glGetString(GL_VERSION) << std::endl;
 
     Input::SetupKeyInputs(glwindow);
-
-    std::vector<Vertex> vertices;
-    std::vector<unsigned int> indices;
-
-    for (int x = 0; x < tilesX; x++)
-    {
-        for (int y = 0; y < tilesY; y++)
-        {
-            TerrainMap[x][y].type = 0;
-
-            if (TerrainMap[x][y].type == 1)
-            {
-                for (int i = 0; i < 4; i++)
-                {
-                    vertices.push_back({ (glm::vec3(x, y, 0) + vertexPositions[i]) * (float)tileSize, vertexColors[i] });
-                }
-
-                for (int i = 0; i < 6; i++)
-                {
-                    indices.push_back(meshTriangles[i] + (vertices.size() - 4));
-                }
-            }
-        }
-    }
+    Grid grid;
+    grid.UpdateArrays();
 
     unsigned int vao;
     glGenVertexArrays(1, &vao);
@@ -117,7 +71,7 @@ int main(void)
     unsigned int vertexBuffer;
     glGenBuffers(1, &vertexBuffer);
     glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), vertices.data(), GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, grid.m_Vertices.size() * sizeof(Vertex), grid.m_Vertices.data(), GL_STATIC_DRAW);
 
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const void*) 0);
     glEnableVertexAttribArray(0);
@@ -128,7 +82,7 @@ int main(void)
     unsigned int indexBuffer;
     glGenBuffers(1, &indexBuffer);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), indices.data(), GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, grid.m_Indices.size() * sizeof(unsigned int), grid.m_Indices.data(), GL_STATIC_DRAW);
 
     Shader shader;
 
@@ -154,7 +108,7 @@ int main(void)
         shader.Bind();
         glBindVertexArray(vao);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
-        glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLES, grid.m_Indices.size(), GL_UNSIGNED_INT, 0);
 
         glfwSwapBuffers(glwindow);
         glfwPollEvents();

@@ -4,6 +4,7 @@
 
 #include <glm/glm.hpp>
 
+
 struct TerrainData {
 	unsigned char type;
 };
@@ -20,8 +21,7 @@ public:
 	Grid();
 	~Grid();
 
-	void Update();
-
+	void UpdateArrays();
 
 	unsigned int windowWidth = 1280;
 	unsigned int windowHeight = 720;
@@ -32,20 +32,13 @@ public:
 	unsigned int tilesY = windowHeight / tileSize;
 
 	std::vector<std::vector<TerrainData>> TerrainMap;
-
-	unsigned int GetTileSize() { return windowWidth / gridResolution; }
-	unsigned int GetTileX() { return windowWidth / tileSize; }
-	unsigned int GetTileY() { return windowHeight / tileSize; }
+	std::vector<Vertex> m_Vertices;
+	std::vector<unsigned int> m_Indices;
 
 	inline glm::ivec2 GetTileIndexFromPos(glm::vec2 pos)
 	{
 		return glm::ivec2((int)(pos.x / tileSize), (int)(pos.y / tileSize));
 	}
-
-private:
-
-	std::vector<Vertex> m_Vertices;
-	std::vector<unsigned int> m_Indices;
 };
 
 
