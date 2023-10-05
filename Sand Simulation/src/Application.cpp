@@ -3,16 +3,18 @@
 
 #include <iostream>
 #include <vector>
-#include <climits>
-#include <list>
+#include <string>
 
 #include "Window.h"
 #include "Input.h"
-#include "Shader.h"
-#include "grid.h"
+#include "Grid.h"
 
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
+#include "Shader.h"
+#include "vertexBuffer.h"
+#include "IndexBuffer.h"
+
+#include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
 
 // TODO:
 // - Rendering class
@@ -29,15 +31,16 @@
 unsigned int windowWidth = 1280;
 unsigned int windowHeight = 720;
 
-void testInput(Window window)
+void testInput(Window window, Grid grid)
 {
-    /*if (Input::IsKeyPressed(GLFW_MOUSE_BUTTON_LEFT))
+    if (Input::IsKeyPressed(GLFW_MOUSE_BUTTON_LEFT))
     {
-		glm::vec2 mouse = GetTileIndexFromPos(Input::mousePosition);
+		glm::vec2 mouse = grid.GetTileIndexFromPos(Input::mousePosition);
 		std::cout << "Tile at mouse pos: " << mouse.x << ", " << mouse.y << std::endl;
 
-		TerrainMap[mouse.x][mouse.y].type = 1;
-	}*/
+		grid.TerrainMap[mouse.x][mouse.y].type = 1;
+        grid.UpdateArrays();
+	}
 
     if (Input::IsKeyPressed(GLFW_KEY_ESCAPE))
     {
@@ -68,22 +71,14 @@ int main(void)
     glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);
 
-    unsigned int vertexBuffer;
-    glGenBuffers(1, &vertexBuffer);
-    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-    glBufferData(GL_ARRAY_BUFFER, grid.m_Vertices.size() * sizeof(Vertex), grid.m_Vertices.data(), GL_STATIC_DRAW);
-
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const void*) 0);
     glEnableVertexAttribArray(0);
 
     glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const void*) 12);
     glEnableVertexAttribArray(1);
 
-    unsigned int indexBuffer;
-    glGenBuffers(1, &indexBuffer);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, grid.m_Indices.size() * sizeof(unsigned int), grid.m_Indices.data(), GL_STATIC_DRAW);
-
+    VertexBuffer vb(grid.m_Vertices.data(), grid.m_Vertices.size() * sizeof(Vertex));
+    IndexBuffer ib(grid.m_Indices.data(), grid.m_Indices.size());
     Shader shader;
 
     glm::mat4 proj = glm::ortho(0.0f, (float)windowWidth, 0.0f, (float)windowHeight, -1.0f, 1.0f);
@@ -100,14 +95,14 @@ int main(void)
     glViewport(0, 0, windowWidth, windowHeight);
     while (!glfwWindowShouldClose(glwindow))
     {
-        testInput(window);
+        testInput(window, grid);
 
         //glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
         shader.Bind();
         glBindVertexArray(vao);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
+        //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
         glDrawElements(GL_TRIANGLES, grid.m_Indices.size(), GL_UNSIGNED_INT, 0);
 
         glfwSwapBuffers(glwindow);

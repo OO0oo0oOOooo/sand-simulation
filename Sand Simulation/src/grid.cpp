@@ -1,5 +1,6 @@
-#include "grid.h"
+#include "Grid.h"
 #include "MeshData.h"
+#include <GL/glew.h>
 
 Grid::Grid()
 {
@@ -39,4 +40,4 @@ void Grid::UpdateArrays()
             }
         }
     }
-}   
+}
