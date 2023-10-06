@@ -3,6 +3,7 @@
 class IndexBuffer
 {
 public:
+	IndexBuffer();
 	IndexBuffer(const unsigned int* data, unsigned int count);
 	~IndexBuffer();
 
