@@ -10,6 +10,8 @@ public:
 	void Bind();
 	void Unbind();
 
+	void UpdateData(const unsigned int* data, unsigned int count);
+
 	inline unsigned int GetCount() const { return m_Count; }
 
 private:

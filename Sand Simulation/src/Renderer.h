@@ -36,7 +36,7 @@ public:
 
 	unsigned int windowWidth = 1280;
 	unsigned int windowHeight = 720;
-	unsigned int gridResolution = 32;
+	unsigned int gridResolution = 64;
 
 	unsigned int tileSize = windowWidth / gridResolution;
 	unsigned int tilesX = windowWidth / tileSize;
@@ -49,12 +49,13 @@ public:
 
 	std::vector<std::vector<TerrainData>> TerrainMap;
 
-private:
 	std::vector<Vertex> m_Vertices;
 	std::vector<unsigned int> m_Indices;
+	
+private:
+	unsigned int* vao;
+	VertexBuffer* vb;
+	IndexBuffer* ib;
+	Shader* shader;
 
-	unsigned int vao;
-	VertexBuffer vb;
-	IndexBuffer ib;
-	Shader shader;
 };

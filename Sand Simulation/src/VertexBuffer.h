@@ -10,6 +10,8 @@ public:
 	void Bind();
 	void Unbind();
 
+	void UpdateData(const void* data, unsigned int size);
+
 private:
 	unsigned int m_RendererID;
 };

@@ -8,8 +8,6 @@
 #include "Renderer.h"
 
 // TODO:
-// - Rendering class
-// - Grid class
 // - Update loop
 
 // - Chunks
@@ -22,16 +20,17 @@
 unsigned int windowWidth = 1280;
 unsigned int windowHeight = 720;
 
-void testInput(Window window)
+void testInput(Window window, Renderer* renderer)
 {
-    /*if (Input::IsKeyPressed(GLFW_MOUSE_BUTTON_LEFT))
+    
+    if (Input::IsKeyPressed(GLFW_MOUSE_BUTTON_LEFT))
     {
-		glm::vec2 mouse = grid.GetTileIndexFromPos(Input::mousePosition);
+		glm::vec2 mouse = renderer->GetTileIndexFromPos(Input::mousePosition);
 		std::cout << "Tile at mouse pos: " << mouse.x << ", " << mouse.y << std::endl;
 
-		grid.TerrainMap[mouse.x][mouse.y].type = 1;
-        grid.UpdateArrays();
-	}*/
+		renderer->TerrainMap[mouse.x][mouse.y].type = 0;
+        renderer->UpdateBuffers();
+	}
 
     if (Input::IsKeyPressed(GLFW_KEY_ESCAPE))
     {
@@ -54,51 +53,23 @@ int main(void)
 
     std::cout << "OpenGL Version: " << glGetString(GL_VERSION) << std::endl;
 
-    Renderer renderer;
+    Renderer* renderer = new Renderer();
     Input::SetupKeyInputs(glwindow);
-
-    /*Grid grid;
-    grid.UpdateArrays();
-
-    unsigned int vao;
-    glGenVertexArrays(1, &vao);
-    glBindVertexArray(vao);
-
-    VertexBuffer vb(grid.m_Vertices.data(), grid.m_Vertices.size() * sizeof(Vertex));
-   
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const void*)0);
-    glEnableVertexAttribArray(0);
-
-    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const void*)12);
-    glEnableVertexAttribArray(1);
-
-    IndexBuffer ib(grid.m_Indices.data(), grid.m_Indices.size() * sizeof(unsigned int));
-
-    Shader shader;
-
-    glm::mat4 proj = glm::ortho(0.0f, (float)windowWidth, 0.0f, (float)windowHeight, -1.0f, 1.0f);
-    glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f));
-    glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f));
-
-    glm::mat4 VP = proj * view;
-
-    shader.Bind();
-    shader.SetUniformMat4f("u_ViewProjection", VP);
-    shader.SetUniformMat4f("u_Transform", model);*/
 
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     glViewport(0, 0, windowWidth, windowHeight);
     while (!glfwWindowShouldClose(glwindow))
     {
-        testInput(window);
+        testInput(window, renderer);
 
-        renderer.Clear();
-        renderer.Draw();
+        renderer->Clear();
+        renderer->Draw();
 
         glfwSwapBuffers(glwindow);
         glfwPollEvents();
     }
 
+    delete renderer;
     glfwTerminate();
     return 0;
 }
