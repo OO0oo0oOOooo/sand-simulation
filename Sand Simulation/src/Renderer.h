@@ -25,9 +25,6 @@ public:
 	Renderer();
 	~Renderer();
 
-	void AddVertex(Vertex vertex);
-	void AddIndex(unsigned int index);
-
 	void GenerateTerrainMap();
 	void UpdateBuffers();
 
@@ -36,7 +33,7 @@ public:
 
 	unsigned int windowWidth = 1280;
 	unsigned int windowHeight = 720;
-	unsigned int gridResolution = 64;
+	unsigned int gridResolution = 16;
 
 	unsigned int tileSize = windowWidth / gridResolution;
 	unsigned int tilesX = windowWidth / tileSize;
@@ -44,13 +41,10 @@ public:
 
 	inline glm::ivec2 GetTileIndexFromPos(glm::vec2 pos)
 	{
-		return glm::ivec2((int)(pos.x / tileSize), (int)(pos.y / tileSize));
+		return glm::ivec2((int)(pos.x / tileSize), (int)(pos.y / (tileSize)));
 	}
 
 	std::vector<std::vector<TerrainData>> TerrainMap;
-
-	std::vector<Vertex> m_Vertices;
-	std::vector<unsigned int> m_Indices;
 	
 private:
 	unsigned int* vao;

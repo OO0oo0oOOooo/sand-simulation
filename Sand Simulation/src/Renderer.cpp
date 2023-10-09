@@ -2,14 +2,16 @@
 
 #include "MeshData.h"
 
+#include <iostream>
+
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 
 Renderer::Renderer()
 {
     vao = new unsigned int;
-    vb = new VertexBuffer(m_Vertices.data(), m_Vertices.size() * sizeof(Vertex));
-    ib = new IndexBuffer(m_Indices.data(), m_Indices.size() * sizeof(unsigned int));
+    vb = new VertexBuffer(0, 0);
+    ib = new IndexBuffer(0, 0);
     shader = new Shader();
 
     glm::mat4 proj = glm::ortho(0.0f, (float)windowWidth, 0.0f, (float)windowHeight, -1.0f, 1.0f);
@@ -53,7 +55,7 @@ void Renderer::Draw()
     glBindVertexArray(*vao);
     shader->Bind();
     ib->Bind();
-    glDrawElements(GL_TRIANGLES, m_Indices.size(), GL_UNSIGNED_INT, 0);
+    glDrawElements(GL_TRIANGLES, ib->GetCount(), GL_UNSIGNED_INT, 0);
 }
 
 void Renderer::GenerateTerrainMap()
@@ -71,8 +73,8 @@ void Renderer::GenerateTerrainMap()
 
 void Renderer::UpdateBuffers()
 {
-	m_Vertices.clear();
-	m_Indices.clear();
+    std::vector<Vertex> vertices;
+    std::vector<unsigned int> indices;
 
     for (int x = 0; x < tilesX; x++)
     {
@@ -82,17 +84,20 @@ void Renderer::UpdateBuffers()
             {
                 for (int i = 0; i < 4; i++)
                 {
-                    m_Vertices.push_back({ (glm::vec3(x, y, 0) + vertexPositions[i]) * (float)tileSize, vertexColors[i] });
-				}
+                    vertices.push_back({ (glm::vec3(x, y, 0) + vertexPositions[i]) * (float)tileSize, vertexColors[i] });
+                }
 
                 for (int i = 0; i < 6; i++)
                 {
-                    m_Indices.push_back(meshTriangles[i] + (m_Vertices.size() - 4));
-				}
-			}
-		}
-	}
+                    indices.push_back(meshTriangles[i] + (vertices.size() - 4));
+                }
+            }
+        }
+    }
 
-    vb->UpdateData(m_Vertices.data(), m_Vertices.size() * sizeof(Vertex));
-    ib->UpdateData(m_Indices.data(), m_Indices.size() * sizeof(unsigned int));
+    std::cout << "Vertices: " << vertices.size() << std::endl;
+    std::cout << "Indices: " << indices.size() << std::endl;
+
+    vb->UpdateData(vertices.data(), vertices.size() * sizeof(Vertex));
+    ib->UpdateData(indices.data(), indices.size());
 }

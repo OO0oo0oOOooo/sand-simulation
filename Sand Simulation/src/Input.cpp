@@ -56,8 +56,14 @@ namespace Input {
 
 	void MousePositionCallback(GLFWwindow* window, double xpos, double ypos)
 	{
+		if(xpos > 1280 || xpos < 0)
+			return;
+
+		if (ypos > 720 || ypos < 0)
+			return;
+
 		mousePosition.x = (float)xpos;
-		mousePosition.y = (float)ypos;
+		mousePosition.y = 720-(float)ypos;
 	}
 
 	void MouseScrollCallback(GLFWwindow* window, double xoffset, double yoffset)
