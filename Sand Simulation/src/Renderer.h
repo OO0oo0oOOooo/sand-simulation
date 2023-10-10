@@ -9,9 +9,7 @@
 #include "vertexBuffer.h"
 #include "IndexBuffer.h"
 
-struct TerrainData {
-	unsigned char type;
-};
+#include "Particle.h"
 
 struct Vertex
 {
@@ -33,7 +31,7 @@ public:
 
 	unsigned int windowWidth = 1280;
 	unsigned int windowHeight = 720;
-	unsigned int gridResolution = 16;
+	unsigned int gridResolution = 64;
 
 	unsigned int tileSize = windowWidth / gridResolution;
 	unsigned int tilesX = windowWidth / tileSize;
@@ -44,12 +42,11 @@ public:
 		return glm::ivec2((int)(pos.x / tileSize), (int)(pos.y / (tileSize)));
 	}
 
-	std::vector<std::vector<TerrainData>> TerrainMap;
+	std::vector<std::vector<Particle>> TerrainMap;
 	
 private:
 	unsigned int* vao;
 	VertexBuffer* vb;
 	IndexBuffer* ib;
 	Shader* shader;
-
 };

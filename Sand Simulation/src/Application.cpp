@@ -22,13 +22,18 @@ unsigned int windowHeight = 720;
 
 void testInput(Window window, Renderer* renderer)
 {
-    
     if (Input::IsKeyPressed(GLFW_MOUSE_BUTTON_LEFT))
     {
 		glm::vec2 mouse = renderer->GetTileIndexFromPos(Input::mousePosition);
 		std::cout << "Tile at mouse pos: " << mouse.x << ", " << mouse.y << std::endl;
 
-		renderer->TerrainMap[mouse.x][mouse.y].type = 0;
+        if (mouse.x > renderer->tilesX || mouse.x < 0)
+            return;
+
+        if (mouse.y > renderer->tilesY || mouse.y < 0)
+            return;
+
+        renderer->TerrainMap[mouse.x][mouse.y] = { 1, {0.9f, 0.8f, 0.2f, 1.0f }};
         renderer->UpdateBuffers();
 	}
 
@@ -61,6 +66,14 @@ int main(void)
     while (!glfwWindowShouldClose(glwindow))
     {
         testInput(window, renderer);
+
+        // Update each cell in grid
+        //for (int x = 0; x < renderer->tilesX; x++)
+        //    for (int y = 0; y < renderer->tilesY; y++)
+
+        // Update particles
+        // UpdateSand()
+		// UpdateWater()
 
         renderer->Clear();
         renderer->Draw();

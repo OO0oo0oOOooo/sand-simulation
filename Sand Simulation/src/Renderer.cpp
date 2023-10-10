@@ -2,8 +2,6 @@
 
 #include "MeshData.h"
 
-#include <iostream>
-
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 
@@ -23,6 +21,7 @@ Renderer::Renderer()
     shader->Bind();
     shader->SetUniformMat4f("u_ViewProjection", VP);
     shader->SetUniformMat4f("u_Transform", model);
+    shader->SetUniform4f("u_Color", glm::vec4(0.0f, 0.0f, 0.0f, 0.0f));
 
     glGenVertexArrays(1, vao);
     glBindVertexArray(*vao);
@@ -58,18 +57,20 @@ void Renderer::Draw()
     glDrawElements(GL_TRIANGLES, ib->GetCount(), GL_UNSIGNED_INT, 0);
 }
 
+Particle AirParticle = { 0, { 0.0f, 0.0f, 0.0f, 0.0f } };
+
 void Renderer::GenerateTerrainMap()
 {
-    TerrainMap = std::vector<std::vector<TerrainData>>(tilesX, std::vector<TerrainData>(tilesY));
+    TerrainMap = std::vector<std::vector<Particle>>(tilesX, std::vector<Particle>(tilesY));
 
     for (int x = 0; x < tilesX; x++)
     {
         for (int y = 0; y < tilesY; y++)
         {
-            TerrainMap[x][y].type = 1;
+            TerrainMap[x][y] = AirParticle;
         }
     }
-}
+} 
 
 void Renderer::UpdateBuffers()
 {
@@ -80,11 +81,14 @@ void Renderer::UpdateBuffers()
     {
         for (int y = 0; y < tilesY; y++)
         {
-            if (TerrainMap[x][y].type == 1)
+            unsigned char id = TerrainMap[x][y].type;
+            glm::vec4 color = TerrainMap[x][y].color;
+
+            if (id == 1)
             {
                 for (int i = 0; i < 4; i++)
                 {
-                    vertices.push_back({ (glm::vec3(x, y, 0) + vertexPositions[i]) * (float)tileSize, vertexColors[i] });
+                    vertices.push_back({ (glm::vec3(x, y, 0) + vertexPositions[i]) * (float)tileSize, color });
                 }
 
                 for (int i = 0; i < 6; i++)
@@ -94,9 +98,6 @@ void Renderer::UpdateBuffers()
             }
         }
     }
-
-    std::cout << "Vertices: " << vertices.size() << std::endl;
-    std::cout << "Indices: " << indices.size() << std::endl;
 
     vb->UpdateData(vertices.data(), vertices.size() * sizeof(Vertex));
     ib->UpdateData(indices.data(), indices.size());

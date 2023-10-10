@@ -56,10 +56,10 @@ namespace Input {
 
 	void MousePositionCallback(GLFWwindow* window, double xpos, double ypos)
 	{
-		if(xpos > 1280 || xpos < 0)
+		if(xpos >= 1280 || xpos <= 0)
 			return;
 
-		if (ypos > 720 || ypos < 0)
+		if (ypos >= 720 || ypos <= 0)
 			return;
 
 		mousePosition.x = (float)xpos;
