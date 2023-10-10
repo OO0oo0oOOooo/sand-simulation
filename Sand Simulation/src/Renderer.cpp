@@ -81,20 +81,14 @@ void Renderer::UpdateBuffers()
     {
         for (int y = 0; y < tilesY; y++)
         {
-            unsigned char id = TerrainMap[x][y].type;
-            glm::vec4 color = TerrainMap[x][y].color;
-
-            if (id == 1)
+            for (int i = 0; i < 4; i++)
             {
-                for (int i = 0; i < 4; i++)
-                {
-                    vertices.push_back({ (glm::vec3(x, y, 0) + vertexPositions[i]) * (float)tileSize, color });
-                }
+                vertices.push_back({ (glm::vec3(x, y, 0) + vertexPositions[i]) * (float)tileSize, TerrainMap[x][y].color });
+            }
 
-                for (int i = 0; i < 6; i++)
-                {
-                    indices.push_back(meshTriangles[i] + (vertices.size() - 4));
-                }
+            for (int i = 0; i < 6; i++)
+            {
+                indices.push_back(meshTriangles[i] + (vertices.size() - 4));
             }
         }
     }

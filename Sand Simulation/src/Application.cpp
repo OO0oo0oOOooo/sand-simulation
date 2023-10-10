@@ -20,12 +20,44 @@
 unsigned int windowWidth = 1280;
 unsigned int windowHeight = 720;
 
+unsigned int selectedParticle = 1;
+
+Particle GetSelectedParticle()
+{
+    switch (selectedParticle)
+    {
+    case 0:
+        return { 0, { 0.0f, 0.0f, 0.0f, 0.0f } };
+
+    case 1:
+        return { 1, { 0.9f, 0.8f, 0.2f, 1.0f } };
+
+    case 2:
+        return { 2, { 0.2f, 0.9f, 0.8f, 1.0f } };
+
+    case 3:
+		return { 3, { 0.5f, 0.2f, 0.5f, 1.0f } };
+
+    case 4:
+        return { 4, { 0.4f, 0.2f, 0.1f, 1.0f } };
+
+    case 5:
+        return { 5, { 0.3f, 0.3f, 0.3f, 1.0f } };
+
+    case 6:
+        return { 6, { 0.2f, 0.2f, 0.2f, 1.0f } };
+
+    default:
+        break;
+    }
+}
+
 void testInput(Window window, Renderer* renderer)
 {
     if (Input::IsKeyPressed(GLFW_MOUSE_BUTTON_LEFT))
     {
 		glm::vec2 mouse = renderer->GetTileIndexFromPos(Input::mousePosition);
-		std::cout << "Tile at mouse pos: " << mouse.x << ", " << mouse.y << std::endl;
+		//std::cout << "Tile at mouse pos: " << mouse.x << ", " << mouse.y << std::endl;
 
         if (mouse.x > renderer->tilesX || mouse.x < 0)
             return;
@@ -33,13 +65,38 @@ void testInput(Window window, Renderer* renderer)
         if (mouse.y > renderer->tilesY || mouse.y < 0)
             return;
 
-        renderer->TerrainMap[mouse.x][mouse.y] = { 1, {0.9f, 0.8f, 0.2f, 1.0f }};
+        renderer->TerrainMap[(unsigned int)mouse.x][(unsigned int)mouse.y] = GetSelectedParticle();
         renderer->UpdateBuffers();
 	}
 
     if (Input::IsKeyPressed(GLFW_KEY_ESCAPE))
     {
         window.Close();
+    }
+
+    if (Input::IsKeyPressed(GLFW_KEY_1))
+    {
+        selectedParticle = 1;
+    }
+
+    if (Input::IsKeyPressed(GLFW_KEY_2))
+    {
+        selectedParticle = 2;
+    }
+
+    if (Input::IsKeyPressed(GLFW_KEY_3))
+    {
+        selectedParticle = 3;
+    }
+
+    if (Input::IsKeyPressed(GLFW_KEY_4))
+    {
+        selectedParticle = 4;
+    }
+
+    if (Input::IsKeyPressed(GLFW_KEY_5))
+    {
+        selectedParticle = 5;
     }
 }
 
