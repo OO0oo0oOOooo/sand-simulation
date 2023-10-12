@@ -7,6 +7,8 @@
 #include "Input.h"
 #include "Renderer.h"
 
+#include "ParticleData.h"
+
 // TODO:
 // - Update loop
 
@@ -20,84 +22,84 @@
 unsigned int windowWidth = 1280;
 unsigned int windowHeight = 720;
 
-unsigned int selectedParticle = 1;
+ParticleSelection selectedParticle = Sand;
 
-Particle GetSelectedParticle()
+Particle GetSelectedParticle(ParticleSelection selection)
 {
-    switch (selectedParticle)
-    {
-    case 0:
-        return { 0, { 0.0f, 0.0f, 0.0f, 0.0f } };
+	switch (selection)
+	{
+	case Air:
+		return ParticleAir;
 
-    case 1:
-        return { 1, { 0.9f, 0.8f, 0.2f, 1.0f } };
+	case Sand:
+		return ParticleSand;
 
-    case 2:
-        return { 2, { 0.2f, 0.9f, 0.8f, 1.0f } };
+	case Water:
+		return ParticleWater;
 
-    case 3:
-		return { 3, { 0.5f, 0.2f, 0.5f, 1.0f } };
+	case Rock:
+		return ParticleRock;
 
-    case 4:
-        return { 4, { 0.4f, 0.2f, 0.1f, 1.0f } };
+	case Wood:
+		return ParticleWood;
 
-    case 5:
-        return { 5, { 0.3f, 0.3f, 0.3f, 1.0f } };
+	case Metal:
+		return ParticleMetal;
 
-    case 6:
-        return { 6, { 0.2f, 0.2f, 0.2f, 1.0f } };
+	case Gunpowder:
+		return ParticleGunpowder;
 
-    default:
-        break;
-    }
+	default:
+		break;
+	}
 }
 
-void testInput(Window window, Renderer* renderer)
+void TestInput(Window window, Renderer* renderer)
 {
-    if (Input::IsKeyPressed(GLFW_MOUSE_BUTTON_LEFT))
-    {
+	if (Input::IsKeyPressed(GLFW_MOUSE_BUTTON_LEFT))
+	{
 		glm::vec2 mouse = renderer->GetTileIndexFromPos(Input::mousePosition);
 		//std::cout << "Tile at mouse pos: " << mouse.x << ", " << mouse.y << std::endl;
 
-        if (mouse.x > renderer->tilesX || mouse.x < 0)
-            return;
+		if (mouse.x > renderer->tilesX || mouse.x < 0)
+			return;
 
-        if (mouse.y > renderer->tilesY || mouse.y < 0)
-            return;
+		if (mouse.y > renderer->tilesY || mouse.y < 0)
+			return;
 
-        renderer->TerrainMap[(unsigned int)mouse.x][(unsigned int)mouse.y] = GetSelectedParticle();
-        renderer->UpdateBuffers();
+		renderer->TerrainMap[(unsigned int)mouse.x][(unsigned int)mouse.y] = GetSelectedParticle(selectedParticle);
+		renderer->UpdateBuffers();
 	}
 
-    if (Input::IsKeyPressed(GLFW_KEY_ESCAPE))
-    {
-        window.Close();
-    }
+	if (Input::IsKeyPressed(GLFW_KEY_ESCAPE))
+	{
+		window.Close();
+	}
 
-    if (Input::IsKeyPressed(GLFW_KEY_1))
-    {
-        selectedParticle = 1;
-    }
+	if (Input::IsKeyPressed(GLFW_KEY_1))
+	{
+		selectedParticle = Sand;
+	}
 
-    if (Input::IsKeyPressed(GLFW_KEY_2))
-    {
-        selectedParticle = 2;
-    }
+	if (Input::IsKeyPressed(GLFW_KEY_2))
+	{
+		selectedParticle = Water;
+	}
 
-    if (Input::IsKeyPressed(GLFW_KEY_3))
-    {
-        selectedParticle = 3;
-    }
+	if (Input::IsKeyPressed(GLFW_KEY_3))
+	{
+		selectedParticle = Rock;
+	}
 
-    if (Input::IsKeyPressed(GLFW_KEY_4))
-    {
-        selectedParticle = 4;
-    }
+	if (Input::IsKeyPressed(GLFW_KEY_4))
+	{
+		selectedParticle = Wood;
+	}
 
-    if (Input::IsKeyPressed(GLFW_KEY_5))
-    {
-        selectedParticle = 5;
-    }
+	if (Input::IsKeyPressed(GLFW_KEY_5))
+	{
+		selectedParticle = Metal;
+	}
 }
 
 int main(void)
@@ -122,7 +124,7 @@ int main(void)
     glViewport(0, 0, windowWidth, windowHeight);
     while (!glfwWindowShouldClose(glwindow))
     {
-        testInput(window, renderer);
+        TestInput(window, renderer);
 
         // Update each cell in grid
         //for (int x = 0; x < renderer->tilesX; x++)
@@ -143,3 +145,4 @@ int main(void)
     glfwTerminate();
     return 0;
 }
+

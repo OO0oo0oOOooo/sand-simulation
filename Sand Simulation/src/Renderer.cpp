@@ -1,6 +1,5 @@
 #include "Renderer.h"
-
-#include "MeshData.h"
+#include "ParticleData.h"
 
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
@@ -57,8 +56,6 @@ void Renderer::Draw()
     glDrawElements(GL_TRIANGLES, ib->GetCount(), GL_UNSIGNED_INT, 0);
 }
 
-Particle AirParticle = { 0, { 0.0f, 0.0f, 0.0f, 0.0f } };
-
 void Renderer::GenerateTerrainMap()
 {
     TerrainMap = std::vector<std::vector<Particle>>(tilesX, std::vector<Particle>(tilesY));
@@ -67,7 +64,7 @@ void Renderer::GenerateTerrainMap()
     {
         for (int y = 0; y < tilesY; y++)
         {
-            TerrainMap[x][y] = AirParticle;
+            TerrainMap[x][y] = ParticleAir;
         }
     }
 } 

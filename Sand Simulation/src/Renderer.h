@@ -9,7 +9,7 @@
 #include "vertexBuffer.h"
 #include "IndexBuffer.h"
 
-#include "Particle.h"
+#include "ParticleData.h"
 
 struct Vertex
 {

@@ -9,8 +9,6 @@
 
 #include "Window.h"
 #include "Input.h"
-#include "Grid.h"
-
 
 #include "Shader.h"
 #include "vertexBuffer.h"

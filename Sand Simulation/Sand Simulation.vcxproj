@@ -164,8 +164,7 @@
     <ClInclude Include="src\Core.h" />
     <ClInclude Include="src\IndexBuffer.h" />
     <ClInclude Include="src\Input.h" />
-    <ClInclude Include="src\MeshData.h" />
-    <ClInclude Include="src\Particle.h" />
+    <ClInclude Include="src\ParticleData.h" />
     <ClInclude Include="src\Renderer.h" />
     <ClInclude Include="src\shader.h" />
     <ClInclude Include="src\vendor\glm\common.hpp" />
