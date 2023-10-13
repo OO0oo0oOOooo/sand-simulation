@@ -14,7 +14,6 @@ struct Particle
 	//unsigned int Flammability;
 	//unsigned int Hardness;
 	//unsigned int Density;
-	//unsigned int Viscosity;
 	//unsigned int Buoyancy;
 
 	//unsigned int GasTemp;
@@ -55,6 +54,8 @@ const unsigned int meshTriangles[] = {
 	0, 1, 2,
 	2, 1, 3,
 };
+
+
 
 //glm::vec4 debugColors[] = {
 //	glm::vec4(0.9f, 0.8f, 0.2f, 1.0f),

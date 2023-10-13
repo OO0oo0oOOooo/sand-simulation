@@ -59,7 +59,7 @@ void TestInput(Window window, Renderer* renderer)
 	if (Input::IsKeyPressed(GLFW_MOUSE_BUTTON_LEFT))
 	{
 		glm::vec2 mouse = renderer->GetTileIndexFromPos(Input::mousePosition);
-		//std::cout << "Tile at mouse pos: " << mouse.x << ", " << mouse.y << std::endl;
+		std::cout << "Tile at mouse pos: " << mouse.x << ", " << mouse.y << std::endl;
 
 		if (mouse.x > renderer->tilesX || mouse.x < 0)
 			return;
@@ -102,6 +102,49 @@ void TestInput(Window window, Renderer* renderer)
 	}
 }
 
+Particle GetParticle(Renderer* renderer, int x, int y)
+{
+	return renderer->TerrainMap[x][y];
+}
+
+void SetParticle(Renderer* renderer, int x, int y, Particle particle)
+{
+	renderer->TerrainMap[x][y] = particle;
+}
+
+void UpdateSand(Renderer* renderer)
+{
+	for (int x = 0; x <= renderer->tilesX; x++)
+	{
+		for (int y = 0; y <= renderer->tilesY; y++)
+		{
+
+			if (GetParticle(renderer, x, y).type == ParticleSand.type)
+			{
+
+
+				if (GetParticle(renderer, x, y + 1).type == ParticleAir.type)
+				{
+					SetParticle(renderer, x, y, ParticleAir);
+					SetParticle(renderer, x, y + 1, ParticleSand);
+				}
+				else if (GetParticle(renderer, x + 1, y + 1).type == ParticleAir.type)
+				{
+					SetParticle(renderer, x, y, ParticleAir);
+					SetParticle(renderer, x + 1, y + 1, ParticleSand);
+				}
+				else if (GetParticle(renderer, x - 1, y + 1).type == ParticleAir.type)
+				{
+					SetParticle(renderer, x, y, ParticleAir);
+					SetParticle(renderer, x - 1, y + 1, ParticleSand);
+				}
+
+			}
+
+		}
+	}
+}
+
 int main(void)
 {
     if (!glfwInit())
@@ -131,7 +174,7 @@ int main(void)
         //    for (int y = 0; y < renderer->tilesY; y++)
 
         // Update particles
-        // UpdateSand()
+		// UpdateSand(renderer);
 		// UpdateWater()
 
         renderer->Clear();
