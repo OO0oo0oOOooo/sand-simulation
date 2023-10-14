@@ -23,25 +23,27 @@ struct Particle
 
 enum ParticleSelection
 {
-	Air = 0,
-	Sand = 1,
-	Water = 2,
-	Rock = 3,
-	Wood = 4,
-	Metal = 5,
-	Gunpowder = 6,
-	Fire = 7,
-	Smoke = 8,
-	Steam = 9,
+	Void = 0,
+	Air,
+	Sand,
+	Water,
+	Rock,
+	Wood,
+	Metal,
+	Gunpowder,
+	Fire,
+	Smoke,
+	Steam,
 };
 
-const Particle ParticleAir =       { 0, { 0.0f, 0.0f, 0.0f, 1.0f } };
-const Particle ParticleSand =      { 1, { 0.9f, 0.7f, 0.2f, 1.0f } };
-const Particle ParticleWater =     { 2, { 0.2f, 0.5f, 0.8f, 1.0f } };
-const Particle ParticleRock =      { 3, { 0.5f, 0.5f, 0.5f, 1.0f } };
-const Particle ParticleWood =	   { 4, { 0.4f, 0.2f, 0.1f, 1.0f } };
-const Particle ParticleMetal =     { 5, { 0.3f, 0.3f, 0.3f, 1.0f } };
-const Particle ParticleGunpowder = { 6, { 0.2f, 0.2f, 0.2f, 1.0f } };
+const Particle ParticleVoid =      { 0, { 0.0f, 0.0f, 0.0f, 0.0f } };
+const Particle ParticleAir =       { 1, { 0.1f, 0.1f, 0.1f, 1.0f } };
+const Particle ParticleSand =      { 2, { 0.9f, 0.7f, 0.2f, 1.0f } };
+const Particle ParticleWater =     { 3, { 0.2f, 0.5f, 0.8f, 1.0f } };
+const Particle ParticleRock =      { 4, { 0.5f, 0.5f, 0.5f, 1.0f } };
+const Particle ParticleWood =	   { 5, { 0.4f, 0.2f, 0.1f, 1.0f } };
+const Particle ParticleMetal =     { 6, { 0.3f, 0.3f, 0.3f, 1.0f } };
+const Particle ParticleGunpowder = { 7, { 0.2f, 0.2f, 0.2f, 1.0f } };
 
 const glm::vec3 vertexPositions[] = {
 	glm::vec3(-0.0f, -0.0f, 0.0f),
@@ -54,8 +56,6 @@ const unsigned int meshTriangles[] = {
 	0, 1, 2,
 	2, 1, 3,
 };
-
-
 
 //glm::vec4 debugColors[] = {
 //	glm::vec4(0.9f, 0.8f, 0.2f, 1.0f),
@@ -80,6 +80,7 @@ const unsigned int meshTriangles[] = {
 
 // Main Particles
 
+// Void
 // Air
 // Sand/Motlten Glass/Glass
 // Dirt/Grass
@@ -103,3 +104,5 @@ const unsigned int meshTriangles[] = {
 // Frost
 // Heat
 // Shock
+
+

@@ -112,36 +112,30 @@ void SetParticle(Renderer* renderer, int x, int y, Particle particle)
 	renderer->TerrainMap[x][y] = particle;
 }
 
-void UpdateSand(Renderer* renderer)
+void UpdateSand(Renderer* renderer, int x, int y)
 {
-	for (int x = 0; x <= renderer->tilesX; x++)
+	if (y < 0)
+		return;
+
+	if (GetParticle(renderer, x, y).type == ParticleSand.type)
 	{
-		for (int y = 0; y <= renderer->tilesY; y++)
+
+		if (GetParticle(renderer, x, y - 1).type == ParticleAir.type)
 		{
-
-			if (GetParticle(renderer, x, y).type == ParticleSand.type)
-			{
-
-
-				if (GetParticle(renderer, x, y + 1).type == ParticleAir.type)
-				{
-					SetParticle(renderer, x, y, ParticleAir);
-					SetParticle(renderer, x, y + 1, ParticleSand);
-				}
-				else if (GetParticle(renderer, x + 1, y + 1).type == ParticleAir.type)
-				{
-					SetParticle(renderer, x, y, ParticleAir);
-					SetParticle(renderer, x + 1, y + 1, ParticleSand);
-				}
-				else if (GetParticle(renderer, x - 1, y + 1).type == ParticleAir.type)
-				{
-					SetParticle(renderer, x, y, ParticleAir);
-					SetParticle(renderer, x - 1, y + 1, ParticleSand);
-				}
-
-			}
-
+			SetParticle(renderer, x, y, ParticleAir);
+			SetParticle(renderer, x, y - 1, ParticleSand);
 		}
+		else if (GetParticle(renderer, x + 1, y - 1).type == ParticleAir.type)
+		{
+			SetParticle(renderer, x, y, ParticleAir);
+			SetParticle(renderer, x + 1, y - 1, ParticleSand);
+		}
+		else if (GetParticle(renderer, x - 1, y - 1).type == ParticleAir.type)
+		{
+			SetParticle(renderer, x, y, ParticleAir);
+			SetParticle(renderer, x - 1, y - 1, ParticleSand);
+		}
+
 	}
 }
 
@@ -170,12 +164,14 @@ int main(void)
         TestInput(window, renderer);
 
         // Update each cell in grid
-        //for (int x = 0; x < renderer->tilesX; x++)
-        //    for (int y = 0; y < renderer->tilesY; y++)
-
-        // Update particles
-		// UpdateSand(renderer);
-		// UpdateWater()
+		for (int x = 0; x < renderer->tilesX; x++)
+		{
+			for (int y = 0; y < renderer->tilesY; y++)
+			{
+				UpdateSand(renderer, x, y);
+				// UpdateWater()
+			}
+		}
 
         renderer->Clear();
         renderer->Draw();
