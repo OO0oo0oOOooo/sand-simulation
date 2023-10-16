@@ -6,6 +6,7 @@
 #include "Window.h"
 #include "Input.h"
 #include "Renderer.h"
+#include "Grid.h"
 
 #include "ParticleData.h"
 
@@ -21,6 +22,7 @@
 
 unsigned int windowWidth = 1280;
 unsigned int windowHeight = 720;
+unsigned int gridResolution = 64;
 
 ParticleSelection selectedParticle = Sand;
 
@@ -28,6 +30,9 @@ Particle GetSelectedParticle(ParticleSelection selection)
 {
 	switch (selection)
 	{
+	case Void:
+		return ParticleVoid;
+
 	case Air:
 		return ParticleAir;
 
@@ -56,7 +61,7 @@ Particle GetSelectedParticle(ParticleSelection selection)
 
 void TestInput(Window window, Renderer* renderer)
 {
-	if (Input::IsKeyPressed(GLFW_MOUSE_BUTTON_LEFT))
+	/*if (Input::IsKeyPressed(GLFW_MOUSE_BUTTON_LEFT))
 	{
 		glm::vec2 mouse = renderer->GetTileIndexFromPos(Input::mousePosition);
 		std::cout << "Tile at mouse pos: " << mouse.x << ", " << mouse.y << std::endl;
@@ -69,7 +74,7 @@ void TestInput(Window window, Renderer* renderer)
 
 		renderer->TerrainMap[(unsigned int)mouse.x][(unsigned int)mouse.y] = GetSelectedParticle(selectedParticle);
 		renderer->UpdateBuffers();
-	}
+	}*/
 
 	if (Input::IsKeyPressed(GLFW_KEY_ESCAPE))
 	{
@@ -102,42 +107,42 @@ void TestInput(Window window, Renderer* renderer)
 	}
 }
 
-Particle GetParticle(Renderer* renderer, int x, int y)
-{
-	return renderer->TerrainMap[x][y];
-}
-
-void SetParticle(Renderer* renderer, int x, int y, Particle particle)
-{
-	renderer->TerrainMap[x][y] = particle;
-}
-
-void UpdateSand(Renderer* renderer, int x, int y)
-{
-	if (y < 0)
-		return;
-
-	if (GetParticle(renderer, x, y).type == ParticleSand.type)
-	{
-
-		if (GetParticle(renderer, x, y - 1).type == ParticleAir.type)
-		{
-			SetParticle(renderer, x, y, ParticleAir);
-			SetParticle(renderer, x, y - 1, ParticleSand);
-		}
-		else if (GetParticle(renderer, x + 1, y - 1).type == ParticleAir.type)
-		{
-			SetParticle(renderer, x, y, ParticleAir);
-			SetParticle(renderer, x + 1, y - 1, ParticleSand);
-		}
-		else if (GetParticle(renderer, x - 1, y - 1).type == ParticleAir.type)
-		{
-			SetParticle(renderer, x, y, ParticleAir);
-			SetParticle(renderer, x - 1, y - 1, ParticleSand);
-		}
-
-	}
-}
+//Particle GetParticle(Renderer* renderer, int x, int y)
+//{
+//	return renderer->TerrainMap[x][y];
+//}
+//
+//void SetParticle(Renderer* renderer, int x, int y, Particle particle)
+//{
+//	renderer->TerrainMap[x][y] = particle;
+//}
+//
+//void UpdateSand(Renderer* renderer, int x, int y)
+//{
+//	if (y < 0)
+//		return;
+//
+//	if (GetParticle(renderer, x, y).type == ParticleSand.type)
+//	{
+//
+//		if (GetParticle(renderer, x, y - 1).type == ParticleAir.type)
+//		{
+//			SetParticle(renderer, x, y, ParticleAir);
+//			SetParticle(renderer, x, y - 1, ParticleSand);
+//		}
+//		else if (GetParticle(renderer, x + 1, y - 1).type == ParticleAir.type)
+//		{
+//			SetParticle(renderer, x, y, ParticleAir);
+//			SetParticle(renderer, x + 1, y - 1, ParticleSand);
+//		}
+//		else if (GetParticle(renderer, x - 1, y - 1).type == ParticleAir.type)
+//		{
+//			SetParticle(renderer, x, y, ParticleAir);
+//			SetParticle(renderer, x - 1, y - 1, ParticleSand);
+//		}
+//
+//	}
+//}
 
 int main(void)
 {
@@ -155,6 +160,11 @@ int main(void)
     std::cout << "OpenGL Version: " << glGetString(GL_VERSION) << std::endl;
 
     Renderer* renderer = new Renderer();
+	Grid* grid = new Grid(windowWidth, windowHeight, gridResolution);
+
+	grid->InitGrid();
+	//renderer->UpdateBuffers();
+
     Input::SetupKeyInputs(glwindow);
 
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -163,15 +173,15 @@ int main(void)
     {
         TestInput(window, renderer);
 
-        // Update each cell in grid
-		for (int x = 0; x < renderer->tilesX; x++)
-		{
-			for (int y = 0; y < renderer->tilesY; y++)
-			{
-				UpdateSand(renderer, x, y);
-				// UpdateWater()
-			}
-		}
+        // // Update each cell in grid
+		// for (int x = 0; x < renderer->tilesX; x++)
+		// {
+		//	 for (int y = 0; y < renderer->tilesY; y++)
+		//	 {
+		//		 // UpdateSand(renderer, x, y);
+		//		 // UpdateWater()
+		//	 }
+		// }
 
         renderer->Clear();
         renderer->Draw();
@@ -181,6 +191,7 @@ int main(void)
     }
 
     delete renderer;
+	delete grid;
     glfwTerminate();
     return 0;
 }

@@ -36,6 +36,20 @@ enum ParticleSelection
 	Steam,
 };
 
+const glm::vec4 particleColors[] = {
+	{ 0.0f, 0.0f, 0.0f, 0.0f }, // Void
+	{ 0.1f, 0.1f, 0.1f, 1.0f }, // Air
+	{ 0.9f, 0.7f, 0.2f, 1.0f }, // Sand
+	{ 0.2f, 0.5f, 0.8f, 1.0f }, // Water
+	{ 0.5f, 0.5f, 0.5f, 1.0f }, // Rock
+	{ 0.4f, 0.2f, 0.1f, 1.0f }, // Wood
+	{ 0.3f, 0.3f, 0.3f, 1.0f }, // Metal
+	{ 0.2f, 0.2f, 0.2f, 1.0f }, // Gunpowder
+	{ 0.9f, 0.2f, 0.2f, 1.0f }, // Fire
+	{ 0.2f, 0.2f, 0.2f, 1.0f }, // Smoke
+	{ 0.2f, 0.2f, 0.2f, 1.0f }, // Steam
+};
+
 const Particle ParticleVoid =      { 0, { 0.0f, 0.0f, 0.0f, 0.0f } };
 const Particle ParticleAir =       { 1, { 0.1f, 0.1f, 0.1f, 1.0f } };
 const Particle ParticleSand =      { 2, { 0.9f, 0.7f, 0.2f, 1.0f } };

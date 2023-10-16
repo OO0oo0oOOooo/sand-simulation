@@ -5,11 +5,13 @@
 
 #include <vector>
 
+
 #include "Shader.h"
 #include "vertexBuffer.h"
 #include "IndexBuffer.h"
 
 #include "ParticleData.h"
+#include "Grid.h"
 
 struct Vertex
 {
@@ -23,26 +25,18 @@ public:
 	Renderer();
 	~Renderer();
 
-	void GenerateTerrainMap();
 	void UpdateBuffers();
 
 	void Clear() const;
 	void Draw();
 
-	unsigned int windowWidth = 1280;
-	unsigned int windowHeight = 720;
+	unsigned int windowWidth =    1280;
+	unsigned int windowHeight =   720;
 	unsigned int gridResolution = 64;
 
 	unsigned int tileSize = windowWidth / gridResolution;
-	unsigned int tilesX = windowWidth / tileSize;
-	unsigned int tilesY = windowHeight / tileSize;
-
-	inline glm::ivec2 GetTileIndexFromPos(glm::vec2 pos)
-	{
-		return glm::ivec2((int)(pos.x / tileSize), (int)(pos.y / (tileSize)));
-	}
-
-	std::vector<std::vector<Particle>> TerrainMap;
+	unsigned int tilesX =   windowWidth / tileSize;
+	unsigned int tilesY =   windowHeight / tileSize;
 	
 private:
 	unsigned int* vao;

@@ -9,20 +9,20 @@ Grid::Grid()
 	CellMap = std::vector<std::vector<Particle>>(GridWidth, std::vector<Particle>(GridHeight));
 }
 
-Grid::Grid(int width, int height, int cellSize)
-{
-	CellSize = cellSize;
-	GridWidth = width;
-	GridHeight = height;
-
-	CellMap = std::vector<std::vector<Particle>>(GridWidth, std::vector<Particle>(GridHeight));
-}
+//Grid::Grid(int width, int height, int cellSize)
+//{
+//	CellSize = cellSize;
+//	GridWidth = width;
+//	GridHeight = height;
+//
+//	CellMap = std::vector<std::vector<Particle>>(GridWidth, std::vector<Particle>(GridHeight));
+//}
 
 Grid::Grid(int windowWidth, int windowHeight, int resolution)
 {
-	CellSize = windowWidth  / resolution;
-	GridWidth =	   windowWidth  / CellSize;
-	GridHeight =   windowHeight / CellSize;
+	CellSize =   windowWidth  / resolution;
+	GridWidth =	 windowWidth  / CellSize;
+	GridHeight = windowHeight / CellSize;
 
 	CellMap = std::vector<std::vector<Particle>>(GridWidth, std::vector<Particle>(GridHeight));
 }
@@ -30,7 +30,6 @@ Grid::Grid(int windowWidth, int windowHeight, int resolution)
 Grid::~Grid()
 {
 }
-
 
 void Grid::InitGrid()
 {
@@ -63,21 +62,27 @@ void Grid::ClearGrid()
 			CellMap[x][y] = ParticleVoid;
 		}
 	}
-
 }
 
-void Grid::SetCell(int x, int y, Particle particle)
-{
-	if (x < 0 || x >= GridWidth || y < 0 || y >= GridHeight)
-		return;
+//void Grid::DrawGrid(Renderer* renderer)
+//{
+//	renderer->UpdateBuffers();
+//}
 
-	CellMap[x][y] = particle;
-}
+//Particle GetCell(int x, int y)
+//{
+//	if (x < 0 || x >= GridWidth || y < 0 || y >= GridHeight)
+//		return ParticleAir;
+//
+//	return CellMap[x][y];
+//}
+//
+//void Grid::SetCell(int x, int y, Particle particle)
+//{
+//	if (x < 0 || x >= GridWidth || y < 0 || y >= GridHeight)
+//		return;
+//
+//	CellMap[x][y] = particle;
+//}
 
-Particle Grid::GetCell(int x, int y)
-{
-	if (x < 0 || x >= GridWidth || y < 0 || y >= GridHeight)
-		return ParticleAir;
 
-	return CellMap[x][y];
-}

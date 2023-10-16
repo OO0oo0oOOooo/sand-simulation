@@ -30,9 +30,6 @@ Renderer::Renderer()
 
     glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const void*)12);
     glEnableVertexAttribArray(1);
-
-    GenerateTerrainMap();
-    UpdateBuffers();
 }
 
 Renderer::~Renderer()
@@ -56,19 +53,6 @@ void Renderer::Draw()
     glDrawElements(GL_TRIANGLES, ib->GetCount(), GL_UNSIGNED_INT, 0);
 }
 
-void Renderer::GenerateTerrainMap()
-{
-    TerrainMap = std::vector<std::vector<Particle>>(tilesX, std::vector<Particle>(tilesY));
-
-    for (int x = 0; x < tilesX; x++)
-    {
-        for (int y = 0; y < tilesY; y++)
-        {
-            TerrainMap[x][y] = ParticleAir;
-        }
-    }
-} 
-
 void Renderer::UpdateBuffers()
 {
     std::vector<Vertex> vertices;
@@ -80,7 +64,7 @@ void Renderer::UpdateBuffers()
         {
             for (int i = 0; i < 4; i++)
             {
-                vertices.push_back({ (glm::vec3(x, y, 0) + vertexPositions[i]) * (float)tileSize, TerrainMap[x][y].color });
+                vertices.push_back({ (glm::vec3(x, y, 0) + vertexPositions[i]) * (float)tileSize,  });
             }
 
             for (int i = 0; i < 6; i++)

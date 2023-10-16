@@ -8,7 +8,7 @@ class Cell
 {
 public:
 	Cell();
-	Cell(unsigned char Id);
+	Cell(Grid* grid, unsigned char id);
 
 	~Cell();
 
@@ -16,7 +16,7 @@ public:
 	void Update();
 	void Render();
 
-	Grid* Grid;
+	Grid* m_Grid;
 
 	unsigned char Id;
 	glm::vec4 Color;
