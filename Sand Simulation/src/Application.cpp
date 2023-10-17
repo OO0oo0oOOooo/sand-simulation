@@ -55,26 +55,27 @@ Particle GetSelectedParticle(ParticleSelection selection)
 		return ParticleGunpowder;
 
 	default:
+		return ParticleVoid;
 		break;
 	}
 }
 
-void TestInput(Window window, Renderer* renderer)
+void TestInput(Window window, Renderer* renderer, Grid* grid)
 {
-	/*if (Input::IsKeyPressed(GLFW_MOUSE_BUTTON_LEFT))
+	if (Input::IsKeyPressed(GLFW_MOUSE_BUTTON_LEFT))
 	{
-		glm::vec2 mouse = renderer->GetTileIndexFromPos(Input::mousePosition);
+		glm::vec2 mouse = grid->GetCellIndex(Input::mousePosition);
 		std::cout << "Tile at mouse pos: " << mouse.x << ", " << mouse.y << std::endl;
 
-		if (mouse.x > renderer->tilesX || mouse.x < 0)
+		if (mouse.x > grid->GridWidth || mouse.x < 0)
 			return;
 
-		if (mouse.y > renderer->tilesY || mouse.y < 0)
+		if (mouse.y > grid->GridHeight || mouse.y < 0)
 			return;
 
-		renderer->TerrainMap[(unsigned int)mouse.x][(unsigned int)mouse.y] = GetSelectedParticle(selectedParticle);
-		renderer->UpdateBuffers();
-	}*/
+		grid->SetCell((int)mouse.x, (int)mouse.y, GetSelectedParticle(selectedParticle));
+		renderer->UpdateBuffers(grid);
+	}
 
 	if (Input::IsKeyPressed(GLFW_KEY_ESCAPE))
 	{
@@ -163,7 +164,7 @@ int main(void)
 	Grid* grid = new Grid(windowWidth, windowHeight, gridResolution);
 
 	grid->InitGrid();
-	//renderer->UpdateBuffers();
+	renderer->UpdateBuffers(grid);
 
     Input::SetupKeyInputs(glwindow);
 
@@ -171,7 +172,7 @@ int main(void)
     glViewport(0, 0, windowWidth, windowHeight);
     while (!glfwWindowShouldClose(glwindow))
     {
-        TestInput(window, renderer);
+        TestInput(window, renderer, grid);
 
         // // Update each cell in grid
 		// for (int x = 0; x < renderer->tilesX; x++)

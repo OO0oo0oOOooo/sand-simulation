@@ -25,7 +25,7 @@ public:
 	Renderer();
 	~Renderer();
 
-	void UpdateBuffers();
+	void UpdateBuffers(Grid* grid);
 
 	void Clear() const;
 	void Draw();

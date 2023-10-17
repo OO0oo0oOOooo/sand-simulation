@@ -36,31 +36,35 @@ public:
 		CellMap[x][y] = particle;
 	}
 
-	inline int GetWidth() { return GridWidth; }
+	inline glm::ivec2 GetCellIndex(glm::ivec2 mousePos) 
+	{
+		int x = mousePos.x / CellSize;
+		int y = mousePos.y / CellSize;
+
+		return glm::vec2(x, y);
+	}
+
+	// inline int GetCellIndex(int x, int y, int Width) { return y * Width + x } // This is for a flattened array
+
+	/*inline int GetWidth() { return GridWidth; }
 	inline int GetHeight() { return GridHeight; }
 	inline int GetCellSize() { return CellSize; }
 
 	inline void SetWidth(int gridWidth) { GridWidth = gridWidth; }
 	inline void SetHeight(int gridHeight) { GridHeight = gridHeight; }
-	inline void SetCellSize(int cellSize) { CellSize = cellSize; }
+	inline void SetCellSize(int cellSize) { CellSize = cellSize; }*/
 
 	// This could be used for saving and loading
 	// inline std::vector<std::vector<Particle>> GetCellMap() { return CellMap; }
 	// inline void SetCellMap(std::vector<std::vector<Particle>> cellMap) { CellMap = cellMap; }
 	
-	// inline int GetCellIndex(int x, int y, int Width) { return y * Width + x } // This is for a flattened array
-
-
-private:
 	int GridWidth;
 	int GridHeight;
 	int CellSize;
 
+private:
 	std::vector<std::vector<Particle>> CellMap;
 
 	//void DrawGridLines(Renderer* renderer);
 	//void DrawParticles(Renderer* renderer);
-
-
-
 };

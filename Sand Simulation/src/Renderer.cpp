@@ -53,18 +53,18 @@ void Renderer::Draw()
     glDrawElements(GL_TRIANGLES, ib->GetCount(), GL_UNSIGNED_INT, 0);
 }
 
-void Renderer::UpdateBuffers()
+void Renderer::UpdateBuffers(Grid* grid)
 {
     std::vector<Vertex> vertices;
     std::vector<unsigned int> indices;
 
-    for (int x = 0; x < tilesX; x++)
+    for (int x = 0; x < grid->GridWidth; x++)
     {
-        for (int y = 0; y < tilesY; y++)
+        for (int y = 0; y < grid->GridHeight; y++)
         {
             for (int i = 0; i < 4; i++)
             {
-                vertices.push_back({ (glm::vec3(x, y, 0) + vertexPositions[i]) * (float)tileSize,  });
+                vertices.push_back({ (glm::vec3(x, y, 0) + vertexPositions[i]) * (float)grid->CellSize, grid->GetCell(x,y).color });
             }
 
             for (int i = 0; i < 6; i++)
