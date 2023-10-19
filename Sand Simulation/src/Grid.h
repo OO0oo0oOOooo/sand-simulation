@@ -3,7 +3,6 @@
 #include <vector>
 
 #include "ParticleData.h"
-#include "Renderer.h"
 
 class Grid
 {
@@ -43,8 +42,6 @@ public:
 
 		return glm::vec2(x, y);
 	}
-
-	// inline int GetCellIndex(int x, int y, int Width) { return y * Width + x } // This is for a flattened array
 
 	/*inline int GetWidth() { return GridWidth; }
 	inline int GetHeight() { return GridHeight; }

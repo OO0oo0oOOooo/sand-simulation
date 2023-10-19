@@ -5,7 +5,6 @@
 
 #include <vector>
 
-
 #include "Shader.h"
 #include "vertexBuffer.h"
 #include "IndexBuffer.h"

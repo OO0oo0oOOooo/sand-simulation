@@ -37,7 +37,7 @@ void Grid::InitGrid()
 	{
 		for (int y = 0; y < GridHeight; y++)
 		{
-			CellMap[x][y] = ParticleSand;
+			CellMap[x][y] = ParticleAir;
 		}
 	}
 }
