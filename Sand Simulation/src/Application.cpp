@@ -12,13 +12,12 @@
 
 // TODO:
 // - Update loop
-
-// - Chunks
-// - each chunk has a grid map. 2D array of bytes, 0 air, 1 sand, 2 water, 3 stone, 4 dirt, 5 grass
-
 // - tick and late tick
-// - every tick, update the grid map
-// - every late tick, render the new grid map if it has changed
+//
+// - Particle Brush
+// - Particle Selection
+// - Particle Selection UI
+// - 
 
 unsigned int windowWidth = 1280;
 unsigned int windowHeight = 720;
@@ -74,7 +73,6 @@ void TestInput(Window window, Renderer* renderer, Grid* grid)
 			return;
 
 		grid->SetCell((int)mouse.x, (int)mouse.y, GetSelectedParticle(selectedParticle));
-		renderer->UpdateBuffers(grid);
 	}
 
 	if (Input::IsKeyPressed(GLFW_KEY_ESCAPE))
@@ -108,43 +106,6 @@ void TestInput(Window window, Renderer* renderer, Grid* grid)
 	}
 }
 
-//Particle GetParticle(Renderer* renderer, int x, int y)
-//{
-//	return renderer->TerrainMap[x][y];
-//}
-//
-//void SetParticle(Renderer* renderer, int x, int y, Particle particle)
-//{
-//	renderer->TerrainMap[x][y] = particle;
-//}
-//
-//void UpdateSand(Renderer* renderer, int x, int y)
-//{
-//	if (y < 0)
-//		return;
-//
-//	if (GetParticle(renderer, x, y).type == ParticleSand.type)
-//	{
-//
-//		if (GetParticle(renderer, x, y - 1).type == ParticleAir.type)
-//		{
-//			SetParticle(renderer, x, y, ParticleAir);
-//			SetParticle(renderer, x, y - 1, ParticleSand);
-//		}
-//		else if (GetParticle(renderer, x + 1, y - 1).type == ParticleAir.type)
-//		{
-//			SetParticle(renderer, x, y, ParticleAir);
-//			SetParticle(renderer, x + 1, y - 1, ParticleSand);
-//		}
-//		else if (GetParticle(renderer, x - 1, y - 1).type == ParticleAir.type)
-//		{
-//			SetParticle(renderer, x, y, ParticleAir);
-//			SetParticle(renderer, x - 1, y - 1, ParticleSand);
-//		}
-//
-//	}
-//}
-
 int main(void)
 {
     if (!glfwInit())
@@ -174,15 +135,8 @@ int main(void)
     {
         TestInput(window, renderer, grid);
 
-        // // Update each cell in grid
-		// for (int x = 0; x < renderer->tilesX; x++)
-		// {
-		//	 for (int y = 0; y < renderer->tilesY; y++)
-		//	 {
-		//		 // UpdateSand(renderer, x, y);
-		//		 // UpdateWater()
-		//	 }
-		// }
+		grid->UpdateGrid();
+		renderer->UpdateBuffers(grid);
 
         renderer->Clear();
         renderer->Draw();

@@ -22,7 +22,7 @@ public:
 	inline Particle GetCell(int x, int y)
 	{
 		if (x < 0 || x >= GridWidth || y < 0 || y >= GridHeight)
-			return ParticleAir;
+			return ParticleVoid;
 		
 		return CellMap[x][y]; 
 	}
