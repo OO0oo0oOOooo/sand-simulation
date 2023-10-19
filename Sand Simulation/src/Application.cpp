@@ -138,7 +138,7 @@ int main(void)
 		grid->UpdateGrid();
 		renderer->UpdateBuffers(grid);
 
-        renderer->Clear();
+        //renderer->Clear();
         renderer->Draw();
 
         glfwSwapBuffers(glwindow);

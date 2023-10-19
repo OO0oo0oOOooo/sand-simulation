@@ -20,12 +20,6 @@ Window::Window(int width, int height, const char* title)
 
 Window::~Window()
 {
-	// I think I created my window on the stack
-	
-	//if(m_NativeWindow != nullptr)
-	//    glfwDestroyWindow(m_NativeWindow);
-
-	//delete m_NativeWindow;
 }
 
 void Window::Close()

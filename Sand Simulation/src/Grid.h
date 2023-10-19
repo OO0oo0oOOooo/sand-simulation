@@ -8,7 +8,6 @@ class Grid
 {
 public:
 	Grid();
-	//Grid(int gridWidth, int gridHeight, int cellSize);
 	Grid(int windowWidth, int windowHeight, int resolution);
 	
 	~Grid();
@@ -16,8 +15,6 @@ public:
 	void InitGrid();
 	void UpdateGrid();
 	void ClearGrid();
-
-	// void DrawGrid(Renderer* renderer);
 
 	inline Particle GetCell(int x, int y)
 	{
@@ -42,14 +39,6 @@ public:
 
 		return glm::vec2(x, y);
 	}
-
-	/*inline int GetWidth() { return GridWidth; }
-	inline int GetHeight() { return GridHeight; }
-	inline int GetCellSize() { return CellSize; }
-
-	inline void SetWidth(int gridWidth) { GridWidth = gridWidth; }
-	inline void SetHeight(int gridHeight) { GridHeight = gridHeight; }
-	inline void SetCellSize(int cellSize) { CellSize = cellSize; }*/
 
 	// This could be used for saving and loading
 	// inline std::vector<std::vector<Particle>> GetCellMap() { return CellMap; }
