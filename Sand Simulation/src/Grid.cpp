@@ -9,6 +9,14 @@ Grid::Grid()
 	CellMap = std::vector<std::vector<Particle>>(GridWidth, std::vector<Particle>(GridHeight));
 }
 
+Grid::Grid(int gridWidth, int gridHeight)
+	: GridWidth(gridWidth), GridHeight(gridHeight)
+{
+	CellSize = 20;
+
+	CellMap = std::vector<std::vector<Particle>>(GridWidth, std::vector<Particle>(GridHeight));
+}
+
 Grid::Grid(int windowWidth, int windowHeight, int resolution)
 {
 	CellSize =   windowWidth  / resolution;

@@ -21,3 +21,5 @@ private:
 
 	GLFWwindow* m_NativeWindow;
 };
+
+void window_maximize_callback(GLFWwindow* window, int maximized);

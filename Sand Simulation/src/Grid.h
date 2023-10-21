@@ -1,13 +1,16 @@
 #pragma once
 
 #include <vector>
+#include <iostream>
 
 #include "ParticleData.h"
+#include "Window.h"
 
 class Grid
 {
 public:
 	Grid();
+	Grid(int gridWidth, int gridHeight);
 	Grid(int windowWidth, int windowHeight, int resolution);
 	
 	~Grid();
@@ -21,7 +24,7 @@ public:
 		if (x < 0 || x >= GridWidth || y < 0 || y >= GridHeight)
 			return ParticleVoid;
 		
-		return CellMap[x][y]; 
+		return CellMap[x][y];
 	}
 
 	inline void SetCell(int x, int y, Particle particle) 
@@ -32,10 +35,14 @@ public:
 		CellMap[x][y] = particle;
 	}
 
-	inline glm::ivec2 GetCellIndex(glm::ivec2 mousePos) 
+	inline glm::ivec2 GetCellIndex(glm::ivec2 mousePos, Window window) 
 	{
+		CellSize = window.GetWidth() / GridWidth;
+
 		int x = mousePos.x / CellSize;
 		int y = mousePos.y / CellSize;
+
+		std::cout << "x: " << x << " y: " << y << std::endl;
 
 		return glm::vec2(x, y);
 	}

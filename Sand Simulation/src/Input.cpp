@@ -68,14 +68,11 @@ namespace Input {
 
 	void MousePositionCallback(GLFWwindow* window, double xpos, double ypos)
 	{
-		if(xpos >= 1280 || xpos <= 0)
-			return;
-
-		if (ypos >= 720 || ypos <= 0)
-			return;
+		int width, height;
+		glfwGetWindowSize(window, &width, &height);
 
 		mousePosition.x = (float)xpos;
-		mousePosition.y = 720-(float)ypos;
+		mousePosition.y = height - (float)ypos;
 	}
 
 	void MouseScrollCallback(GLFWwindow* window, double xoffset, double yoffset)
@@ -103,4 +100,5 @@ namespace Input {
 			it->second = isDown;
 		}
 	}
+
 }

@@ -31,14 +31,6 @@ public:
 	void Draw();
 
 	void SetShaderUniforms(float windowWidth, float windowHeight);
-
-	/*unsigned int windowWidth =    1280;
-	unsigned int windowHeight =   720;
-	unsigned int gridResolution = 64;
-
-	unsigned int tileSize = windowWidth / gridResolution;
-	unsigned int tilesX =   windowWidth / tileSize;
-	unsigned int tilesY =   windowHeight / tileSize;*/
 	
 private:
 	unsigned int* vao;

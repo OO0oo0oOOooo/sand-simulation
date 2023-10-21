@@ -65,31 +65,17 @@ void TestInput(Window window, Renderer* renderer, Grid* grid)
 {
 	if (Input::IsKeyPressed(GLFW_MOUSE_BUTTON_LEFT))
 	{
-		glm::vec2 mouse = grid->GetCellIndex(Input::mousePosition);
-		std::cout << "Tile at mouse pos: " << mouse.x << ", " << mouse.y << std::endl;
+		glm::vec2 index = grid->GetCellIndex(Input::mousePosition, window);
+		//std::cout << "Mouse pos: " << Input::mousePosition.x << ", " << Input::mousePosition.y << std::endl;
+		//std::cout << "Tile at mouse pos: " << index.x << ", " << index.y << std::endl;
 
-		if (mouse.x > grid->GridWidth || mouse.x < 0)
+		if (index.x > grid->GridWidth || index.x < 0)
 			return;
 
-		if (mouse.y > grid->GridHeight || mouse.y < 0)
+		if (index.y > grid->GridHeight || index.y < 0)
 			return;
 
-		grid->SetCell((int)mouse.x, (int)mouse.y, GetSelectedParticle(selectedParticle));
-	}
-
-	// Resize window
-	if (Input::IsKeyPressed(GLFW_KEY_R))
-	{
-		windowWidth = 1280;
-		windowHeight = 720;
-		gridResolution = 64;
-
-		window.Resize(windowWidth, windowHeight);
-		renderer->windowWidth = windowWidth;
-		renderer->windowHeight = windowHeight;
-		renderer->gridResolution = gridResolution;
-
-		grid->ResizeGrid(windowWidth, windowHeight, gridResolution);
+		grid->SetCell((int)index.x, (int)index.y, GetSelectedParticle(selectedParticle));
 	}
 
 	if (Input::IsKeyPressed(GLFW_KEY_ESCAPE))
@@ -138,7 +124,7 @@ int main(void)
 
     std::cout << "OpenGL Version: " << glGetString(GL_VERSION) << std::endl;
 
-    Renderer* renderer = new Renderer();
+    Renderer* renderer = new Renderer(windowWidth, windowHeight);
 	Grid* grid = new Grid(windowWidth, windowHeight, gridResolution);
 
 	grid->InitGrid();
@@ -147,7 +133,6 @@ int main(void)
     Input::SetupKeyInputs(glwindow);
 
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    glViewport(0, 0, windowWidth, windowHeight);
     while (!glfwWindowShouldClose(glwindow))
     {
         TestInput(window, renderer, grid);
