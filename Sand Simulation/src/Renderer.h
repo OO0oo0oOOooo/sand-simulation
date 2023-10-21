@@ -22,6 +22,7 @@ class Renderer
 {
 public:
 	Renderer();
+	Renderer(int windowWidth, int windowHeight);
 	~Renderer();
 
 	void UpdateBuffers(Grid* grid);
@@ -29,13 +30,15 @@ public:
 	void Clear() const;
 	void Draw();
 
-	unsigned int windowWidth =    1280;
+	void SetShaderUniforms(float windowWidth, float windowHeight);
+
+	/*unsigned int windowWidth =    1280;
 	unsigned int windowHeight =   720;
 	unsigned int gridResolution = 64;
 
 	unsigned int tileSize = windowWidth / gridResolution;
 	unsigned int tilesX =   windowWidth / tileSize;
-	unsigned int tilesY =   windowHeight / tileSize;
+	unsigned int tilesY =   windowHeight / tileSize;*/
 	
 private:
 	unsigned int* vao;

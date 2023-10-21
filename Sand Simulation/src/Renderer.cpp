@@ -6,6 +6,10 @@
 
 Renderer::Renderer()
 {
+}
+
+Renderer::Renderer(int windowWidth, int windowHeight)
+{
     vao = new unsigned int;
     vb = new VertexBuffer(0, 0);
     ib = new IndexBuffer(0, 0);
@@ -76,4 +80,18 @@ void Renderer::UpdateBuffers(Grid* grid)
 
     vb->UpdateData(vertices.data(), vertices.size() * sizeof(Vertex));
     ib->UpdateData(indices.data(), indices.size());
+}
+
+void Renderer::SetShaderUniforms(float width, float height)
+{
+    glm::mat4 proj = glm::ortho(0.0f, width, 0.0f, height, -1.0f, 1.0f);
+    glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f));
+    glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f));
+
+    glm::mat4 VP = proj * view;
+
+    shader->Bind();
+    shader->SetUniformMat4f("u_ViewProjection", VP);
+    shader->SetUniformMat4f("u_Transform", model);
+    shader->SetUniform4f("u_Color", glm::vec4(0.0f, 0.0f, 0.0f, 0.0f));
 }

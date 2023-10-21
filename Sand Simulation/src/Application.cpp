@@ -17,7 +17,9 @@
 // - Particle Brush
 // - Particle Selection
 // - Particle Selection UI
-// - 
+//
+// - Adjust Window Size
+// - Update renderer window size
 
 unsigned int windowWidth = 1280;
 unsigned int windowHeight = 720;
@@ -73,6 +75,21 @@ void TestInput(Window window, Renderer* renderer, Grid* grid)
 			return;
 
 		grid->SetCell((int)mouse.x, (int)mouse.y, GetSelectedParticle(selectedParticle));
+	}
+
+	// Resize window
+	if (Input::IsKeyPressed(GLFW_KEY_R))
+	{
+		windowWidth = 1280;
+		windowHeight = 720;
+		gridResolution = 64;
+
+		window.Resize(windowWidth, windowHeight);
+		renderer->windowWidth = windowWidth;
+		renderer->windowHeight = windowHeight;
+		renderer->gridResolution = gridResolution;
+
+		grid->ResizeGrid(windowWidth, windowHeight, gridResolution);
 	}
 
 	if (Input::IsKeyPressed(GLFW_KEY_ESCAPE))
