@@ -6,6 +6,7 @@
 namespace Input {
 
     extern glm::vec2 mousePosition;
+    extern glm::vec2 normalizedMousePosition;
     extern glm::vec2 mouseScroll;
 
     void SetupKeyInputs(GLFWwindow* window);

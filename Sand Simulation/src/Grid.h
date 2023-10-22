@@ -1,10 +1,13 @@
 #pragma once
 
+#include <GLFW/glfw3.h>
+
 #include <vector>
 #include <iostream>
 
 #include "ParticleData.h"
 #include "Window.h"
+
 
 class Grid
 {
@@ -35,16 +38,12 @@ public:
 		CellMap[x][y] = particle;
 	}
 
-	inline glm::ivec2 GetCellIndex(glm::ivec2 mousePos, Window window) 
+	inline glm::ivec2 GetCellIndex(glm::vec2 normalizedPos)
 	{
-		CellSize = window.GetWidth() / GridWidth;
+		int x = normalizedPos.x * GridWidth;
+		int y = normalizedPos.y * GridHeight;
 
-		int x = mousePos.x / CellSize;
-		int y = mousePos.y / CellSize;
-
-		std::cout << "x: " << x << " y: " << y << std::endl;
-
-		return glm::vec2(x, y);
+		return glm::ivec2(x, y);
 	}
 
 	// This could be used for saving and loading

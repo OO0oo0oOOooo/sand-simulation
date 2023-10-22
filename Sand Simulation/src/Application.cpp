@@ -11,6 +11,8 @@
 #include "ParticleData.h"
 
 // TODO:
+// - ImGUI
+// 
 // - Update loop
 // - tick and late tick
 //
@@ -18,8 +20,8 @@
 // - Particle Selection
 // - Particle Selection UI
 //
-// - Adjust Window Size
-// - Update renderer window size
+// - Move ParticleSelection
+// - Move TestInput
 
 unsigned int windowWidth = 1280;
 unsigned int windowHeight = 720;
@@ -61,13 +63,13 @@ Particle GetSelectedParticle(ParticleSelection selection)
 	}
 }
 
-void TestInput(Window window, Renderer* renderer, Grid* grid)
+void TestInput(Window window, Grid* grid)
 {
 	if (Input::IsKeyPressed(GLFW_MOUSE_BUTTON_LEFT))
 	{
-		glm::vec2 index = grid->GetCellIndex(Input::mousePosition, window);
-		//std::cout << "Mouse pos: " << Input::mousePosition.x << ", " << Input::mousePosition.y << std::endl;
-		//std::cout << "Tile at mouse pos: " << index.x << ", " << index.y << std::endl;
+		glm::ivec2 index = grid->GetCellIndex(Input::normalizedMousePosition);
+		//std::cout << "x: " << Input::normalizedMousePosition.x << " y: " << Input::normalizedMousePosition.y << std::endl;
+		//std::cout << "Tile X: " << index.x << " Tile Y: " << index.y << std::endl;
 
 		if (index.x > grid->GridWidth || index.x < 0)
 			return;
@@ -135,7 +137,7 @@ int main(void)
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     while (!glfwWindowShouldClose(glwindow))
     {
-        TestInput(window, renderer, grid);
+        TestInput(window, grid);
 
 		grid->UpdateGrid();
 		renderer->UpdateBuffers(grid);

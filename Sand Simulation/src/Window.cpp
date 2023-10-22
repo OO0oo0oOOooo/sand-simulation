@@ -1,7 +1,5 @@
 #include "Window.h"
 
-#include <iostream>
-
 Window::Window(int width, int height, const char* title)
 	: m_WindowWidth(width), m_WindowHeight(height), m_Title(title)
 {
@@ -15,7 +13,7 @@ Window::Window(int width, int height, const char* title)
 	glfwMakeContextCurrent(m_NativeWindow);
 
 	//Set callbacks
-	glfwSetWindowMaximizeCallback(m_NativeWindow, window_maximize_callback);
+	glfwSetFramebufferSizeCallback(m_NativeWindow, framebuffer_size_callback);
 
 	if (!m_NativeWindow)
 	{
@@ -31,22 +29,4 @@ void Window::Close()
 {
 	if(m_NativeWindow != nullptr)
 		glfwSetWindowShouldClose(m_NativeWindow, GLFW_TRUE);
-}
-
-// Callbacks
-void window_maximize_callback(GLFWwindow* window, int maximized)
-{
-	if (maximized)
-	{
-		glViewport(0, 0, 1920, 1080);
-		// The window was maximized
-		std::cout << "Window maximized" << std::endl;
-
-	}
-	else
-	{
-		glViewport(0, 0, 1280, 720);
-		// The window was restored
-		std::cout << "Window restored" << std::endl;
-	}
 }
