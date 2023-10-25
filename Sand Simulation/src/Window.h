@@ -18,17 +18,9 @@ public:
 		glViewport(0, 0, width, height);
 	}
 
-	/*static void window_maximize_callback(GLFWwindow* window, int maximized)
-	{
-		if (maximized){}
-		else{}
-	}*/
-
 private:
 	int m_WindowWidth;
 	int m_WindowHeight;
 	const char* m_Title;
 	GLFWwindow* m_NativeWindow;
 };
-
-

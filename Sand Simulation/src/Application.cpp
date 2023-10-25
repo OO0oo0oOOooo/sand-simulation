@@ -20,8 +20,8 @@
 // - Particle Selection
 // - Particle Selection UI
 //
-// - Move ParticleSelection
-// - Move TestInput
+// - Move ParticleSelection out of Application
+// - Move TestInput out of Application
 
 unsigned int windowWidth = 1280;
 unsigned int windowHeight = 720;
