@@ -105,5 +105,4 @@ namespace Input {
 			it->second = isDown;
 		}
 	}
-
 }

@@ -1,95 +1,92 @@
 #include "Brush.h"
-#include "Input.h"
 
-Brush::Brush()
+namespace Brush
 {
-}
+	ParticleSelection selectedParticle = Sand;
 
-Brush::~Brush()
-{
-}
-
-Particle GetSelectedParticle(ParticleSelection selection)
-{
-	switch (selection)
+	Particle GetSelectedParticle(ParticleSelection selection)
 	{
-	case Void:
-		return ParticleVoid;
 
-	case Air:
-		return ParticleAir;
+		switch (selection)
+		{
+		case Void:
+			return ParticleVoid;
 
-	case Sand:
-		return ParticleSand;
+		case Air:
+			return ParticleAir;
 
-	case Water:
-		return ParticleWater;
+		case Sand:
+			return ParticleSand;
 
-	case Rock:
-		return ParticleRock;
+		case Water:
+			return ParticleWater;
 
-	case Wood:
-		return ParticleWood;
+		case Rock:
+			return ParticleRock;
 
-	case Metal:
-		return ParticleMetal;
+		case Wood:
+			return ParticleWood;
 
-	case Gunpowder:
-		return ParticleGunpowder;
+		case Metal:
+			return ParticleMetal;
 
-	default:
-		return ParticleVoid;
-		break;
-	}
-}
+		case Gunpowder:
+			return ParticleGunpowder;
 
-void Brush::MouseInput(Window window, Grid* grid)
-{
-	if (Input::IsKeyPressed(GLFW_MOUSE_BUTTON_LEFT))
-	{
-		glm::ivec2 index = grid->GetCellIndex(Input::normalizedMousePosition);
-		//std::cout << "x: " << Input::normalizedMousePosition.x << " y: " << Input::normalizedMousePosition.y << std::endl;
-		//std::cout << "Tile X: " << index.x << " Tile Y: " << index.y << std::endl;
-
-		if (index.x > grid->GridWidth || index.x < 0)
-			return;
-
-		if (index.y > grid->GridHeight || index.y < 0)
-			return;
-
-		grid->SetCell((int)index.x, (int)index.y, GetSelectedParticle(selectedParticle));
-	}
-}
-
-void Brush::SelectionInput(Window window, Grid* grid)
-{
-	if (Input::IsKeyPressed(GLFW_KEY_ESCAPE))
-	{
-		window.Close();
+		default:
+			return ParticleVoid;
+			break;
+		}
 	}
 
-	if (Input::IsKeyPressed(GLFW_KEY_1))
+	void MouseInput(Window window, Grid* grid)
 	{
-		selectedParticle = Sand;
+		if (Input::IsKeyPressed(GLFW_MOUSE_BUTTON_LEFT))
+		{
+			glm::ivec2 index = grid->GetCellIndex(Input::normalizedMousePosition);
+			//std::cout << "x: " << Input::normalizedMousePosition.x << " y: " << Input::normalizedMousePosition.y << std::endl;
+			//std::cout << "Tile X: " << index.x << " Tile Y: " << index.y << std::endl;
+
+			if (index.x > grid->GridWidth || index.x < 0)
+				return;
+
+			if (index.y > grid->GridHeight || index.y < 0)
+				return;
+
+			grid->SetCell((int)index.x, (int)index.y, GetSelectedParticle(selectedParticle));
+		}
 	}
 
-	if (Input::IsKeyPressed(GLFW_KEY_2))
+	void SelectionInput(Window window, Grid* grid)
 	{
-		selectedParticle = Water;
-	}
+		if (Input::IsKeyPressed(GLFW_KEY_ESCAPE))
+		{
+			window.Close();
+		}
 
-	if (Input::IsKeyPressed(GLFW_KEY_3))
-	{
-		selectedParticle = Rock;
-	}
+		if (Input::IsKeyPressed(GLFW_KEY_1))
+		{
+			selectedParticle = Sand;
+		}
 
-	if (Input::IsKeyPressed(GLFW_KEY_4))
-	{
-		selectedParticle = Wood;
-	}
+		if (Input::IsKeyPressed(GLFW_KEY_2))
+		{
+			selectedParticle = Water;
+		}
 
-	if (Input::IsKeyPressed(GLFW_KEY_5))
-	{
-		selectedParticle = Metal;
+		if (Input::IsKeyPressed(GLFW_KEY_3))
+		{
+			selectedParticle = Rock;
+		}
+
+		if (Input::IsKeyPressed(GLFW_KEY_4))
+		{
+			selectedParticle = Wood;
+		}
+
+		if (Input::IsKeyPressed(GLFW_KEY_5))
+		{
+			selectedParticle = Metal;
+		}
 	}
 }

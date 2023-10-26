@@ -118,5 +118,3 @@ const unsigned int meshTriangles[] = {
 // Frost
 // Heat
 // Shock
-
-

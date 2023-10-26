@@ -40,8 +40,8 @@ public:
 
 	inline glm::ivec2 GetCellIndex(glm::vec2 normalizedPos)
 	{
-		int x = normalizedPos.x * GridWidth;
-		int y = normalizedPos.y * GridHeight;
+		int x = (int)(normalizedPos.x * GridWidth);
+		int y = (int)(normalizedPos.y * GridHeight);
 
 		return glm::ivec2(x, y);
 	}
