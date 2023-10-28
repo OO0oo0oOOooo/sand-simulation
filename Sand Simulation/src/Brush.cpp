@@ -3,6 +3,7 @@
 namespace Brush
 {
 	ParticleSelection selectedParticle = Sand;
+	int brushSize = 1;
 
 	Particle GetSelectedParticle(ParticleSelection selection)
 	{
@@ -46,6 +47,12 @@ namespace Brush
 			glm::ivec2 index = grid->GetCellIndex(Input::normalizedMousePosition);
 			//std::cout << "x: " << Input::normalizedMousePosition.x << " y: " << Input::normalizedMousePosition.y << std::endl;
 			//std::cout << "Tile X: " << index.x << " Tile Y: " << index.y << std::endl;
+
+			//srand(time(0));
+			int rx = rand() % (2 * brushSize + 1) - brushSize;
+			int ry = rand() % (2 * brushSize + 1) - brushSize;
+
+			index += glm::ivec2(rx, ry);
 
 			if (index.x > grid->GridWidth || index.x < 0)
 				return;

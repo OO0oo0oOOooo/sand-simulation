@@ -84,6 +84,9 @@ const unsigned int meshTriangles[] = {
 // Gunpowder
 // Fire
 
+// Secondary Particles
+// Foliage
+
 // Smoke
 // Steam
 // Lava

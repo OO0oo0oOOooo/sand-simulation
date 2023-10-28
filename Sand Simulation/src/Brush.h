@@ -8,6 +8,7 @@
 namespace Brush
 {
 	extern ParticleSelection selectedParticle;
+	extern int brushSize;
 
 	Particle GetSelectedParticle(ParticleSelection selection);
 	void MouseInput(Window window, Grid* grid);
