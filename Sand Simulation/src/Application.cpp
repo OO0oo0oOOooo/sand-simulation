@@ -28,7 +28,7 @@
 
 unsigned int windowWidth = 1280;
 unsigned int windowHeight = 720;
-unsigned int gridResolution = 128;
+unsigned int gridResolution = 256;
 
 int main(void)
 {
