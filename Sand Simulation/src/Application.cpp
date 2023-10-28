@@ -1,15 +1,13 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
-#include <iostream>
-
 #include "Window.h"
 #include "Input.h"
 #include "Renderer.h"
 #include "Grid.h"
 #include "Brush.h"
 
-//#include "ParticleData.h"
+#include <iostream>
 
 // TODO:
 // - ImGUI
@@ -26,7 +24,7 @@
 
 unsigned int windowWidth = 1280;
 unsigned int windowHeight = 720;
-unsigned int gridResolution = 64;
+unsigned int gridResolution = 128;
 
 int main(void)
 {
