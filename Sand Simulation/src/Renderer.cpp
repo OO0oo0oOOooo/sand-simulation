@@ -81,7 +81,7 @@ void Renderer::UpdateBuffers(Grid* grid)
     {
         for (int y = 0; y < grid->GridHeight; y++)
         {
-            Cell cell = grid->GetCell(x, y);
+            Cell& cell = grid->GetCellRefrence(x, y);
             if (cell.dirty)
             {
                 int baseVertexIndex = (y * grid->GridWidth + x) * 4;
@@ -100,28 +100,31 @@ void Renderer::UpdateBuffers(Grid* grid)
     vb->UpdateData(vertices.data(), vertices.size() * sizeof(Vertex));
 }
 
-//void Renderer::UpdateDirtyBuffers(Grid* grid)
-//{
-//    for (int x = 0; x < grid->DirtyCells.size(); x++)
-//    {
-//            Cell cell = grid->GetCell(x, y);
-//            if (cell.dirty)
-//            {
-//                int baseVertexIndex = (y * grid->GridWidth + x) * 4;
-//
-//                for (int i = 0; i < 4; i++)
-//                {
-//                    vertices[baseVertexIndex + i].position = (glm::vec3(x, y, 0) + vertexPositions[i]) * (float)grid->CellSize;
-//                    vertices[baseVertexIndex + i].color = cell.color;
-//                }
-//
-//                cell.dirty = false;
-//            }
-//        }
-//    }
-//
-//    vb->UpdateData(vertices.data(), vertices.size() * sizeof(Vertex));
-//}
+void Renderer::UpdateDirtyBuffers(Grid* grid)
+{
+    for (int x = 0; x < grid->DirtyCells.size(); x++)
+    {
+        Vertex v[4];
+
+
+        glm::ivec2 pos = grid->DirtyCells[x].position;
+        Cell& cell = grid->GetCellRefrence(pos.x, pos.y);
+
+        int baseVertexIndex = (pos.y * grid->GridWidth + pos.x) * 4;
+
+        for (int i = 0; i < 4; i++)
+        {
+            v[baseVertexIndex + i].position = (glm::vec3(pos.x, pos.y, 0) + vertexPositions[i]) * (float)grid->CellSize;
+            v[baseVertexIndex + i].color = cell.color;
+        }
+
+        // remove this cell from grid->DirtyCells[x]
+
+        vb->UpdateDirtyData(vertices.data(), sizeof(Vertex), (pos.y * grid->GridWidth + pos.x) * sizeof(Vertex));
+    }
+
+    
+}
 
 void Renderer::SetShaderUniforms(float width, float height)
 {

@@ -14,17 +14,16 @@
 #include <iostream>
 
 // TODO:
-// - ImGUI
+// - QuadTree
+// - Chunks
+// - Multithreading
+// - 
+// - FlatCellMap [x]
 // 
 // - Update loop
 // - tick and late tick
 //
-// - Particle Brush
-// - Particle Selection
 // - Particle Selection UI
-//
-// - Move ParticleSelection out of Application
-// - Move TestInput out of Application
 
 unsigned int windowWidth = 1280;
 unsigned int windowHeight = 720;

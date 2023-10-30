@@ -22,7 +22,7 @@ public:
 	void UpdateGrid();
 	void ClearGrid();
 
-	inline Cell& GetCell(int x, int y)
+	inline Cell& GetCellRefrence(int x, int y)
 	{
 		if (x < 0 || x >= GridWidth || y < 0 || y >= GridHeight)
 			throw std::out_of_range("Index out of bounds");
@@ -30,7 +30,15 @@ public:
 		return FlatCellMap[GetIndexFromFlat2DArray(x, y)];
 	}
 
-	inline void SetCell(int x, int y, Cell particle) 
+	inline Cell GetCell(int x, int y)
+	{
+		if (x < 0 || x >= GridWidth || y < 0 || y >= GridHeight)
+			return ParticleVoid;
+
+		return FlatCellMap[GetIndexFromFlat2DArray(x, y)];
+	}
+
+	inline void SetCell(int x, int y, Cell particle)
 	{
 		if (x < 0 || x >= GridWidth || y < 0 || y >= GridHeight)
 			return;
@@ -62,9 +70,9 @@ public:
 	int GridHeight;
 	int CellSize;
 
+	std::vector<Cell> DirtyCells;
 private:
 	std::vector<Cell> FlatCellMap;
-	std::vector<Cell> DirtyCells;
 
 	//std::vector<std::vector<Cell>> CellMap;
 

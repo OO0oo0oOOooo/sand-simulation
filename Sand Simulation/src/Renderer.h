@@ -26,6 +26,7 @@ public:
 
 	void InitBuffers(Grid* grid);
 	void UpdateBuffers(Grid* grid);
+	void UpdateDirtyBuffers(Grid* grid);
 
 	void Clear() const;
 	void Draw();
