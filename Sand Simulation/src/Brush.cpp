@@ -2,43 +2,8 @@
 
 namespace Brush
 {
-	ParticleSelection selectedParticle = Sand;
+	Cell selectedParticle = ParticleSand;
 	int brushSize = 1;
-
-	Particle GetSelectedParticle(ParticleSelection selection)
-	{
-
-		switch (selection)
-		{
-		case Void:
-			return ParticleVoid;
-
-		case Air:
-			return ParticleAir;
-
-		case Sand:
-			return ParticleSand;
-
-		case Water:
-			return ParticleWater;
-
-		case Rock:
-			return ParticleRock;
-
-		case Wood:
-			return ParticleWood;
-
-		case Metal:
-			return ParticleMetal;
-
-		case Gunpowder:
-			return ParticleGunpowder;
-
-		default:
-			return ParticleVoid;
-			break;
-		}
-	}
 
 	void MouseInput(Window window, Grid* grid)
 	{
@@ -48,7 +13,6 @@ namespace Brush
 			//std::cout << "x: " << Input::normalizedMousePosition.x << " y: " << Input::normalizedMousePosition.y << std::endl;
 			//std::cout << "Tile X: " << index.x << " Tile Y: " << index.y << std::endl;
 
-			//srand(time(0));
 			int rx = rand() % (2 * brushSize + 1) - brushSize;
 			int ry = rand() % (2 * brushSize + 1) - brushSize;
 
@@ -60,7 +24,7 @@ namespace Brush
 			if (index.y > grid->GridHeight || index.y < 0)
 				return;
 
-			grid->SetCell((int)index.x, (int)index.y, GetSelectedParticle(selectedParticle));
+			grid->SetCell((int)index.x, (int)index.y, selectedParticle);
 		}
 	}
 
@@ -73,27 +37,27 @@ namespace Brush
 
 		if (Input::IsKeyPressed(GLFW_KEY_1))
 		{
-			selectedParticle = Sand;
+			selectedParticle = ParticleSand;
 		}
 
 		if (Input::IsKeyPressed(GLFW_KEY_2))
 		{
-			selectedParticle = Water;
+			selectedParticle = ParticleWater;
 		}
 
 		if (Input::IsKeyPressed(GLFW_KEY_3))
 		{
-			selectedParticle = Rock;
+			selectedParticle = ParticleRock;
 		}
 
 		if (Input::IsKeyPressed(GLFW_KEY_4))
 		{
-			selectedParticle = Wood;
+			selectedParticle = ParticleWood;
 		}
 
 		if (Input::IsKeyPressed(GLFW_KEY_5))
 		{
-			selectedParticle = Metal;
+			selectedParticle = ParticleMetal;
 		}
 	}
 }

@@ -11,6 +11,7 @@ public:
 	void Unbind();
 
 	void UpdateData(const void* data, unsigned int size);
+	void UpdateDirty(const void* data, unsigned int size, int offset);
 
 private:
 	unsigned int m_RendererID;

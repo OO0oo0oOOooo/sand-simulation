@@ -9,7 +9,7 @@
 #include "vertexBuffer.h"
 #include "IndexBuffer.h"
 
-#include "ParticleData.h"
+#include "Cell.h"
 #include "Grid.h"
 
 struct Vertex
@@ -21,10 +21,10 @@ struct Vertex
 class Renderer
 {
 public:
-	Renderer();
 	Renderer(int windowWidth, int windowHeight);
 	~Renderer();
 
+	void InitBuffers(Grid* grid);
 	void UpdateBuffers(Grid* grid);
 
 	void Clear() const;
@@ -37,4 +37,7 @@ private:
 	VertexBuffer* vb;
 	IndexBuffer* ib;
 	Shader* shader;
+
+	std::vector<Vertex> vertices;
+	std::vector<unsigned int> indices;
 };

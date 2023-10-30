@@ -49,6 +49,7 @@ int main(void)
 	Grid* grid = new Grid(windowWidth, windowHeight, gridResolution);
 
 	grid->InitGrid();
+    renderer->InitBuffers(grid);
 	renderer->UpdateBuffers(grid);
 
     Input::SetupKeyInputs(glwindow);
@@ -60,7 +61,7 @@ int main(void)
     ImGui_ImplGlfw_InitForOpenGL(glwindow, true);
     ImGui_ImplOpenGL3_Init("#version 430");
 
-    bool show_demo_window = true;
+    bool show_demo_window = false;
 
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     while (!glfwWindowShouldClose(glwindow))
@@ -70,8 +71,6 @@ int main(void)
 
 		grid->UpdateGrid();
 		renderer->UpdateBuffers(grid);
-
-        //renderer->Clear();
         renderer->Draw();
 
         // Start the Dear ImGui frame
@@ -79,8 +78,14 @@ int main(void)
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
-        if (show_demo_window)
-            ImGui::ShowDemoWindow(&show_demo_window);
+        //if(show_demo_window)
+        //    ImGui::ShowDemoWindow(&show_demo_window);
+
+        {
+            ImGui::Begin("FPS");
+            ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
+            ImGui::End();
+        }
 
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());

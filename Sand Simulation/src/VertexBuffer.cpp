@@ -32,4 +32,14 @@ void VertexBuffer::UpdateData(const void* data, unsigned int size)
 {
 	glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
 	glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
+
+	glBufferSubData(GL_ARRAY_BUFFER, 0, size, data);
+	
+}
+
+void VertexBuffer::UpdateDirty(const void* data, unsigned int size, int offset)
+{
+	glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
+	glBufferSubData(GL_ARRAY_BUFFER, offset, size, data);
+
 }

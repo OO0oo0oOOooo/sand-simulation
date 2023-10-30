@@ -5,7 +5,7 @@
 #include <vector>
 #include <iostream>
 
-#include "ParticleData.h"
+#include "Cell.h"
 #include "Window.h"
 
 
@@ -22,20 +22,21 @@ public:
 	void UpdateGrid();
 	void ClearGrid();
 
-	inline Particle GetCell(int x, int y)
+	inline Cell& GetCell(int x, int y)
 	{
 		if (x < 0 || x >= GridWidth || y < 0 || y >= GridHeight)
-			return ParticleVoid;
-		
-		return CellMap[x][y];
+			throw std::out_of_range("Index out of bounds");
+
+		return FlatCellMap[GetIndexFromFlat2DArray(x, y)];
 	}
 
-	inline void SetCell(int x, int y, Particle particle) 
+	inline void SetCell(int x, int y, Cell particle) 
 	{
 		if (x < 0 || x >= GridWidth || y < 0 || y >= GridHeight)
 			return;
 
-		CellMap[x][y] = particle;
+		FlatCellMap[GetIndexFromFlat2DArray(x, y)] = particle;
+		FlatCellMap[GetIndexFromFlat2DArray(x, y)].dirty;
 	}
 
 	inline glm::ivec2 GetCellIndex(glm::vec2 normalizedPos)
@@ -46,16 +47,26 @@ public:
 		return glm::ivec2(x, y);
 	}
 
+	inline int GetIndexFromFlat2DArray(int x, int y)
+	{
+		return (y * GridWidth + x);
+	}
+
 	// This could be used for saving and loading
 	// inline std::vector<std::vector<Particle>> GetCellMap() { return CellMap; }
 	// inline void SetCellMap(std::vector<std::vector<Particle>> cellMap) { CellMap = cellMap; }
+
+	//char CheckCellBounds(int x, int y);
 	
 	int GridWidth;
 	int GridHeight;
 	int CellSize;
 
 private:
-	std::vector<std::vector<Particle>> CellMap;
+	std::vector<Cell> FlatCellMap;
+	std::vector<Cell> DirtyCells;
+
+	//std::vector<std::vector<Cell>> CellMap;
 
 	//void DrawGridLines(Renderer* renderer);
 	//void DrawParticles(Renderer* renderer);

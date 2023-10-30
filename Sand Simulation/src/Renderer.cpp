@@ -1,12 +1,8 @@
 #include "Renderer.h"
-#include "ParticleData.h"
+#include "Cell.h"
 
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
-
-Renderer::Renderer()
-{
-}
 
 Renderer::Renderer(int windowWidth, int windowHeight)
 {
@@ -57,30 +53,75 @@ void Renderer::Draw()
     glDrawElements(GL_TRIANGLES, ib->GetCount(), GL_UNSIGNED_INT, 0);
 }
 
-void Renderer::UpdateBuffers(Grid* grid)
+void Renderer::InitBuffers(Grid* grid)
 {
-    std::vector<Vertex> vertices;
-    std::vector<unsigned int> indices;
+    vertices.resize(grid->GridWidth * grid->GridHeight * 4);
+    indices.resize(grid->GridWidth * grid->GridHeight * 6);
 
     for (int x = 0; x < grid->GridWidth; x++)
     {
         for (int y = 0; y < grid->GridHeight; y++)
         {
-            for (int i = 0; i < 4; i++)
-            {
-                vertices.push_back({ (glm::vec3(x, y, 0) + vertexPositions[i]) * (float)grid->CellSize, grid->GetCell(x,y).color });
-            }
+            int baseVertexIndex = (y * grid->GridWidth + x) * 4;
+            int baseIndexIndex = (y * grid->GridWidth + x) * 6;
 
             for (int i = 0; i < 6; i++)
             {
-                indices.push_back(meshTriangles[i] + (vertices.size() - 4));
+                indices[baseIndexIndex + i] = meshTriangles[i] + baseVertexIndex;
+            }
+        }
+    }
+
+    ib->UpdateData(indices.data(), indices.size());
+}
+
+void Renderer::UpdateBuffers(Grid* grid)
+{
+    for (int x = 0; x < grid->GridWidth; x++)
+    {
+        for (int y = 0; y < grid->GridHeight; y++)
+        {
+            Cell cell = grid->GetCell(x, y);
+            if (cell.dirty)
+            {
+                int baseVertexIndex = (y * grid->GridWidth + x) * 4;
+
+                for (int i = 0; i < 4; i++)
+                {
+                    vertices[baseVertexIndex + i].position = (glm::vec3(x, y, 0) + vertexPositions[i]) * (float)grid->CellSize;
+                    vertices[baseVertexIndex + i].color = cell.color;
+                }
+
+                cell.dirty = false;
             }
         }
     }
 
     vb->UpdateData(vertices.data(), vertices.size() * sizeof(Vertex));
-    ib->UpdateData(indices.data(), indices.size());
 }
+
+//void Renderer::UpdateDirtyBuffers(Grid* grid)
+//{
+//    for (int x = 0; x < grid->DirtyCells.size(); x++)
+//    {
+//            Cell cell = grid->GetCell(x, y);
+//            if (cell.dirty)
+//            {
+//                int baseVertexIndex = (y * grid->GridWidth + x) * 4;
+//
+//                for (int i = 0; i < 4; i++)
+//                {
+//                    vertices[baseVertexIndex + i].position = (glm::vec3(x, y, 0) + vertexPositions[i]) * (float)grid->CellSize;
+//                    vertices[baseVertexIndex + i].color = cell.color;
+//                }
+//
+//                cell.dirty = false;
+//            }
+//        }
+//    }
+//
+//    vb->UpdateData(vertices.data(), vertices.size() * sizeof(Vertex));
+//}
 
 void Renderer::SetShaderUniforms(float width, float height)
 {

@@ -1,68 +1,68 @@
 #include "Cell.h"
 
-Cell::Cell()
-{
-}
-
-Cell::Cell(Grid* grid, unsigned char id)
-{
-	m_Grid = grid;
-
-	Id = id;
-	Color = particleColors[id];
-	Velocity = glm::vec2(0.0f, 0.0f);
-
-	LifeTime = 0;
-
-	Temperature = 0;
-	Conductivity = 0;
-	Moisture = 0;
-	HeatCapacity = 0;
-	Density = 0;
-	Hardness = 0;
-	Weight = 0;
-
-	BoilingPoint = 0;
-	MeltingPoint = 0;
-	FreezingPoint = 0;
-
-	IgnitionPoint = 0;
-	FlashPoint = 0;
-	ExplosionPoint = 0;
-
-	Flammability = 0;
-	Explosiveness = 0;
-
-	IsSolid = false;
-	IsLiquid = false;
-	IsGas = false;
-}
-
-Cell::~Cell()
-{
-}
-
-void Cell::Update()
-{
-	switch (Id)
-	{
-	case 0:
-		// UpdateVoid();
-		break;
-
-	case 1:
-		// UpdateAir();
-		break;
-
-	case 2:
-		// UpdateSand();
-		break;
-
-
-	default:
-		break;
-	}
-}
+//Cell::Cell()
+//{
+//}
+//
+//Cell::Cell(Grid* grid, unsigned char id)
+//{
+//	m_Grid = grid;
+//
+//	Id = id;
+//	Color = particleColors[id];
+//	Velocity = glm::vec2(0.0f, 0.0f);
+//
+//	LifeTime = 0;
+//
+//	Temperature = 0;
+//	Conductivity = 0;
+//	Moisture = 0;
+//	HeatCapacity = 0;
+//	Density = 0;
+//	Hardness = 0;
+//	Weight = 0;
+//
+//	BoilingPoint = 0;
+//	MeltingPoint = 0;
+//	FreezingPoint = 0;
+//
+//	IgnitionPoint = 0;
+//	FlashPoint = 0;
+//	ExplosionPoint = 0;
+//
+//	Flammability = 0;
+//	Explosiveness = 0;
+//
+//	IsSolid = false;
+//	IsLiquid = false;
+//	IsGas = false;
+//}
+//
+//Cell::~Cell()
+//{
+//}
+//
+//void Cell::Update()
+//{
+//	switch (Id)
+//	{
+//	case 0:
+//		// UpdateVoid();
+//		break;
+//
+//	case 1:
+//		// UpdateAir();
+//		break;
+//
+//	case 2:
+//		// UpdateSand();
+//		break;
+//
+//
+//	default:
+//		break;
+//	}
+//}
 
 
 //void UpdateSand(int x, int y)
