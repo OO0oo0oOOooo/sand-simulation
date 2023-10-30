@@ -7,7 +7,7 @@ Grid::Grid()
 	GridHeight = 1;
 
 	//CellMap = std::vector<std::vector<Cell>>(GridWidth, std::vector<Cell>(GridHeight));
-	FlatCellMap = std::vector<Cell>(GridWidth * GridHeight);
+	CellMap = std::vector<Cell>(GridWidth * GridHeight);
 }
 
 Grid::Grid(int gridWidth, int gridHeight)
@@ -16,7 +16,7 @@ Grid::Grid(int gridWidth, int gridHeight)
 	CellSize = 20;
 
 	//CellMap = std::vector<std::vector<Cell>>(GridWidth, std::vector<Cell>(GridHeight));
-	FlatCellMap = std::vector<Cell>(GridWidth * GridHeight);
+	CellMap = std::vector<Cell>(GridWidth * GridHeight);
 }
 
 Grid::Grid(int windowWidth, int windowHeight, int resolution)
@@ -26,7 +26,7 @@ Grid::Grid(int windowWidth, int windowHeight, int resolution)
 	GridHeight = windowHeight / CellSize;
 
 	//CellMap = std::vector<std::vector<Cell>>(GridWidth, std::vector<Cell>(GridHeight));
-	FlatCellMap = std::vector<Cell>(GridWidth * GridHeight);
+	CellMap = std::vector<Cell>(GridWidth * GridHeight);
 }
 
 Grid::~Grid()
@@ -40,7 +40,7 @@ void Grid::InitGrid()
 		for (int y = 0; y < GridHeight; y++)
 		{
 			//CellMap[x][y] = ParticleAir;
-			FlatCellMap[x + y * GridWidth] = ParticleAir;
+			CellMap[x + y * GridWidth] = ParticleAir;
 		}
 	}
 }
@@ -54,6 +54,8 @@ void Grid::UpdateGrid()
 			// Update Particles
 			// UpdateSand(x, y);
 			// UpdateWater(x, y);
+
+			// Determine if cell can switch with colliding cell
 
 			// Sand
 			if (GetCell(x, y).Id == ParticleSand.Id)
@@ -121,7 +123,7 @@ void Grid::ClearGrid()
 		for (int y = 0; y < GridHeight; y++)
 		{
 			//CellMap[x][y] = ParticleVoid;
-			FlatCellMap[GetIndexFromFlat2DArray(x, y)] = ParticleVoid;
+			CellMap[GetIndexFromFlat2DArray(x, y)] = ParticleVoid;
 		}
 	}
 }

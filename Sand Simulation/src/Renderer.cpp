@@ -106,7 +106,6 @@ void Renderer::UpdateDirtyBuffers(Grid* grid)
     {
         Vertex v[4];
 
-
         glm::ivec2 pos = grid->DirtyCells[x].position;
         Cell& cell = grid->GetCellRefrence(pos.x, pos.y);
 
@@ -118,12 +117,10 @@ void Renderer::UpdateDirtyBuffers(Grid* grid)
             v[baseVertexIndex + i].color = cell.color;
         }
 
-        // remove this cell from grid->DirtyCells[x]
+        grid->DirtyCells.erase(grid->DirtyCells.begin() + x);
 
-        vb->UpdateDirtyData(vertices.data(), sizeof(Vertex), (pos.y * grid->GridWidth + pos.x) * sizeof(Vertex));
+        vb->UpdateSubData(vertices.data(), sizeof(Vertex), (pos.y * grid->GridWidth + pos.x) * sizeof(Vertex));
     }
-
-    
 }
 
 void Renderer::SetShaderUniforms(float width, float height)

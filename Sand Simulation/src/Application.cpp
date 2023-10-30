@@ -14,16 +14,34 @@
 #include <iostream>
 
 // TODO:
-// - QuadTree
-// - Chunks
-// - Multithreading
-// - 
-// - FlatCellMap [x]
-// 
-// - Update loop
-// - tick and late tick
+// [ ] Update loop
+// [ ] tick and late tick
 //
-// - Particle Selection UI
+// UI:
+// [ ] Particle Selection UI
+//
+// Optimizations:
+// [ ] QuadTree
+// [ ] Chunks
+// [ ] Compute Shaders
+// [ ] Multithreading
+// 
+// [ ] glBufferSubData instead of glBufferData
+//  - Set positions
+//  - Add/Remove to DirtyCells Vector
+// 
+// [x] Use a flat array instead of a 2D array
+// [x] UpdateBuffers with dirty flag
+//
+// Reactions:
+// [ ] Wood + Fire = Fire
+// [ ] Water + Lava = Stone
+//
+// Effects:
+// [ ] Lighting
+//  - Flood Fill
+// [ ] Texturing Groups
+
 
 unsigned int windowWidth = 1280;
 unsigned int windowHeight = 720;
@@ -34,7 +52,6 @@ int main(void)
     if (!glfwInit())
         return -1;
 
-    // This might be copying the window object, but I'm not sure
     Window window(windowWidth, windowHeight, "Sand Simulation");
     GLFWwindow* glwindow = window.GetNativeWindow();
 

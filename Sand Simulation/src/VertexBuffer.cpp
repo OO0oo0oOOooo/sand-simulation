@@ -37,7 +37,7 @@ void VertexBuffer::UpdateData(const void* data, unsigned int size)
 	
 }
 
-void VertexBuffer::UpdateDirtyData(const void* data, unsigned int size, int offset)
+void VertexBuffer::UpdateSubData(const void* data, unsigned int size, int offset)
 {
 	glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
 	glBufferSubData(GL_ARRAY_BUFFER, offset, size, data);

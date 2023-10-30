@@ -8,7 +8,6 @@
 #include "Cell.h"
 #include "Window.h"
 
-
 class Grid
 {
 public:
@@ -27,7 +26,7 @@ public:
 		if (x < 0 || x >= GridWidth || y < 0 || y >= GridHeight)
 			throw std::out_of_range("Index out of bounds");
 
-		return FlatCellMap[GetIndexFromFlat2DArray(x, y)];
+		return CellMap[GetIndexFromFlat2DArray(x, y)];
 	}
 
 	inline Cell GetCell(int x, int y)
@@ -35,7 +34,7 @@ public:
 		if (x < 0 || x >= GridWidth || y < 0 || y >= GridHeight)
 			return ParticleVoid;
 
-		return FlatCellMap[GetIndexFromFlat2DArray(x, y)];
+		return CellMap[GetIndexFromFlat2DArray(x, y)];
 	}
 
 	inline void SetCell(int x, int y, Cell particle)
@@ -43,8 +42,8 @@ public:
 		if (x < 0 || x >= GridWidth || y < 0 || y >= GridHeight)
 			return;
 
-		FlatCellMap[GetIndexFromFlat2DArray(x, y)] = particle;
-		FlatCellMap[GetIndexFromFlat2DArray(x, y)].dirty;
+		CellMap[GetIndexFromFlat2DArray(x, y)] = particle;
+		CellMap[GetIndexFromFlat2DArray(x, y)].dirty;
 	}
 
 	inline glm::ivec2 GetCellIndex(glm::vec2 normalizedPos)
@@ -72,7 +71,7 @@ public:
 
 	std::vector<Cell> DirtyCells;
 private:
-	std::vector<Cell> FlatCellMap;
+	std::vector<Cell> CellMap;
 
 	//std::vector<std::vector<Cell>> CellMap;
 
