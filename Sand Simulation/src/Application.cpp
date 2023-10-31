@@ -26,7 +26,7 @@
 // [ ] Compute Shaders
 // [ ] Multithreading
 // 
-// [ ] glBufferSubData instead of glBufferData
+// [x] glBufferSubData instead of glBufferData
 //  - Set positions
 //  - Add/Remove to DirtyCells Vector
 // 
@@ -66,7 +66,7 @@ int main(void)
 
 	grid->InitGrid();
     renderer->InitBuffers(grid);
-	renderer->UpdateBuffers(grid);
+    renderer->UpdateBuffers(grid);
 
     Input::SetupKeyInputs(glwindow);
 
@@ -86,7 +86,9 @@ int main(void)
         Brush::SelectionInput(window, grid);
 
 		grid->UpdateGrid();
-		renderer->UpdateBuffers(grid);
+
+		renderer->UpdateDirtyBuffers(grid);
+        //renderer->UpdateBuffers(grid);
         renderer->Draw();
 
         // Start the Dear ImGui frame

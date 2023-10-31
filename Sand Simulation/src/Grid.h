@@ -43,7 +43,10 @@ public:
 			return;
 
 		CellMap[GetIndexFromFlat2DArray(x, y)] = particle;
+		CellMap[GetIndexFromFlat2DArray(x, y)].position = glm::vec2(x, y);
 		CellMap[GetIndexFromFlat2DArray(x, y)].dirty;
+
+		DirtyCells.push_back(GetCell(x, y));
 	}
 
 	inline glm::ivec2 GetCellIndex(glm::vec2 normalizedPos)
@@ -59,6 +62,11 @@ public:
 		return (y * GridWidth + x);
 	}
 
+	inline void ClearDirtyCells()
+	{
+		DirtyCells.clear();
+	}
+
 	// This could be used for saving and loading
 	// inline std::vector<std::vector<Particle>> GetCellMap() { return CellMap; }
 	// inline void SetCellMap(std::vector<std::vector<Particle>> cellMap) { CellMap = cellMap; }
@@ -72,9 +80,4 @@ public:
 	std::vector<Cell> DirtyCells;
 private:
 	std::vector<Cell> CellMap;
-
-	//std::vector<std::vector<Cell>> CellMap;
-
-	//void DrawGridLines(Renderer* renderer);
-	//void DrawParticles(Renderer* renderer);
 };

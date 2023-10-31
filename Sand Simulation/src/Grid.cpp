@@ -55,8 +55,6 @@ void Grid::UpdateGrid()
 			// UpdateSand(x, y);
 			// UpdateWater(x, y);
 
-			// Determine if cell can switch with colliding cell
-
 			// Sand
 			if (GetCell(x, y).Id == ParticleSand.Id)
 			{

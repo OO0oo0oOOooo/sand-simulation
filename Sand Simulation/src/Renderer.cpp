@@ -102,6 +102,9 @@ void Renderer::UpdateBuffers(Grid* grid)
 
 void Renderer::UpdateDirtyBuffers(Grid* grid)
 {
+    if (grid->DirtyCells.size() <= 0)
+        return;
+
     for (int x = 0; x < grid->DirtyCells.size(); x++)
     {
         Vertex v[4];
@@ -109,18 +112,18 @@ void Renderer::UpdateDirtyBuffers(Grid* grid)
         glm::ivec2 pos = grid->DirtyCells[x].position;
         Cell& cell = grid->GetCellRefrence(pos.x, pos.y);
 
-        int baseVertexIndex = (pos.y * grid->GridWidth + pos.x) * 4;
 
         for (int i = 0; i < 4; i++)
         {
-            v[baseVertexIndex + i].position = (glm::vec3(pos.x, pos.y, 0) + vertexPositions[i]) * (float)grid->CellSize;
-            v[baseVertexIndex + i].color = cell.color;
+            v[i].position = (glm::vec3(pos.x, pos.y, 0) + vertexPositions[i]) * (float)grid->CellSize;
+            v[i].color = cell.color;
         }
 
-        grid->DirtyCells.erase(grid->DirtyCells.begin() + x);
-
-        vb->UpdateSubData(vertices.data(), sizeof(Vertex), (pos.y * grid->GridWidth + pos.x) * sizeof(Vertex));
+        int baseVertexIndex = (pos.y * grid->GridWidth + pos.x) * 4;
+        vb->UpdateSubData(v, 4 * sizeof(Vertex), baseVertexIndex * sizeof(Vertex));
     }
+
+    grid->ClearDirtyCells();
 }
 
 void Renderer::SetShaderUniforms(float width, float height)
