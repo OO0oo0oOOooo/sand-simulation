@@ -11,6 +11,7 @@ Window::Window(int width, int height, const char* title)
 	GLFWmonitor* monitor = NULL; // glfwGetPrimaryMonitor();
 	m_NativeWindow = glfwCreateWindow(width, height, title, monitor, NULL);
 	glfwMakeContextCurrent(m_NativeWindow);
+	glfwSwapInterval(0);
 
 	//Set callbacks
 	glfwSetFramebufferSizeCallback(m_NativeWindow, framebuffer_size_callback);

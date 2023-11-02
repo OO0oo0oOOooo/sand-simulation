@@ -13,6 +13,10 @@
 
 #include <iostream>
 
+// Quadtree to reduce the amount of particles to check
+// 
+// Instanced rendering / Whatever technique reduces the amount of data sent to the gpu
+
 // TODO:
 // [ ] Update loop
 // [ ] tick and late tick
@@ -25,6 +29,7 @@
 // [ ] Chunks
 // [ ] Compute Shaders
 // [ ] Multithreading
+// [ ] Reduce size of buffer (Build Quads on gpu)
 // 
 // [x] glBufferSubData instead of glBufferData
 //  - Set positions
