@@ -9,12 +9,13 @@
 
 class Quadtree {
 public:
-    Quadtree();
+    Quadtree(int depth);
+    ~Quadtree();
+
+    void Insert(Cell cell);
+    std::vector<Cell> Query(); // If this node is a leaf, return data? // If this node is in Occupied return data?
 
 private:
-    // Define Node structure, which includes pointers to child nodes (if any)
-    // and data (if this is a leaf node)
-
     QuadTreeNode* root;
     int maxDepth;
 };
@@ -25,11 +26,11 @@ public:
     QuadTreeNode(glm::vec2 position, int size);
 	~QuadTreeNode();
 
-    void Insert(Cell cell);
-	std::vector<Cell> Query(); // If this node is a leaf, return data? // If this node is in Occupied return data?
-    std::vector<Cell> QueryArea(); // parameters to define query area
+    //void Insert(Cell cell);
+	//std::vector<Cell> Query(); // If this node is a leaf, return data? // If this node is in Occupied return data?
+    //std::vector<Cell> QueryArea(); // parameters to define query area
 
-    void Subdivide(); // If node is not entirely occupied, subdivide for more precision. If node is entirely occupied or entirly unoccupied, do not subdivide.
+    void Subdivide(int depth); // If node is not entirely occupied, subdivide for more precision. If node is entirely occupied or entirly unoccupied, do not subdivide.
 
 private:
     glm::vec2 position;
@@ -41,4 +42,8 @@ private:
 	QuadTreeNode* SE;
 
 	Cell data;
+
+    bool isLeaf;
+	bool isOccupied;
 };
+
