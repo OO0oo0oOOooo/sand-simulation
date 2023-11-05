@@ -1,16 +1,10 @@
-#include "GL/glew.h"
 #include "VertexBuffer.h"
 
-VertexBuffer::VertexBuffer()
-{
-	m_RendererID = 0;
-}
-
-VertexBuffer::VertexBuffer(const void* data, unsigned int size)
+VertexBuffer::VertexBuffer(std::vector<Vertex>& vertices)
 {
 	glGenBuffers(1, &m_RendererID);
 	glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
-	glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), vertices.data(), GL_STATIC_DRAW);
 }
 
 VertexBuffer::~VertexBuffer()
@@ -28,10 +22,10 @@ void VertexBuffer::Unbind()
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-void VertexBuffer::UpdateData(const void* data, unsigned int size)
+void VertexBuffer::UpdateData(std::vector<Vertex>& vertices)
 {
 	glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
-	glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), vertices.data(), GL_STATIC_DRAW);
 }
 
 void VertexBuffer::UpdateSubData(const void* data, unsigned int size, int offset)

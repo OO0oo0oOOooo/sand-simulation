@@ -1,16 +1,18 @@
 #pragma once
 
+#include "GL/glew.h"
+#include <vector>
+
 class IndexBuffer
 {
 public:
-	IndexBuffer();
-	IndexBuffer(const unsigned int* data, unsigned int count);
+	IndexBuffer(std::vector<unsigned int>& indices);
 	~IndexBuffer();
 
 	void Bind();
 	void Unbind();
 
-	void UpdateData(const unsigned int* data, unsigned int count);
+	void UpdateData(std::vector<unsigned int>& indices);
 
 	inline unsigned int GetCount() const { return m_Count; }
 

@@ -8,15 +8,10 @@
 #include "Shader.h"
 #include "vertexBuffer.h"
 #include "IndexBuffer.h"
+#include "Mesh.h"
 
 #include "Cell.h"
 #include "Grid.h"
-
-struct Vertex
-{
-	glm::vec3 position;
-	glm::vec4 color;
-};
 
 class Renderer
 {
@@ -30,13 +25,15 @@ public:
 
 	void Clear() const;
 	void Draw();
-
-	void SetShaderUniforms(float windowWidth, float windowHeight);
 	
 private:
 	unsigned int* vao;
 	VertexBuffer* vb;
 	IndexBuffer* ib;
+
+	Mesh* mesh;
+	Mesh* quadTreeMesh;
+
 	Shader* shader;
 
 	std::vector<Vertex> vertices;

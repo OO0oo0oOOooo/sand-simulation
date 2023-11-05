@@ -20,10 +20,6 @@ std::vector<Cell> Quadtree::Query()
 	return std::vector<Cell>();
 }
 
-
-
-
-
 QuadTreeNode::QuadTreeNode(glm::vec2 position, int size)
 {
 	this->position = position;
@@ -40,6 +36,8 @@ QuadTreeNode::~QuadTreeNode()
 
 void QuadTreeNode::Subdivide(int depth)
 {
+	if (depth == 0) return;
+
 	NW = new QuadTreeNode(glm::vec2(position.x - size * 0.25f, position.y + size * 0.25f), size / 2);
 	NE = new QuadTreeNode(glm::vec2(position.x + size * 0.25f, position.y + size * 0.25f), size / 2);
 	SW = new QuadTreeNode(glm::vec2(position.x - size * 0.25f, position.y - size * 0.25f), size / 2);

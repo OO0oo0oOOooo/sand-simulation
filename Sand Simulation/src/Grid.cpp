@@ -104,6 +104,9 @@ void Grid::UpdateGrid()
 					SetCell(x - 1, y, ParticleWater);
 				}
 			}
+
+			// Render Changes
+
 		}
 	}
 }
