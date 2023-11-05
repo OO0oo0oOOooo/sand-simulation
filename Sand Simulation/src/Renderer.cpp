@@ -37,6 +37,7 @@ void Renderer::Draw()
     mesh->Draw(shader);
 }
 
+// Move the buffer stuff to the grid class
 void Renderer::InitBuffers(Grid* grid)
 {
     mesh->vertices.resize(grid->GridWidth * grid->GridHeight * 4);
@@ -48,6 +49,13 @@ void Renderer::InitBuffers(Grid* grid)
         {
             int baseVertexIndex = (y * grid->GridWidth + x) * 4;
             int baseIndexIndex = (y * grid->GridWidth + x) * 6;
+            Cell& cell = grid->GetCellRefrence(x, y);
+
+            for (int i = 0; i < 4; i++)
+            {
+                mesh->vertices[baseVertexIndex + i].position = (glm::vec3(x, y, 0) + vertexPositions[i]) * (float)grid->CellSize;
+                mesh->vertices[baseVertexIndex + i].color = cell.color;
+            }
 
             for (int i = 0; i < 6; i++)
             {
@@ -57,6 +65,7 @@ void Renderer::InitBuffers(Grid* grid)
     }
 
     mesh->UploadIBOData();
+    mesh->UploadVBOData();
 }
 
 void Renderer::UpdateBuffers(Grid* grid)

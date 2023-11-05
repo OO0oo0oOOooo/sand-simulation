@@ -6,7 +6,6 @@ Grid::Grid()
 	GridWidth = 1;
 	GridHeight = 1;
 
-	//CellMap = std::vector<std::vector<Cell>>(GridWidth, std::vector<Cell>(GridHeight));
 	CellMap = std::vector<Cell>(GridWidth * GridHeight);
 }
 
@@ -15,7 +14,6 @@ Grid::Grid(int gridWidth, int gridHeight)
 {
 	CellSize = 20;
 
-	//CellMap = std::vector<std::vector<Cell>>(GridWidth, std::vector<Cell>(GridHeight));
 	CellMap = std::vector<Cell>(GridWidth * GridHeight);
 }
 
@@ -25,7 +23,6 @@ Grid::Grid(int windowWidth, int windowHeight, int resolution)
 	GridWidth =	 windowWidth  / CellSize;
 	GridHeight = windowHeight / CellSize;
 
-	//CellMap = std::vector<std::vector<Cell>>(GridWidth, std::vector<Cell>(GridHeight));
 	CellMap = std::vector<Cell>(GridWidth * GridHeight);
 }
 
@@ -39,7 +36,6 @@ void Grid::InitGrid()
 	{
 		for (int y = 0; y < GridHeight; y++)
 		{
-			//CellMap[x][y] = ParticleAir;
 			CellMap[x + y * GridWidth] = ParticleAir;
 		}
 	}
@@ -123,7 +119,6 @@ void Grid::ClearGrid()
 	{
 		for (int y = 0; y < GridHeight; y++)
 		{
-			//CellMap[x][y] = ParticleVoid;
 			CellMap[GetIndexFromFlat2DArray(x, y)] = ParticleVoid;
 		}
 	}

@@ -6,8 +6,6 @@
 #include <vector>
 
 #include "Shader.h"
-#include "vertexBuffer.h"
-#include "IndexBuffer.h"
 #include "Mesh.h"
 
 #include "Cell.h"
@@ -27,15 +25,7 @@ public:
 	void Draw();
 	
 private:
-	unsigned int* vao;
-	VertexBuffer* vb;
-	IndexBuffer* ib;
-
 	Mesh* mesh;
 	Mesh* quadTreeMesh;
-
 	Shader* shader;
-
-	std::vector<Vertex> vertices;
-	std::vector<unsigned int> indices;
 };

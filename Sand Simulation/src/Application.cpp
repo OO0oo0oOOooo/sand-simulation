@@ -71,7 +71,6 @@ int main(void)
 
 	grid->InitGrid();
     renderer->InitBuffers(grid);
-    renderer->UpdateBuffers(grid);
 
     Input::SetupKeyInputs(glwindow);
 
