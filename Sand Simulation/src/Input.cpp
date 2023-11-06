@@ -1,9 +1,5 @@
 #include "Input.h"
 
-#include <iostream>
-#include <map>
-#include <vector>
-
 namespace Input {
 	glm::vec2 mousePosition = { 0.0f, 0.0f };
 	glm::vec2 normalizedMousePosition = { 0.0f, 0.0f };

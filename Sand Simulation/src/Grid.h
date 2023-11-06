@@ -6,7 +6,6 @@
 #include <iostream>
 
 #include "Cell.h"
-#include "Window.h"
 
 class Grid
 {

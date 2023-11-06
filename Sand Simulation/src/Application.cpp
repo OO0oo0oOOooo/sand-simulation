@@ -9,13 +9,10 @@
 #include "Input.h"
 #include "Renderer.h"
 #include "Grid.h"
+#include "Quadtree.h"
 #include "Brush.h"
 
 #include <iostream>
-
-// Quadtree to reduce the amount of particles to check
-// 
-// Instanced rendering / Whatever technique reduces the amount of data sent to the gpu
 
 // TODO:
 // [ ] Update loop
@@ -26,17 +23,18 @@
 //
 // Optimizations:
 // [ ] QuadTree
+// [ ] Instanced Rendering
+// [ ] Multithreading
 // [ ] Chunks
 // [ ] Compute Shaders
-// [ ] Multithreading
 // [ ] Reduce size of buffer (Build Quads on gpu)
 // 
-// [x] glBufferSubData instead of glBufferData
-//  - Set positions
-//  - Add/Remove to DirtyCells Vector
+// Grid:
+// [ ] Build mesh inside grid class
+// [ ] Get rid of DirtyCells vector
 // 
-// [x] Use a flat array instead of a 2D array
-// [x] UpdateBuffers with dirty flag
+// QuadTree:
+// Goto quadtree class to see the todo
 //
 // Reactions:
 // [ ] Wood + Fire = Fire
@@ -44,9 +42,15 @@
 //
 // Effects:
 // [ ] Lighting
-//  - Flood Fill
+//      Flood Fill
+//
 // [ ] Texturing Groups
-
+// [ ] Tiled textures across the world
+//      Cells will get the texture for there block ID
+//
+// Refactoring:
+// [ ] Cell.cpp doesnt do anything anymore and has a lot of comments
+// [ ] Cell.h has a lot of comments
 
 unsigned int windowWidth = 1280;
 unsigned int windowHeight = 720;
@@ -68,9 +72,11 @@ int main(void)
 
     Renderer* renderer = new Renderer(windowWidth, windowHeight);
 	Grid* grid = new Grid(windowWidth, windowHeight, gridResolution);
+    //Quadtree* quadTree = new Quadtree(1);
 
 	grid->InitGrid();
     renderer->InitBuffers(grid);
+    //quadTree->DrawQuadTree();
 
     Input::SetupKeyInputs(glwindow);
 
@@ -84,6 +90,8 @@ int main(void)
     bool show_demo_window = false;
 
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    //glPolygonMode(GL_FRONT_AND_BACK, GL_POLYGON);
+    //glPolygonMode(GL_FRONT, GL_POLYGON);
     while (!glfwWindowShouldClose(glwindow))
     {
         Brush::MouseInput(window, grid);

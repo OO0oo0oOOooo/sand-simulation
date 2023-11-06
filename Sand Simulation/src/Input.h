@@ -3,6 +3,9 @@
 #include <GLFW/glfw3.h>
 #include "glm/glm.hpp"
 
+#include <map>
+#include <vector>
+
 namespace Input {
 
     extern glm::vec2 mousePosition;

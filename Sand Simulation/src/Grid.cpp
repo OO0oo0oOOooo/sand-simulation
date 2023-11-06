@@ -119,7 +119,7 @@ void Grid::ClearGrid()
 	{
 		for (int y = 0; y < GridHeight; y++)
 		{
-			CellMap[GetIndexFromFlat2DArray(x, y)] = ParticleVoid;
+			CellMap[GetIndexFromFlat2DArray(x, y)] = ParticleAir;
 		}
 	}
 }

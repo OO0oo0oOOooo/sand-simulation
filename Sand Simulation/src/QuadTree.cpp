@@ -11,19 +11,20 @@ Quadtree::~Quadtree()
 	delete root;
 }
 
-void Quadtree::Insert(Cell cell)
+void Quadtree::DrawQuadTree()
 {
+	DrawNode(root);
 }
 
-std::vector<Cell> Quadtree::Query()
-{
-	return std::vector<Cell>();
-}
+
+
 
 QuadTreeNode::QuadTreeNode(glm::vec2 position, int size)
 {
 	this->position = position;
 	this->size = size;
+
+	isLeaf = false;
 }
 
 QuadTreeNode::~QuadTreeNode()
@@ -36,7 +37,11 @@ QuadTreeNode::~QuadTreeNode()
 
 void QuadTreeNode::Subdivide(int depth)
 {
-	if (depth == 0) return;
+	if (depth == 0)
+	{
+		isLeaf = true;
+		return;
+	}
 
 	NW = new QuadTreeNode(glm::vec2(position.x - size * 0.25f, position.y + size * 0.25f), size / 2);
 	NE = new QuadTreeNode(glm::vec2(position.x + size * 0.25f, position.y + size * 0.25f), size / 2);
@@ -65,3 +70,18 @@ void QuadTreeNode::Subdivide(int depth)
 //{
 //	return std::vector<Cell>();
 //}
+
+void DrawNode(QuadTreeNode* node) {
+	if (node->isLeaf) {
+		// Figure out how to send this data to the mesh
+		// DrawSquare(node->position, node->size);
+
+		//std::cout << "Drawing node at position: " << node->position.x << ", " << node->position.y << " with size: " << node->size << std::endl;
+	}
+	else {
+		DrawNode(node->NW);
+		DrawNode(node->NE);
+		DrawNode(node->SW);
+		DrawNode(node->SE);
+	}
+}
