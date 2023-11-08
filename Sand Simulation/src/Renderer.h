@@ -24,6 +24,8 @@ public:
 
 	void Clear() const;
 	void Draw();
+
+	inline Shader* GetShader() { return shader; }
 	
 private:
 	Mesh* mesh;

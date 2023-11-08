@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Mesh.h"
+#include "Cell.h"
 
 // TODO:
 // Get Detail where required.
@@ -46,12 +47,13 @@ public:
     ~Quadtree();
 
     void DrawQuadTree();
+    void RenderQuadTree(Shader* shader);
 
     QuadTreeNode* root;
     Mesh mesh;
 };
 
-void DrawNode(QuadTreeNode* node);
+void DrawNode(QuadTreeNode* node, Mesh& mesh);
 
 
 

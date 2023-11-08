@@ -23,6 +23,12 @@ public:
         glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, nullptr);
     }
 
+    void Clear() noexcept
+    {
+		indices.clear();
+		vertices.clear();
+	}
+
     void UploadIBOData() noexcept
 	{
 		ib->UpdateData(indices);

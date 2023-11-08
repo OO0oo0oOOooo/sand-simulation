@@ -13,7 +13,13 @@ Quadtree::~Quadtree()
 
 void Quadtree::DrawQuadTree()
 {
-	DrawNode(root);
+	mesh.Clear();
+	DrawNode(root, mesh);
+}
+
+void Quadtree::RenderQuadTree(Shader* shader)
+{
+	mesh.Draw(shader);
 }
 
 
@@ -71,17 +77,30 @@ void QuadTreeNode::Subdivide(int depth)
 //	return std::vector<Cell>();
 //}
 
-void DrawNode(QuadTreeNode* node) {
+void DrawNode(QuadTreeNode* node, Mesh& mesh) {
 	if (node->isLeaf) {
-		// Figure out how to send this data to the mesh
-		// DrawSquare(node->position, node->size);
-
 		//std::cout << "Drawing node at position: " << node->position.x << ", " << node->position.y << " with size: " << node->size << std::endl;
+
+		for (int i = 0; i < 4; i++)
+		{
+			Vertex v;
+
+			v.position = (glm::vec3(node->position, 0) + vertexPositions[i]) * (float)node->size;
+			v.color = {0, 0, 0, 1};
+
+			mesh.vertices.push_back(v);
+		}
+
+		for (int i = 0; i < 6; i++)
+		{
+			mesh.indices.push_back(mesh.vertices.size() - 4 + meshTriangles[i]);
+		}
+
 	}
 	else {
-		DrawNode(node->NW);
-		DrawNode(node->NE);
-		DrawNode(node->SW);
-		DrawNode(node->SE);
+		DrawNode(node->NW, mesh);
+		DrawNode(node->NE, mesh);
+		DrawNode(node->SW, mesh);
+		DrawNode(node->SE, mesh);
 	}
 }

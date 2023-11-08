@@ -72,11 +72,11 @@ int main(void)
 
     Renderer* renderer = new Renderer(windowWidth, windowHeight);
 	Grid* grid = new Grid(windowWidth, windowHeight, gridResolution);
-    //Quadtree* quadTree = new Quadtree(1);
+    Quadtree* quadTree = new Quadtree(1);
 
 	grid->InitGrid();
     renderer->InitBuffers(grid);
-    //quadTree->DrawQuadTree();
+    quadTree->DrawQuadTree();
 
     Input::SetupKeyInputs(glwindow);
 
@@ -101,7 +101,8 @@ int main(void)
 
 		renderer->UpdateDirtyBuffers(grid);
         //renderer->UpdateBuffers(grid);
-        renderer->Draw();
+        //renderer->Draw();
+        quadTree->RenderQuadTree(renderer->GetShader());
 
         // Start the Dear ImGui frame
         ImGui_ImplOpenGL3_NewFrame();
