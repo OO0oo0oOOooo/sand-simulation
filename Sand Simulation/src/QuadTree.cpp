@@ -1,25 +1,30 @@
 #include "QuadTree.h"
 
-Quadtree::Quadtree(int depth)
+#include <iostream>
+
+Quadtree::Quadtree(glm::vec2 position, int size, int depth)
 {
-	root = new QuadTreeNode(glm::vec2(0, 0), 100);
+	root = new QuadTreeNode(position, size);
 	root->Subdivide(depth);
+
+	mesh = new Mesh();
 }
 
 Quadtree::~Quadtree()
 {
 	delete root;
+	delete mesh;
 }
 
 void Quadtree::DrawQuadTree()
 {
-	mesh.Clear();
-	DrawNode(root, mesh);
+	mesh->Clear();
+	DrawLeafNodeRecursive(root);
 }
 
 void Quadtree::RenderQuadTree(Shader* shader)
 {
-	mesh.Draw(shader);
+	mesh->Draw(shader);
 }
 
 
@@ -49,10 +54,10 @@ void QuadTreeNode::Subdivide(int depth)
 		return;
 	}
 
-	NW = new QuadTreeNode(glm::vec2(position.x - size * 0.25f, position.y + size * 0.25f), size / 2);
-	NE = new QuadTreeNode(glm::vec2(position.x + size * 0.25f, position.y + size * 0.25f), size / 2);
-	SW = new QuadTreeNode(glm::vec2(position.x - size * 0.25f, position.y - size * 0.25f), size / 2);
-	SE = new QuadTreeNode(glm::vec2(position.x + size * 0.25f, position.y - size * 0.25f), size / 2);
+	NW = new QuadTreeNode(glm::vec2(position.x - (size * 0.25f), position.y + (size * 0.25f)), size / 2);
+	NE = new QuadTreeNode(glm::vec2(position.x + (size * 0.25f), position.y + (size * 0.25f)), size / 2);
+	SW = new QuadTreeNode(glm::vec2(position.x - (size * 0.25f), position.y - (size * 0.25f)), size / 2);
+	SE = new QuadTreeNode(glm::vec2(position.x + (size * 0.25f), position.y - (size * 0.25f)), size / 2);
 
 	if (depth > 0)
 	{
@@ -77,7 +82,8 @@ void QuadTreeNode::Subdivide(int depth)
 //	return std::vector<Cell>();
 //}
 
-void DrawNode(QuadTreeNode* node, Mesh& mesh) {
+void Quadtree::DrawLeafNodeRecursive(QuadTreeNode* node) 
+{
 	if (node->isLeaf) {
 		//std::cout << "Drawing node at position: " << node->position.x << ", " << node->position.y << " with size: " << node->size << std::endl;
 
@@ -86,21 +92,24 @@ void DrawNode(QuadTreeNode* node, Mesh& mesh) {
 			Vertex v;
 
 			v.position = (glm::vec3(node->position, 0) + vertexPositions[i]) * (float)node->size;
-			v.color = {0, 0, 0, 1};
+			v.color = { 1.0f, 1.0f, 1.0f, 1.0f };
 
-			mesh.vertices.push_back(v);
+			mesh->vertices.push_back(v);
 		}
 
 		for (int i = 0; i < 6; i++)
 		{
-			mesh.indices.push_back(mesh.vertices.size() - 4 + meshTriangles[i]);
+			mesh->indices.push_back(mesh->vertices.size() - 4 + meshTriangles[i]);
 		}
+
+		mesh->UploadIBOData();
+		mesh->UploadVBOData();
 
 	}
 	else {
-		DrawNode(node->NW, mesh);
-		DrawNode(node->NE, mesh);
-		DrawNode(node->SW, mesh);
-		DrawNode(node->SE, mesh);
+		DrawLeafNodeRecursive(node->NW);
+		DrawLeafNodeRecursive(node->NE);
+		DrawLeafNodeRecursive(node->SW);
+		DrawLeafNodeRecursive(node->SE);
 	}
 }

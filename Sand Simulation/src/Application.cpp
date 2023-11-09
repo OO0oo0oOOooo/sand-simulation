@@ -72,7 +72,7 @@ int main(void)
 
     Renderer* renderer = new Renderer(windowWidth, windowHeight);
 	Grid* grid = new Grid(windowWidth, windowHeight, gridResolution);
-    Quadtree* quadTree = new Quadtree(1);
+    Quadtree* quadTree = new Quadtree({ 0, 0 }, 100, 2);
 
 	grid->InitGrid();
     renderer->InitBuffers(grid);
@@ -89,7 +89,7 @@ int main(void)
 
     bool show_demo_window = false;
 
-    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     //glPolygonMode(GL_FRONT_AND_BACK, GL_POLYGON);
     //glPolygonMode(GL_FRONT, GL_POLYGON);
     while (!glfwWindowShouldClose(glwindow))
