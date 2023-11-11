@@ -30,10 +30,10 @@ void Quadtree::RenderQuadTree(Shader* shader)
 
 
 
-QuadTreeNode::QuadTreeNode(glm::vec2 position, int size)
+QuadTreeNode::QuadTreeNode(glm::vec2 pos, int s)
 {
-	this->position = position;
-	this->size = size;
+	position = pos;
+	size = s;
 
 	isLeaf = false;
 }
@@ -54,10 +54,10 @@ void QuadTreeNode::Subdivide(int depth)
 		return;
 	}
 
-	NW = new QuadTreeNode(glm::vec2(position.x - (size * 0.25f), position.y + (size * 0.25f)), size / 2);
-	NE = new QuadTreeNode(glm::vec2(position.x + (size * 0.25f), position.y + (size * 0.25f)), size / 2);
-	SW = new QuadTreeNode(glm::vec2(position.x - (size * 0.25f), position.y - (size * 0.25f)), size / 2);
-	SE = new QuadTreeNode(glm::vec2(position.x + (size * 0.25f), position.y - (size * 0.25f)), size / 2);
+	NW = new QuadTreeNode(glm::vec2(position.x, position.y + 1), size / 2);
+	NE = new QuadTreeNode(glm::vec2(position.x + 1, position.y + 1), size / 2);
+	SW = new QuadTreeNode(glm::vec2(position.x, position.y), size / 2);
+	SE = new QuadTreeNode(glm::vec2(position.x + 1, position.y), size / 2);
 
 	if (depth > 0)
 	{
@@ -84,27 +84,26 @@ void QuadTreeNode::Subdivide(int depth)
 
 void Quadtree::DrawLeafNodeRecursive(QuadTreeNode* node) 
 {
+	for (int i = 0; i < 4; i++)
+	{
+		Vertex v;
+
+		v.position = (glm::vec3(node->position.x, node->position.y, 0) + vertexPositions[i]) * (float)node->size;
+		v.color = { 0.2f, 0.2f, 0.7f, 1.0f };
+
+		mesh->vertices.push_back(v);
+	}
+
+	for (int i = 0; i < 6; i++)
+	{
+		mesh->indices.push_back(mesh->vertices.size() - 4 + meshTriangles[i]);
+	}
+
+	mesh->UploadIBOData();
+	mesh->UploadVBOData();
+
 	if (node->isLeaf) {
-		//std::cout << "Drawing node at position: " << node->position.x << ", " << node->position.y << " with size: " << node->size << std::endl;
-
-		for (int i = 0; i < 4; i++)
-		{
-			Vertex v;
-
-			v.position = (glm::vec3(node->position, 0) + vertexPositions[i]) * (float)node->size;
-			v.color = { 1.0f, 1.0f, 1.0f, 1.0f };
-
-			mesh->vertices.push_back(v);
-		}
-
-		for (int i = 0; i < 6; i++)
-		{
-			mesh->indices.push_back(mesh->vertices.size() - 4 + meshTriangles[i]);
-		}
-
-		mesh->UploadIBOData();
-		mesh->UploadVBOData();
-
+		std::cout << "Drawing node at position: " << node->position.x << ", " << node->position.y << " with size: " << node->size << std::endl;
 	}
 	else {
 		DrawLeafNodeRecursive(node->NW);
