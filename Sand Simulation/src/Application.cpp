@@ -72,7 +72,7 @@ int main(void)
 
     Renderer* renderer = new Renderer(windowWidth, windowHeight);
 	Grid* grid = new Grid(windowWidth, windowHeight, gridResolution);
-    Quadtree* quadTree = new Quadtree({ 1, 1 }, 250, 2);
+    Quadtree* quadTree = new Quadtree({ 5, 5 }, 250, 1);
 
 	grid->InitGrid();
     renderer->InitBuffers(grid);

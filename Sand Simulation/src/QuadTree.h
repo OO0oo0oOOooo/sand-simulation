@@ -30,10 +30,10 @@ public:
     glm::vec2 position;
     int size;
 
-    QuadTreeNode* NW = nullptr;
-    QuadTreeNode* NE = nullptr;
-    QuadTreeNode* SW = nullptr;
-    QuadTreeNode* SE = nullptr;
+    QuadTreeNode* NW;
+    QuadTreeNode* NE;
+    QuadTreeNode* SW;
+    QuadTreeNode* SE;
 
     bool isLeaf;
 };

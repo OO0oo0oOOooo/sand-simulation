@@ -24,6 +24,8 @@ void Quadtree::DrawQuadTree()
 
 void Quadtree::RenderQuadTree(Shader* shader)
 {
+	mesh->UploadIBOData();
+	mesh->UploadVBOData();
 	mesh->Draw(shader);
 }
 
@@ -35,15 +37,27 @@ QuadTreeNode::QuadTreeNode(glm::vec2 pos, int s)
 	position = pos;
 	size = s;
 
+	NW = nullptr;
+	NE = nullptr;
+	SW = nullptr;
+	SE = nullptr;
+
 	isLeaf = false;
 }
 
 QuadTreeNode::~QuadTreeNode()
 {
-	delete NW;
-	delete NE;
-	delete SW;
-	delete SE;
+	if (NW != nullptr)
+		delete NW;
+
+	if (NE != nullptr)
+		delete NE;
+
+	if (SW != nullptr)
+		delete SW;
+
+	if (SE != nullptr)
+		delete SE;
 }
 
 void QuadTreeNode::Subdivide(int depth)
@@ -54,10 +68,10 @@ void QuadTreeNode::Subdivide(int depth)
 		return;
 	}
 
-	NW = new QuadTreeNode(glm::vec2(position.x, position.y + 1), size / 2);
-	NE = new QuadTreeNode(glm::vec2(position.x + 1, position.y + 1), size / 2);
-	SW = new QuadTreeNode(glm::vec2(position.x, position.y), size / 2);
-	SE = new QuadTreeNode(glm::vec2(position.x + 1, position.y), size / 2);
+	NW = new QuadTreeNode(glm::vec2(position.x /* - size*0.25f*/,	position.y + size*0.25f),	size / 2);
+	NE = new QuadTreeNode(glm::vec2(position.x + size*0.25f,		position.y + size*0.25f),	size / 2);
+	SW = new QuadTreeNode(glm::vec2(position.x /*- size*0.25f*/,	position.y /*- size*0.25f*/),	size / 2);
+	SE = new QuadTreeNode(glm::vec2(position.x + size*0.25f,		position.y /*- size*0.25f*/),	size / 2);
 
 	if (depth > 0)
 	{
@@ -88,7 +102,7 @@ void Quadtree::DrawLeafNodeRecursive(QuadTreeNode* node)
 	{
 		Vertex v;
 
-		v.position = (glm::vec3(node->position.x, node->position.y, 0) + vertexPositions[i]) * (float)node->size;
+		v.position = (glm::vec3(node->position, 0) + (vertexPositions[i]) * (float)node->size);
 		v.color = { 0.2f, 0.2f, 0.7f, 1.0f };
 
 		mesh->vertices.push_back(v);
@@ -99,13 +113,12 @@ void Quadtree::DrawLeafNodeRecursive(QuadTreeNode* node)
 		mesh->indices.push_back(mesh->vertices.size() - 4 + meshTriangles[i]);
 	}
 
-	mesh->UploadIBOData();
-	mesh->UploadVBOData();
-
-	if (node->isLeaf) {
+	if (node->isLeaf) 
+	{
 		std::cout << "Drawing node at position: " << node->position.x << ", " << node->position.y << " with size: " << node->size << std::endl;
 	}
-	else {
+	else 
+	{
 		DrawLeafNodeRecursive(node->NW);
 		DrawLeafNodeRecursive(node->NE);
 		DrawLeafNodeRecursive(node->SW);
