@@ -40,7 +40,7 @@ public:
 
 class Quadtree {
 public:
-    Quadtree(glm::vec2 position, int size, int depth);
+    Quadtree(int windowWidth, int windowHeight, int depth);
     ~Quadtree();
 
     void DrawLeafNodeRecursive(QuadTreeNode* node);
@@ -48,7 +48,17 @@ public:
     void DrawQuadTree();
     void RenderQuadTree(Shader* shader);
 
-    QuadTreeNode* root;
+    //QuadTreeNode* root;
+    QuadTreeNode* node1;
+    QuadTreeNode* node2;
+    QuadTreeNode* node3;
+    QuadTreeNode* node4;
+
+    QuadTreeNode* node5;
+    QuadTreeNode* node6;
+    QuadTreeNode* node7;
+    QuadTreeNode* node8;
+
     Mesh* mesh;
 };
 

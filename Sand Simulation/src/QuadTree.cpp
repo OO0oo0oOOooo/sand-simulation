@@ -2,24 +2,41 @@
 
 #include <iostream>
 
-Quadtree::Quadtree(glm::vec2 position, int size, int depth)
+Quadtree::Quadtree(int windowWidth, int windowHeight, int depth)
 {
-	root = new QuadTreeNode(position, size);
-	root->Subdivide(depth);
+	//root = new QuadTreeNode(position, size);
+	//root->Subdivide(depth);
+
+	int width = windowWidth / 2;
+	int height = windowHeight / 2;
+
+	int size = width;// < height ? width : height;
+
+	node1 = new QuadTreeNode(glm::vec2(0, 0), size);
+	node2 = new QuadTreeNode(glm::vec2(size, 0), size);
+
+	node1->Subdivide(depth);
+	node2->Subdivide(depth);
 
 	mesh = new Mesh();
 }
 
 Quadtree::~Quadtree()
 {
-	delete root;
+	//delete root;
+	delete node1;
+	delete node2;
+	
 	delete mesh;
 }
 
 void Quadtree::DrawQuadTree()
 {
 	mesh->Clear();
-	DrawLeafNodeRecursive(root);
+	//DrawLeafNodeRecursive(root);
+
+	DrawLeafNodeRecursive(node1);
+	DrawLeafNodeRecursive(node2);
 }
 
 void Quadtree::RenderQuadTree(Shader* shader)
@@ -113,7 +130,7 @@ void Quadtree::DrawLeafNodeRecursive(QuadTreeNode* node)
 
 	if (node->isLeaf) 
 	{
-		std::cout << "Drawing node at position: " << node->position.x << ", " << node->position.y << " with size: " << node->size << std::endl;
+		//std::cout << "Drawing node at position: " << node->position.x << ", " << node->position.y << " with size: " << node->size << std::endl;
 	}
 	else
 	{

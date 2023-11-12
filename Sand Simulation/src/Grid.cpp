@@ -15,6 +15,7 @@ Grid::Grid(int gridWidth, int gridHeight)
 	CellSize = 20;
 
 	CellMap = std::vector<Cell>(GridWidth * GridHeight);
+	std::cout << "CellMap Size" << CellMap.size() << std::endl;
 }
 
 Grid::Grid(int windowWidth, int windowHeight, int resolution)
@@ -24,6 +25,7 @@ Grid::Grid(int windowWidth, int windowHeight, int resolution)
 	GridHeight = windowHeight / CellSize;
 
 	CellMap = std::vector<Cell>(GridWidth * GridHeight);
+	std::cout << "CellMap Size" << CellMap.size() << std::endl;
 }
 
 Grid::~Grid()
