@@ -30,8 +30,6 @@ void Quadtree::RenderQuadTree(Shader* shader)
 }
 
 
-
-
 QuadTreeNode::QuadTreeNode(glm::vec2 pos, int s)
 {
 	position = pos;
@@ -68,10 +66,10 @@ void QuadTreeNode::Subdivide(int depth)
 		return;
 	}
 
-	NW = new QuadTreeNode(glm::vec2(position.x /* - size*0.25f*/,	position.y + size*0.25f),	size / 2);
-	NE = new QuadTreeNode(glm::vec2(position.x + size*0.25f,		position.y + size*0.25f),	size / 2);
-	SW = new QuadTreeNode(glm::vec2(position.x /*- size*0.25f*/,	position.y /*- size*0.25f*/),	size / 2);
-	SE = new QuadTreeNode(glm::vec2(position.x + size*0.25f,		position.y /*- size*0.25f*/),	size / 2);
+	NW = new QuadTreeNode(glm::vec2(position.x,					position.y + size * 0.5f),	size / 2);
+	NE = new QuadTreeNode(glm::vec2(position.x + size * 0.5f,	position.y + size * 0.5f),	size / 2);
+	SW = new QuadTreeNode(glm::vec2(position.x,					position.y),				size / 2);
+	SE = new QuadTreeNode(glm::vec2(position.x + size * 0.5f,	position.y),				size / 2);
 
 	if (depth > 0)
 	{
@@ -96,7 +94,7 @@ void QuadTreeNode::Subdivide(int depth)
 //	return std::vector<Cell>();
 //}
 
-void Quadtree::DrawLeafNodeRecursive(QuadTreeNode* node) 
+void Quadtree::DrawLeafNodeRecursive(QuadTreeNode* node)
 {
 	for (int i = 0; i < 4; i++)
 	{
@@ -117,7 +115,7 @@ void Quadtree::DrawLeafNodeRecursive(QuadTreeNode* node)
 	{
 		std::cout << "Drawing node at position: " << node->position.x << ", " << node->position.y << " with size: " << node->size << std::endl;
 	}
-	else 
+	else
 	{
 		DrawLeafNodeRecursive(node->NW);
 		DrawLeafNodeRecursive(node->NE);
