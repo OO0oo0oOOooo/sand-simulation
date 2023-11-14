@@ -10,6 +10,7 @@
 #include "Renderer.h"
 #include "Grid.h"
 #include "Quadtree.h"
+#include "QuadTreeObject.h"
 #include "Brush.h"
 
 #include <iostream>
@@ -72,12 +73,10 @@ int main(void)
 
     Renderer* renderer = new Renderer(windowWidth, windowHeight);
 	Grid* grid = new Grid(windowWidth, windowHeight, gridResolution);
-    Quadtree* quadTree = new Quadtree(windowWidth, windowHeight, 0);
 
-	grid->InitGrid();
+    QuadTreeObject quadTreeObject(windowWidth, 6);
+
     renderer->InitBuffers(grid);
-    quadTree->DrawQuadTree();
-
     Input::SetupKeyInputs(glwindow);
 
     IMGUI_CHECKVERSION();
@@ -87,22 +86,22 @@ int main(void)
     ImGui_ImplGlfw_InitForOpenGL(glwindow, true);
     ImGui_ImplOpenGL3_Init("#version 430");
 
-    bool show_demo_window = false;
+    //bool show_demo_window = false;
 
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     //glPolygonMode(GL_FRONT_AND_BACK, GL_POLYGON);
     //glPolygonMode(GL_FRONT, GL_POLYGON);
     while (!glfwWindowShouldClose(glwindow))
     {
-        Brush::MouseInput(window, grid);
+        Brush::MouseInput(window, grid, &quadTreeObject);
         Brush::SelectionInput(window, grid);
 
-		grid->UpdateGrid();
+		//grid->UpdateGrid();
 
-		renderer->UpdateDirtyBuffers(grid);
-        //renderer->UpdateBuffers(grid);
+		//renderer->UpdateDirtyBuffers(grid);
         //renderer->Draw();
-        quadTree->RenderQuadTree(renderer->GetShader());
+
+        quadTreeObject.Render(renderer->GetShader());
 
         // Start the Dear ImGui frame
         ImGui_ImplOpenGL3_NewFrame();

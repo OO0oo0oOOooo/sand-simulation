@@ -2,50 +2,51 @@
 
 #include <iostream>
 
-Quadtree::Quadtree(int windowWidth, int windowHeight, int depth)
+QuadTree::QuadTree(int x, int y, int size, int depth)
 {
-	//root = new QuadTreeNode(position, size);
+	root = new QuadTreeNode(glm::vec2(x, y), size);
 	//root->Subdivide(depth);
-
-	int width = windowWidth / 2;
-	int height = windowHeight / 2;
-
-	int size = width;// < height ? width : height;
-
-	node1 = new QuadTreeNode(glm::vec2(0, 0), size);
-	node2 = new QuadTreeNode(glm::vec2(size, 0), size);
-
-	node1->Subdivide(depth);
-	node2->Subdivide(depth);
-
-	mesh = new Mesh();
 }
 
-Quadtree::~Quadtree()
+QuadTree::~QuadTree()
 {
-	//delete root;
-	delete node1;
-	delete node2;
-	
-	delete mesh;
+	delete root;
 }
 
-void Quadtree::DrawQuadTree()
+void QuadTree::Insert(glm::vec2 position, Cell cell)
 {
-	mesh->Clear();
-	//DrawLeafNodeRecursive(root);
+	/*QuadTreeNode* node = root;
 
-	DrawLeafNodeRecursive(node1);
-	DrawLeafNodeRecursive(node2);
+	while (!node->isLeaf)
+	{
+		if (position.x < node->position.x + node->size * 0.5f)
+		{
+			if (position.y < node->position.y + node->size * 0.5f)
+			{
+				node = node->SW;
+			}
+			else
+			{
+				node = node->NW;
+			}
+		}
+		else
+		{
+			if (position.y < node->position.y + node->size * 0.5f)
+			{
+				node = node->SE;
+			}
+			else
+			{
+				node = node->NE;
+			}
+		}
+	}
+
+	node->cell = cell;*/
+
+	root->Subdivide(position, cell, 6);
 }
-
-void Quadtree::RenderQuadTree(Shader* shader)
-{
-	mesh->UploadIBOData();
-	mesh->UploadVBOData();
-	mesh->Draw(shader);
-}
-
 
 QuadTreeNode::QuadTreeNode(glm::vec2 pos, int s)
 {
@@ -75,7 +76,38 @@ QuadTreeNode::~QuadTreeNode()
 		delete SE;
 }
 
-void QuadTreeNode::Subdivide(int depth)
+int	GetIndexFromPosition(glm::vec2 position, QuadTreeNode* node)
+{
+		int index = -1;
+
+		if (position.x < node->position.x + node->size * 0.5f)
+		{
+			if (position.y < node->position.y + node->size * 0.5f)
+			{
+				index = 2;
+			}
+			else
+			{
+				index = 0;
+			}
+		}
+		else
+		{
+			if (position.y < node->position.y + node->size * 0.5f)
+			{
+				index = 3;
+			}
+			else
+			{
+				index = 1;
+			}
+		}
+
+	return index;
+
+}
+
+void QuadTreeNode::Subdivide(glm::vec2 position, Cell cell, int depth)
 {
 	if (depth == 0)
 	{
@@ -83,60 +115,28 @@ void QuadTreeNode::Subdivide(int depth)
 		return;
 	}
 
-	NW = new QuadTreeNode(glm::vec2(position.x,					position.y + size * 0.5f),	size / 2);
-	NE = new QuadTreeNode(glm::vec2(position.x + size * 0.5f,	position.y + size * 0.5f),	size / 2);
-	SW = new QuadTreeNode(glm::vec2(position.x,					position.y),				size / 2);
-	SE = new QuadTreeNode(glm::vec2(position.x + size * 0.5f,	position.y),				size / 2);
+	// Get Index of the child that the cell belongs to
+	int index = GetIndexFromPosition(position, this);
+	std::cout << index << std::endl;
 
-	if (depth > 0)
+	// If the child doesn't exist, create it
+	switch (index)
 	{
-		NW->Subdivide(depth - 1);
-		NE->Subdivide(depth - 1);
-		SW->Subdivide(depth - 1);
-		SE->Subdivide(depth - 1);
-	}
-}
-
-//void QuadTreeNode::Insert(Cell cell)
-//{
-//}
-//
-//std::vector<Cell> QuadTreeNode::Query()
-//{
-//	return std::vector<Cell>();
-//}
-//
-//std::vector<Cell> QuadTreeNode::QueryArea()
-//{
-//	return std::vector<Cell>();
-//}
-
-void Quadtree::DrawLeafNodeRecursive(QuadTreeNode* node)
-{
-	for (int i = 0; i < 4; i++)
-	{
-		Vertex v;
-
-		v.position = (glm::vec3(node->position, 0) + (vertexPositions[i]) * (float)node->size);
-		v.color = { 0.2f, 0.2f, 0.7f, 1.0f };
-
-		mesh->vertices.push_back(v);
-	}
-
-	for (int i = 0; i < 6; i++)
-	{
-		mesh->indices.push_back(mesh->vertices.size() - 4 + meshTriangles[i]);
-	}
-
-	if (node->isLeaf) 
-	{
-		//std::cout << "Drawing node at position: " << node->position.x << ", " << node->position.y << " with size: " << node->size << std::endl;
-	}
-	else
-	{
-		DrawLeafNodeRecursive(node->NW);
-		DrawLeafNodeRecursive(node->NE);
-		DrawLeafNodeRecursive(node->SW);
-		DrawLeafNodeRecursive(node->SE);
+	case 0:
+		NW = new QuadTreeNode(glm::vec2(this->position.x,				this->position.y + size * 0.5f), size / 2);
+		NW->Subdivide(position, cell, depth - 1);
+		break;
+	case 1:
+		NE = new QuadTreeNode(glm::vec2(this->position.x + size * 0.5f, this->position.y + size * 0.5f), size / 2);
+		NE->Subdivide(position, cell, depth - 1);
+		break;
+	case 2:
+		SW = new QuadTreeNode(glm::vec2(this->position.x,				this->position.y), size / 2);
+		SW->Subdivide(position, cell, depth - 1);
+		break;
+	case 3:
+		SE = new QuadTreeNode(glm::vec2(this->position.x + size * 0.5f, this->position.y), size / 2);
+		SE->Subdivide(position, cell, depth - 1);
+		break;
 	}
 }

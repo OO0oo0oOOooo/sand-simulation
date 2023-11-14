@@ -1,23 +1,5 @@
 #include "Grid.h"
 
-Grid::Grid()
-{
-	CellSize = 1;
-	GridWidth = 1;
-	GridHeight = 1;
-
-	CellMap = std::vector<Cell>(GridWidth * GridHeight);
-}
-
-Grid::Grid(int gridWidth, int gridHeight)
-	: GridWidth(gridWidth), GridHeight(gridHeight)
-{
-	CellSize = 20;
-
-	CellMap = std::vector<Cell>(GridWidth * GridHeight);
-	std::cout << "CellMap Size" << CellMap.size() << std::endl;
-}
-
 Grid::Grid(int windowWidth, int windowHeight, int resolution)
 {
 	CellSize =   windowWidth  / resolution;
@@ -25,7 +7,8 @@ Grid::Grid(int windowWidth, int windowHeight, int resolution)
 	GridHeight = windowHeight / CellSize;
 
 	CellMap = std::vector<Cell>(GridWidth * GridHeight);
-	std::cout << "CellMap Size" << CellMap.size() << std::endl;
+
+	InitGrid();
 }
 
 Grid::~Grid()

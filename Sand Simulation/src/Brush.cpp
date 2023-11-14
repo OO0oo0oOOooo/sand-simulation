@@ -5,7 +5,7 @@ namespace Brush
 	Cell selectedParticle = ParticleSand;
 	int brushSize = 1;
 
-	void MouseInput(Window window, Grid* grid)
+	void MouseInput(Window window, Grid* grid, QuadTreeObject* quadTreeObject)
 	{
 		if (Input::IsKeyPressed(GLFW_MOUSE_BUTTON_LEFT))
 		{
@@ -25,6 +25,8 @@ namespace Brush
 				return;
 
 			grid->SetCell((int)index.x, (int)index.y, selectedParticle);
+			quadTreeObject->Insert(glm::vec2(Input::mousePosition.x, Input::mousePosition.y), selectedParticle);
+
 		}
 	}
 

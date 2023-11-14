@@ -159,6 +159,7 @@
     <ClCompile Include="src\Input.cpp" />
     <ClCompile Include="src\Mesh.cpp" />
     <ClCompile Include="src\QuadTree.cpp" />
+    <ClCompile Include="src\QuadTreeObject.cpp" />
     <ClCompile Include="src\Renderer.cpp" />
     <ClCompile Include="src\Shader.cpp" />
     <ClCompile Include="src\vendor\glm\detail\glm.cpp" />
@@ -180,6 +181,7 @@
     <ClInclude Include="src\Cell.h" />
     <ClInclude Include="src\Mesh.h" />
     <ClInclude Include="src\QuadTree.h" />
+    <ClInclude Include="src\QuadTreeObject.h" />
     <ClInclude Include="src\Renderer.h" />
     <ClInclude Include="src\shader.h" />
     <ClInclude Include="src\vendor\glm\common.hpp" />

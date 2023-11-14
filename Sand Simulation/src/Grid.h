@@ -10,10 +10,7 @@
 class Grid
 {
 public:
-	Grid();
-	Grid(int gridWidth, int gridHeight);
 	Grid(int windowWidth, int windowHeight, int resolution);
-	
 	~Grid();
 
 	void InitGrid();

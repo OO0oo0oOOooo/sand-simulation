@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Mesh.h"
 #include "Cell.h"
 
 // TODO:
@@ -14,6 +13,8 @@
 // [ ] Think of how i want to subdivide the quadtree
 //      If node is entirely occupied, do not subdivide.
 //      If node is not entirely occupied, subdivide for more precision.
+//
+// [ ] Change IsLeaf to be if the node has no children
 
 class QuadTreeNode
 {
@@ -21,14 +22,13 @@ public:
     QuadTreeNode(glm::vec2 position, int size);
     ~QuadTreeNode();
 
-    //void Insert(Cell cell);
-    //std::vector<Cell> Query(); 
-    //std::vector<Cell> QueryArea(); // parameters to define query area
+    //std::vector<Cell> Query(x, y);
 
-    void Subdivide(int depth);
+    void Subdivide(glm::vec2 position, Cell cell, int depth);
 
     glm::vec2 position;
     int size;
+    Cell cell;
 
     QuadTreeNode* NW;
     QuadTreeNode* NE;
@@ -38,31 +38,12 @@ public:
     bool isLeaf;
 };
 
-class Quadtree {
+class QuadTree {
 public:
-    Quadtree(int windowWidth, int windowHeight, int depth);
-    ~Quadtree();
+    QuadTree(int x, int y, int size, int depth);
+    ~QuadTree();
 
-    void DrawLeafNodeRecursive(QuadTreeNode* node);
+    void Insert(glm::vec2 position, Cell cell);
 
-    void DrawQuadTree();
-    void RenderQuadTree(Shader* shader);
-
-    //QuadTreeNode* root;
-    QuadTreeNode* node1;
-    QuadTreeNode* node2;
-    QuadTreeNode* node3;
-    QuadTreeNode* node4;
-
-    QuadTreeNode* node5;
-    QuadTreeNode* node6;
-    QuadTreeNode* node7;
-    QuadTreeNode* node8;
-
-    Mesh* mesh;
+    QuadTreeNode* root;
 };
-
-
-
-
-
