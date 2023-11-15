@@ -19,11 +19,22 @@ void QuadTreeObject::Insert(glm::vec2 position, Cell cell)
 
 void QuadTreeObject::DrawNode(QuadTreeNode* node)
 {
-	glm::vec4 color = { 1, 1, 1, 1 };
-
 	if (node->isLeaf)
 	{
-		color = { 0.2f, 0.2f, 0.7f, 1.0f };
+		for (int i = 0; i < 4; i++)
+		{
+			Vertex v;
+
+			v.position = (glm::vec3(node->position, 0) + (vertexPositions[i]) * (float)node->size);
+			v.color = node->cell.color;
+
+			mesh->vertices.push_back(v);
+		}
+
+		for (int i = 0; i < 6; i++)
+		{
+			mesh->indices.push_back(mesh->vertices.size() - 4 + meshTriangles[i]);
+		}
 	}
 	else
 	{
@@ -40,12 +51,12 @@ void QuadTreeObject::DrawNode(QuadTreeNode* node)
 			DrawNode(node->SE);
 	}
 
-	for (int i = 0; i < 4; i++)
+	/*for (int i = 0; i < 4; i++)
 	{
 		Vertex v;
 
 		v.position = (glm::vec3(node->position, 0) + (vertexPositions[i]) * (float)node->size);
-		v.color = color;
+		v.color = {1,1,1,1};
 
 		mesh->vertices.push_back(v);
 	}
@@ -53,7 +64,7 @@ void QuadTreeObject::DrawNode(QuadTreeNode* node)
 	for (int i = 0; i < 6; i++)
 	{
 		mesh->indices.push_back(mesh->vertices.size() - 4 + meshTriangles[i]);
-	}
+	}*/
 }
 
 void QuadTreeObject::Render(Shader* shader)

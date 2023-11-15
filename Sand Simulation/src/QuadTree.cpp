@@ -111,6 +111,7 @@ void QuadTreeNode::Subdivide(glm::vec2 position, Cell cell, int depth)
 {
 	if (depth == 0)
 	{
+		this->cell = cell;
 		isLeaf = true;
 		return;
 	}

@@ -88,7 +88,7 @@ int main(void)
 
     //bool show_demo_window = false;
 
-    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     //glPolygonMode(GL_FRONT_AND_BACK, GL_POLYGON);
     //glPolygonMode(GL_FRONT, GL_POLYGON);
     while (!glfwWindowShouldClose(glwindow))
