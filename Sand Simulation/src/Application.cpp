@@ -16,6 +16,13 @@
 #include <iostream>
 
 // TODO:
+// 
+// [ ] STPImage
+// [ ] Replace Grid with QuadTree
+// [ ] Check QuadTree cells for updates
+// [ ] Seperate QuadTree debug mesh from QuadTreeGridMesh
+// [ ] Quadtree features/optimizations
+// 
 // [ ] Update loop
 // [ ] tick and late tick
 //
@@ -86,8 +93,6 @@ int main(void)
     ImGui_ImplGlfw_InitForOpenGL(glwindow, true);
     ImGui_ImplOpenGL3_Init("#version 430");
 
-    //bool show_demo_window = false;
-
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     //glPolygonMode(GL_FRONT_AND_BACK, GL_POLYGON);
     //glPolygonMode(GL_FRONT, GL_POLYGON);
@@ -97,7 +102,6 @@ int main(void)
         Brush::SelectionInput(window, grid);
 
 		//grid->UpdateGrid();
-
 		//renderer->UpdateDirtyBuffers(grid);
         //renderer->Draw();
 
@@ -108,7 +112,7 @@ int main(void)
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
-        //if(show_demo_window)
+        //if(true)
         //    ImGui::ShowDemoWindow(&show_demo_window);
 
         {

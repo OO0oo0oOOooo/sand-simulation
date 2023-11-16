@@ -6,15 +6,10 @@
 // Get Detail where required.
 // Exclude cells that are occupied but shouldnt be checked for updates
 // 
-// [ ] Think of how i want to query the quadtree
-//      If this node is a leaf, return area into a larger array?
-//      Loop through this subsection of the grid and do updates from here?
-// 
-// [ ] Think of how i want to subdivide the quadtree
-//      If node is entirely occupied, do not subdivide.
-//      If node is not entirely occupied, subdivide for more precision.
-//
-// [ ] Change IsLeaf to be if the node has no children
+// [ ] Add/remove function
+// [ ] check nehbouring cells for updates
+// [ ] Collapse tree if all cells are the same
+
 
 class QuadTreeNode
 {
