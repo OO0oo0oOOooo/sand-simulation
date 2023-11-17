@@ -20,6 +20,7 @@ public:
     //std::vector<Cell> Query(x, y);
 
     void Subdivide(glm::vec2 position, Cell cell, int depth);
+    void Collapse(glm::vec2 position);
 
     glm::vec2 position;
     int size;
@@ -39,6 +40,7 @@ public:
     ~QuadTree();
 
     void Insert(glm::vec2 position, Cell cell);
+    void Remove(glm::vec2 position);
 
     QuadTreeNode* root;
 };

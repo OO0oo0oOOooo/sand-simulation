@@ -15,37 +15,12 @@ QuadTree::~QuadTree()
 
 void QuadTree::Insert(glm::vec2 position, Cell cell)
 {
-	/*QuadTreeNode* node = root;
-
-	while (!node->isLeaf)
-	{
-		if (position.x < node->position.x + node->size * 0.5f)
-		{
-			if (position.y < node->position.y + node->size * 0.5f)
-			{
-				node = node->SW;
-			}
-			else
-			{
-				node = node->NW;
-			}
-		}
-		else
-		{
-			if (position.y < node->position.y + node->size * 0.5f)
-			{
-				node = node->SE;
-			}
-			else
-			{
-				node = node->NE;
-			}
-		}
-	}
-
-	node->cell = cell;*/
-
 	root->Subdivide(position, cell, 6);
+}
+
+void QuadTree::Remove(glm::vec2 position)
+{
+	root->Collapse(position);
 }
 
 QuadTreeNode::QuadTreeNode(glm::vec2 pos, int s)
@@ -116,9 +91,7 @@ void QuadTreeNode::Subdivide(glm::vec2 position, Cell cell, int depth)
 		return;
 	}
 
-	// Get Index of the child that the cell belongs to
 	int index = GetIndexFromPosition(position, this);
-	std::cout << index << std::endl;
 
 	// If the child doesn't exist, create it
 	switch (index)
@@ -140,4 +113,52 @@ void QuadTreeNode::Subdivide(glm::vec2 position, Cell cell, int depth)
 		SE->Subdivide(position, cell, depth - 1);
 		break;
 	}
+}
+
+void QuadTreeNode::Collapse(glm::vec2 position)
+{
+
+	int index = GetIndexFromPosition(position, this);
+
+	if(!isLeaf)
+	{ 
+		switch (index)
+		{
+		case 0:
+			NW->Collapse(position);
+			break;
+		case 1:
+			NE->Collapse(position);
+			break;
+		case 2:
+			SW->Collapse(position);
+			break;
+		case 3:
+			SE->Collapse(position);
+			break;
+		}
+	}
+	else
+	{
+		switch (index)
+		{
+		case 0:
+			delete NW;
+			NW = nullptr;
+			break;
+		case 1:
+			delete NE;
+			NE = nullptr;
+			break;
+		case 2:
+			delete SW;
+			SW = nullptr;
+			break;
+		case 3:
+			delete SE;
+			SE = nullptr;
+			break;
+		}
+	}
+	
 }
