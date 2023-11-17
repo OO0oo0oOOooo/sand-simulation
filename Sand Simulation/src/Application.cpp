@@ -93,9 +93,6 @@ int main(void)
     ImGui_ImplGlfw_InitForOpenGL(glwindow, true);
     ImGui_ImplOpenGL3_Init("#version 430");
 
-    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    //glPolygonMode(GL_FRONT_AND_BACK, GL_POLYGON);
-    //glPolygonMode(GL_FRONT, GL_POLYGON);
     while (!glfwWindowShouldClose(glwindow))
     {
         Brush::MouseInput(window, grid, &quadTreeObject);

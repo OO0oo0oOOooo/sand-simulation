@@ -9,7 +9,12 @@ namespace Brush
 	{
 		if (Input::IsKeyPressed(GLFW_MOUSE_BUTTON_LEFT))
 		{
-			quadTreeObject->Insert(glm::vec2(Input::mousePosition.x, Input::mousePosition.y), selectedParticle);
+			quadTreeObject->Insert(Input::mousePosition, selectedParticle);
+		}
+
+		if (Input::IsKeyPressed(GLFW_MOUSE_BUTTON_RIGHT))
+		{
+			quadTreeObject->Remove(glm::vec2(Input::mousePosition));
 		}
 	}
 

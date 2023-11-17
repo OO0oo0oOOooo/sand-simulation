@@ -20,7 +20,7 @@ public:
     //std::vector<Cell> Query(x, y);
 
     void Subdivide(glm::vec2 position, Cell cell, int depth);
-    void Collapse(glm::vec2 position);
+    void Collapse(glm::vec2 position, int depth);
 
     glm::vec2 position;
     int size;

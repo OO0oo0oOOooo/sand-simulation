@@ -20,7 +20,7 @@ void QuadTree::Insert(glm::vec2 position, Cell cell)
 
 void QuadTree::Remove(glm::vec2 position)
 {
-	root->Collapse(position);
+	root->Collapse(position, 6);
 }
 
 QuadTreeNode::QuadTreeNode(glm::vec2 pos, int s)
@@ -115,8 +115,12 @@ void QuadTreeNode::Subdivide(glm::vec2 position, Cell cell, int depth)
 	}
 }
 
-void QuadTreeNode::Collapse(glm::vec2 position)
+void QuadTreeNode::Collapse(glm::vec2 position, int depth)
 {
+	if (depth < 0)
+	{
+		return;
+	}
 
 	int index = GetIndexFromPosition(position, this);
 
@@ -125,16 +129,16 @@ void QuadTreeNode::Collapse(glm::vec2 position)
 		switch (index)
 		{
 		case 0:
-			NW->Collapse(position);
+			NW->Collapse(position, depth - 1);
 			break;
 		case 1:
-			NE->Collapse(position);
+			NE->Collapse(position, depth - 1);
 			break;
 		case 2:
-			SW->Collapse(position);
+			SW->Collapse(position, depth - 1);
 			break;
 		case 3:
-			SE->Collapse(position);
+			SE->Collapse(position, depth - 1);
 			break;
 		}
 	}

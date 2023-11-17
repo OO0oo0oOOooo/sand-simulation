@@ -28,6 +28,7 @@ void QuadTreeObject::Insert(glm::vec2 position, Cell cell)
 void QuadTreeObject::Remove(glm::vec2 position)
 {
 	quadTree->Remove(position);
+	ClearMesh();
 	DrawNode(quadTree->root);
 }
 
