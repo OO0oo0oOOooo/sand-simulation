@@ -117,32 +117,17 @@ void QuadTreeNode::Subdivide(glm::vec2 position, Cell cell, int depth)
 
 void QuadTreeNode::Collapse(glm::vec2 position, int depth)
 {
-	if (depth < 0)
-	{
+	// Start at root and drill down to the leaf using the position
+	// If the leaf is found, delete it from the parent
+	// If the rest of the child nodes are null, delete the parent
+	// Repeat until the root is reached
+
+	if(this == nullptr)
 		return;
-	}
 
 	int index = GetIndexFromPosition(position, this);
 
-	if(!isLeaf)
-	{ 
-		switch (index)
-		{
-		case 0:
-			NW->Collapse(position, depth - 1);
-			break;
-		case 1:
-			NE->Collapse(position, depth - 1);
-			break;
-		case 2:
-			SW->Collapse(position, depth - 1);
-			break;
-		case 3:
-			SE->Collapse(position, depth - 1);
-			break;
-		}
-	}
-	else
+	if (depth == 1)
 	{
 		switch (index)
 		{
@@ -163,6 +148,29 @@ void QuadTreeNode::Collapse(glm::vec2 position, int depth)
 			SE = nullptr;
 			break;
 		}
+
+		return;
 	}
-	
+	else if(depth > 0)
+	{
+		switch (index)
+		{
+		case 0:
+			if(NW != nullptr)
+				NW->Collapse(position, depth - 1);
+			break;
+		case 1:
+			if(NE != nullptr)
+				NE->Collapse(position, depth - 1);
+			break;
+		case 2:
+			if(SW != nullptr)
+				SW->Collapse(position, depth - 1);
+			break;
+		case 3:
+			if(SE != nullptr)
+				SE->Collapse(position, depth - 1);
+			break;
+		}
+	}
 }

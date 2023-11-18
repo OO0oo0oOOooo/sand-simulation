@@ -27,8 +27,8 @@ void QuadTreeObject::Insert(glm::vec2 position, Cell cell)
 
 void QuadTreeObject::Remove(glm::vec2 position)
 {
-	quadTree->Remove(position);
 	ClearMesh();
+	quadTree->Remove(position);
 	DrawNode(quadTree->root);
 }
 
@@ -61,7 +61,7 @@ void QuadTreeObject::DrawNode(QuadTreeNode* node)
 
 		if(node->SW != nullptr)
 			DrawNode(node->SW);
-		
+
 		if(node->SE != nullptr)
 			DrawNode(node->SE);
 	}
@@ -97,9 +97,6 @@ void QuadTreeObject::Render(Shader* shader)
 
 void QuadTreeObject::ClearMesh()
 {
-	mesh->vertices.clear();
-	mesh->indices.clear();
-
-	quadTreeMesh->vertices.clear();
-	quadTreeMesh->indices.clear();
+	mesh->Clear();
+	quadTreeMesh->Clear();
 }

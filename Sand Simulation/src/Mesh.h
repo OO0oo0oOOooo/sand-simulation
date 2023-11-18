@@ -25,8 +25,15 @@ public:
 
     void Clear() noexcept
     {
-		indices.clear();
-		vertices.clear();
+        indices.clear();
+        vertices.clear();
+
+		/*indices.erase(indices.begin(), indices.end());
+		vertices.erase(vertices.begin(), vertices.end());
+
+        glBindVertexArray(*vao);
+        UploadIBOData();
+        UploadVBOData();*/
 	}
 
     void UploadIBOData() noexcept

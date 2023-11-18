@@ -83,7 +83,7 @@ int main(void)
 
     QuadTreeObject quadTreeObject(windowWidth, 6);
 
-    renderer->InitBuffers(grid);
+    //renderer->InitBuffers(grid);
     Input::SetupKeyInputs(glwindow);
 
     IMGUI_CHECKVERSION();
@@ -101,6 +101,8 @@ int main(void)
 		//grid->UpdateGrid();
 		//renderer->UpdateDirtyBuffers(grid);
         //renderer->Draw();
+
+        glClear(GL_COLOR_BUFFER_BIT);
 
         quadTreeObject.Render(renderer->GetShader());
 
