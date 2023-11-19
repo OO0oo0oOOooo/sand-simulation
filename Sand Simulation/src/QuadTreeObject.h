@@ -3,6 +3,8 @@
 #include "QuadTree.h"
 #include "Mesh.h"
 
+#include <iostream>
+
 class QuadTreeObject
 {
 public:
@@ -22,4 +24,6 @@ public:
 	Mesh* quadTreeMesh;
 
 	QuadTree* quadTree;
+
+	int numNodes = 0;
 };

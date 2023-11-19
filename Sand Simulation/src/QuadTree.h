@@ -18,20 +18,23 @@ public:
     ~QuadTreeNode();
 
     //std::vector<Cell> Query(x, y);
+    void Remove(glm::vec2 position);
 
     void Subdivide(glm::vec2 position, Cell cell, int depth);
-    void Collapse(glm::vec2 position, int depth);
+    void Collapse();
 
     glm::vec2 position;
     int size;
     Cell cell;
 
+    QuadTreeNode* parent;
     QuadTreeNode* NW;
     QuadTreeNode* NE;
     QuadTreeNode* SW;
     QuadTreeNode* SE;
 
     bool isLeaf;
+    bool isRoot;
 };
 
 class QuadTree {

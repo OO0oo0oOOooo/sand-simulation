@@ -28,12 +28,15 @@ public:
         indices.clear();
         vertices.clear();
 
-		/*indices.erase(indices.begin(), indices.end());
-		vertices.erase(vertices.begin(), vertices.end());
+        //indices.resize(0);
+        //vertices.resize(0);
 
-        glBindVertexArray(*vao);
-        UploadIBOData();
-        UploadVBOData();*/
+		//indices.erase(indices.begin(), indices.end());
+		//vertices.erase(vertices.begin(), vertices.end());
+
+        //glBindVertexArray(*vao);
+        //UploadIBOData();
+        //UploadVBOData();
 	}
 
     void UploadIBOData() noexcept

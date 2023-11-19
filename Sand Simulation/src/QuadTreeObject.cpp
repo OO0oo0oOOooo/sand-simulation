@@ -21,6 +21,7 @@ void QuadTreeObject::Update()
 
 void QuadTreeObject::Insert(glm::vec2 position, Cell cell)
 {
+	ClearMesh();
 	quadTree->Insert(position, cell);
 	DrawNode(quadTree->root);
 }
