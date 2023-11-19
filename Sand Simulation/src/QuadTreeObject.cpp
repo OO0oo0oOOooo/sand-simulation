@@ -17,6 +17,11 @@ QuadTreeObject::~QuadTreeObject()
 void QuadTreeObject::Update()
 {
 	// Run on every leaf node
+	// Use velocity to find new position
+	// Place node at new position
+	// erase old node
+	// check for collisions
+	// if collision, run collision function
 }
 
 void QuadTreeObject::Insert(glm::vec2 position, Cell cell)
@@ -33,7 +38,7 @@ void QuadTreeObject::Remove(glm::vec2 position)
 	DrawNode(quadTree->root);
 }
 
-void QuadTreeObject::DrawNode(QuadTreeNode* node)
+void QuadTreeObject::DrawNode(Node* node)
 {
 	if (node->isLeaf)
 	{

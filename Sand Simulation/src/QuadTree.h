@@ -11,14 +11,13 @@
 // [ ] Collapse tree if all cells are the same
 
 
-class QuadTreeNode
+class Node
 {
 public:
-    QuadTreeNode(glm::vec2 position, int size);
-    ~QuadTreeNode();
+    Node(glm::vec2 position, int size);
+    ~Node();
 
     //std::vector<Cell> Query(x, y);
-    void Remove(glm::vec2 position);
 
     void Subdivide(glm::vec2 position, Cell cell, int depth);
     void Collapse();
@@ -27,11 +26,11 @@ public:
     int size;
     Cell cell;
 
-    QuadTreeNode* parent;
-    QuadTreeNode* NW;
-    QuadTreeNode* NE;
-    QuadTreeNode* SW;
-    QuadTreeNode* SE;
+    Node* parent;
+    Node* NW;
+    Node* NE;
+    Node* SW;
+    Node* SE;
 
     bool isLeaf;
     bool isRoot;
@@ -45,5 +44,8 @@ public:
     void Insert(glm::vec2 position, Cell cell);
     void Remove(glm::vec2 position);
 
-    QuadTreeNode* root;
+    Node* root;
+
+private:
+    int depth;
 };

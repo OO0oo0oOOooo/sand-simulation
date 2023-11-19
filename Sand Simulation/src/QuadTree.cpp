@@ -3,10 +3,10 @@
 #include <iostream>
 
 QuadTree::QuadTree(int x, int y, int size, int depth)
+	: depth(depth)
 {
-	root = new QuadTreeNode(glm::vec2(x, y), size);
+	root = new Node(glm::vec2(x, y), size);
 	root->isRoot = true;
-	//root->Subdivide(depth);
 }
 
 QuadTree::~QuadTree()
@@ -16,10 +16,10 @@ QuadTree::~QuadTree()
 
 void QuadTree::Insert(glm::vec2 position, Cell cell)
 {
-	root->Subdivide(position, cell, 6);
+	root->Subdivide(position, cell, depth);
 }
 
-int	GetIndexFromPosition(glm::vec2 position, QuadTreeNode* node)
+int	GetIndexFromPosition(glm::vec2 position, Node* node)
 {
 	int index = -1;
 	if (node == nullptr) return index;
@@ -48,38 +48,51 @@ int	GetIndexFromPosition(glm::vec2 position, QuadTreeNode* node)
 	}
 
 	return index;
-
 }
 
-QuadTreeNode* FindLeafNode(glm::vec2 position, QuadTreeNode* root)
+Node* GetNodeFromPosition(glm::vec2 position, Node* node)
 {
-	QuadTreeNode* node = root;
+	if (node == nullptr) return nullptr;
+	if (node->NW == nullptr && node->NE == nullptr && node->SW == nullptr && node->SE == nullptr) return nullptr;
+
+	if (position.x < node->position.x + node->size * 0.5f)
+	{
+		if (position.y < node->position.y + node->size * 0.5f)
+		{
+			if(node->SW != nullptr)
+				return node->SW;
+		}
+		else
+		{
+			if(node->NW != nullptr)
+				return node->NW;
+		}
+	}
+	else
+	{
+		if (position.y < node->position.y + node->size * 0.5f)
+		{
+			if(node->SE != nullptr)
+				return node->SE;
+		}
+		else
+		{
+			if(node->NE != nullptr)
+				return node->NE;
+		}
+	}
+
+	return nullptr;
+}
+
+Node* FindLeafNode(glm::vec2 position, Node* root)
+{
+	Node* node = root;
 
 	while (!node->isLeaf)
 	{
-		int index = GetIndexFromPosition(position, node);
-
-		switch (index)
-		{
-		case 0:
-			if (node->NW != nullptr)
-				node = node->NW;
-			break;
-		case 1:
-			if (node->NE != nullptr)
-				node = node->NE;
-			break;
-		case 2:
-			if (node->SW != nullptr)
-				node = node->SW;
-			break;
-		case 3:
-			if (node->SE != nullptr)
-				node = node->SE;
-			break;
-		default:
-			return nullptr;
-		}
+		node = GetNodeFromPosition(position, node);
+		if(node == nullptr) return nullptr;
 	}
 
 	return node;
@@ -87,19 +100,23 @@ QuadTreeNode* FindLeafNode(glm::vec2 position, QuadTreeNode* root)
 
 void QuadTree::Remove(glm::vec2 position)
 {
-	QuadTreeNode* node = FindLeafNode(position, root);
+	Node* node = FindLeafNode(position, root);
 	if (node == nullptr) return;
 
-	if		(node->parent->NW == node) { delete node->parent->NW; node->parent->NW = nullptr; }
-	else if (node->parent->NE == node) { delete node->parent->NE; node->parent->NE = nullptr; }
-	else if (node->parent->SW == node) { delete node->parent->SW; node->parent->SW = nullptr; }
-	else if (node->parent->SE == node) { delete node->parent->SE; node->parent->SE = nullptr; }
+	Node* parent = node->parent;
+	if (parent == nullptr) return;
 
-	node->parent->Collapse();
-	//root->Remove(position);
+	if		(parent->NW == node) { parent->NW = nullptr; }
+	else if (parent->NE == node) { parent->NE = nullptr; }
+	else if (parent->SW == node) { parent->SW = nullptr; }
+	else if (parent->SE == node) { parent->SE = nullptr; }
+
+	delete node;
+
+	parent->Collapse();
 }
 
-QuadTreeNode::QuadTreeNode(glm::vec2 pos, int s)
+Node::Node(glm::vec2 pos, int s)
 {
 	position = pos;
 	size = s;
@@ -114,7 +131,7 @@ QuadTreeNode::QuadTreeNode(glm::vec2 pos, int s)
 	isRoot = false;
 }
 
-QuadTreeNode::~QuadTreeNode()
+Node::~Node()
 {
 	if (NW != nullptr)
 		delete NW;
@@ -129,7 +146,7 @@ QuadTreeNode::~QuadTreeNode()
 		delete SE;
 }
 
-void QuadTreeNode::Subdivide(glm::vec2 position, Cell cell, int depth)
+void Node::Subdivide(glm::vec2 position, Cell cell, int depth)
 {
 	if (depth == 0)
 	{
@@ -145,106 +162,37 @@ void QuadTreeNode::Subdivide(glm::vec2 position, Cell cell, int depth)
 	{
 	case 0:
 		if(NW == nullptr)
-			NW = new QuadTreeNode(glm::vec2(this->position.x,				this->position.y + size * 0.5f), size / 2);
+			NW = new Node(glm::vec2(this->position.x,				this->position.y + size * 0.5f), size / 2);
 		NW->Subdivide(position, cell, depth - 1);
 		NW->parent = this;
 		break;
 	case 1:
 		if(NE == nullptr)
-			NE = new QuadTreeNode(glm::vec2(this->position.x + size * 0.5f, this->position.y + size * 0.5f), size / 2);
+			NE = new Node(glm::vec2(this->position.x + size * 0.5f, this->position.y + size * 0.5f), size / 2);
 		NE->Subdivide(position, cell, depth - 1);
 		NE->parent = this;
 		break;
 	case 2:
 		if(SW == nullptr)
-			SW = new QuadTreeNode(glm::vec2(this->position.x, this->position.y), size / 2);
+			SW = new Node(glm::vec2(this->position.x, this->position.y), size / 2);
 		SW->Subdivide(position, cell, depth - 1);
 		SW->parent = this;
 		break;
 	case 3:
 		if(SE == nullptr)
-			SE = new QuadTreeNode(glm::vec2(this->position.x + size * 0.5f, this->position.y), size / 2);
+			SE = new Node(glm::vec2(this->position.x + size * 0.5f, this->position.y), size / 2);
 		SE->Subdivide(position, cell, depth - 1);
 		SE->parent = this;
 		break;
 	}
 }
 
-
-
-void QuadTreeNode::Remove(glm::vec2 position)
-{
-	QuadTreeNode* node = FindLeafNode(position, this);
-
-	if		(parent->NW == node) { delete parent->NW; parent->NW = nullptr; }
-	else if (parent->NE == node) { delete parent->NE; parent->NE = nullptr; }
-	else if (parent->SW == node) { delete parent->SW; parent->SW = nullptr; }
-	else if (parent->SE == node) { delete parent->SE; parent->SE = nullptr; }
-
-	parent->Collapse();
-
-	/*if(this == nullptr)
-		return;
-
-	int index = GetIndexFromPosition(position, this);
-
-	if (!isLeaf)
-	{
-		switch (index)
-		{
-		case 0:
-			if (NW != nullptr)
-				NW->Remove(position);
-			break;
-		case 1:
-			if (NE != nullptr)
-				NE->Remove(position);
-			break;
-		case 2:
-			if (SW != nullptr)
-				SW->Remove(position);
-			break;
-		case 3:
-			if (SE != nullptr)
-				SE->Remove(position);
-			break;
-		default:
-			return;
-		}
-	}
-	else
-	{
-		switch (index)
-		{
-			case 0:
-				delete parent->NW;
-				parent->NW = nullptr;
-				break;
-			case 1:
-				delete parent->NE;
-				parent->NE = nullptr;
-				break;
-			case 2:
-				delete parent->SW;
-				parent->SW = nullptr;
-				break;
-			case 3:
-				delete parent->SE;
-				parent->SE = nullptr;
-				break;
-			default:
-				return;
-		}
-	}*/
-
-	//if (parent != nullptr)
-	//parent->Collapse();
-}
-
-void QuadTreeNode::Collapse()
+void Node::Collapse()
 {
 	if (this == nullptr || this->isRoot)
 		return;
+
+	Node* parent = this->parent;
 
 	if (NW == nullptr && NE == nullptr && SW == nullptr && SE == nullptr)
 	{
@@ -253,56 +201,7 @@ void QuadTreeNode::Collapse()
 		else if (parent->SW == this) { delete parent->SW; parent->SW = nullptr; }
 		else if (parent->SE == this) { delete parent->SE; parent->SE = nullptr; }
 
-		//if (parent != nullptr)
-		parent->Collapse();
+		if (parent != nullptr)
+			parent->Collapse();
 	}
 }
-
-	//int index = GetIndexFromPosition(position, this);
-
-	//if (depth == 1)
-	//{
-	//	switch (index)
-	//	{
-	//	case 0:
-	//		delete NW;
-	//		NW = nullptr;
-	//		break;
-	//	case 1:
-	//		delete NE;
-	//		NE = nullptr;
-	//		break;
-	//	case 2:
-	//		delete SW;
-	//		SW = nullptr;
-	//		break;
-	//	case 3:
-	//		delete SE;
-	//		SE = nullptr;
-	//		break;
-	//	}
-	//	return;
-	//}
-	//else if(depth > 0)
-	//{
-	//	switch (index)
-	//	{
-	//	case 0:
-	//		if(NW != nullptr)
-	//			NW->Collapse(position, depth - 1);
-	//		break;
-	//	case 1:
-	//		if(NE != nullptr)
-	//			NE->Collapse(position, depth - 1);
-	//		break;
-	//	case 2:
-	//		if(SW != nullptr)
-	//			SW->Collapse(position, depth - 1);
-	//		break;
-	//	case 3:
-	//		if(SE != nullptr)
-	//			SE->Collapse(position, depth - 1);
-	//		break;
-	//	}
-	//}
-//}
