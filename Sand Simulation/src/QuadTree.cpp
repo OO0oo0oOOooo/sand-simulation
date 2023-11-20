@@ -1,7 +1,5 @@
 #include "QuadTree.h"
 
-#include <iostream>
-
 QuadTree::QuadTree(int x, int y, int size, int depth)
 	: depth(depth)
 {
@@ -144,6 +142,9 @@ Node::~Node()
 
 	if (SE != nullptr)
 		delete SE;
+
+	/*if (parent != nullptr)
+		delete parent;*/
 }
 
 void Node::Subdivide(glm::vec2 position, Cell cell, int depth)

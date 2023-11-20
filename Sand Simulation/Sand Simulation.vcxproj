@@ -154,6 +154,7 @@
     <ClCompile Include="src\Application.cpp" />
     <ClCompile Include="src\Brush.cpp" />
     <ClCompile Include="src\Cell.cpp" />
+    <ClCompile Include="src\Chunk.cpp" />
     <ClCompile Include="src\Grid.cpp" />
     <ClCompile Include="src\IndexBuffer.cpp" />
     <ClCompile Include="src\Input.cpp" />
@@ -172,13 +173,16 @@
     <ClCompile Include="src\vendor\imgui\imgui_widgets.cpp" />
     <ClCompile Include="src\VertexBuffer.cpp" />
     <ClCompile Include="src\Window.cpp" />
+    <ClCompile Include="src\World.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Brush.h" />
+    <ClInclude Include="src\Chunk.h" />
     <ClInclude Include="src\Grid.h" />
     <ClInclude Include="src\IndexBuffer.h" />
     <ClInclude Include="src\Input.h" />
     <ClInclude Include="src\Cell.h" />
+    <ClInclude Include="src\Log.h" />
     <ClInclude Include="src\Mesh.h" />
     <ClInclude Include="src\QuadTree.h" />
     <ClInclude Include="src\QuadTreeObject.h" />
@@ -477,6 +481,7 @@
     <ClInclude Include="src\vendor\imgui\imstb_truetype.h" />
     <ClInclude Include="src\VertexBuffer.h" />
     <ClInclude Include="src\Window.h" />
+    <ClInclude Include="src\World.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\vendor\glm\detail\func_common.inl" />

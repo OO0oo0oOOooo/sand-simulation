@@ -14,15 +14,36 @@ QuadTreeObject::~QuadTreeObject()
 	delete quadTreeMesh;
 }
 
-void QuadTreeObject::Update()
+
+void QuadTreeObject::UpdateNode(Node* node, float deltaTime)
 {
-	// Run on every leaf node
-	// Use velocity to find new position
-	// Place node at new position
-	// erase old node
-	// check for collisions
-	// if collision, run collision function
+	if (node->isLeaf)
+	{
+		// Calculate the new position
+		glm::vec2 newPosition = node->position + node->cell.velocity * deltaTime;
+
+		// Remove the node from its current position
+		Remove(node->position);
+
+		// Insert the node at the new position
+		Insert(newPosition, node->cell);
+	}
+	else
+	{
+		if (node->NW != nullptr)
+			UpdateNode(node->NW, deltaTime);
+
+		if (node->NE != nullptr)
+			UpdateNode(node->NE, deltaTime);
+
+		if (node->SW != nullptr)
+			UpdateNode(node->SW, deltaTime);
+
+		if (node->SE != nullptr)
+			UpdateNode(node->SE, deltaTime);
+	}
 }
+
 
 void QuadTreeObject::Insert(glm::vec2 position, Cell cell)
 {

@@ -11,7 +11,7 @@ public:
 	QuadTreeObject(int width, int depth);
 	~QuadTreeObject();
 
-	void Update();
+	void UpdateNode(Node* node, float deltaTime);
 
 	void Insert(glm::vec2 position, Cell cell);
 	void Remove(glm::vec2 position);

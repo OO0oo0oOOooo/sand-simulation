@@ -8,10 +8,12 @@
 #include "Window.h"
 #include "Input.h"
 #include "Renderer.h"
+#include "Brush.h"
+
 #include "Grid.h"
 #include "Quadtree.h"
 #include "QuadTreeObject.h"
-#include "Brush.h"
+#include "World.h"
 
 #include <iostream>
 
@@ -30,19 +32,21 @@
 // [ ] Particle Selection UI
 //
 // Optimizations:
-// [ ] QuadTree
-// [ ] Instanced Rendering
-// [ ] Multithreading
 // [ ] Chunks
+// [ ] Dirty Quads
+// [ ] Multithreading
+// [ ] Instanced Rendering
 // [ ] Compute Shaders
 // [ ] Reduce size of buffer (Build Quads on gpu)
+// 
+// Chunks:
+// [ ] Map of Chunks
+// [ ] Chunks have a 1d array of cells
+// 
 // 
 // Grid:
 // [ ] Build mesh inside grid class
 // [ ] Get rid of DirtyCells vector
-// 
-// QuadTree:
-// Goto quadtree class to see the todo
 //
 // Reactions:
 // [ ] Wood + Fire = Fire
@@ -79,9 +83,11 @@ int main(void)
     std::cout << "OpenGL Version: " << glGetString(GL_VERSION) << std::endl;
 
     Renderer* renderer = new Renderer(windowWidth, windowHeight);
-	Grid* grid = new Grid(windowWidth, windowHeight, gridResolution);
+    World world;
 
-    QuadTreeObject quadTreeObject(windowWidth, 6);
+	//Grid* grid = new Grid(windowWidth, windowHeight, gridResolution);
+
+    //QuadTreeObject quadTreeObject(windowWidth, 6);
 
     //renderer->InitBuffers(grid);
     Input::SetupKeyInputs(glwindow);
@@ -95,16 +101,19 @@ int main(void)
 
     while (!glfwWindowShouldClose(glwindow))
     {
-        Brush::MouseInput(window, grid, &quadTreeObject);
-        Brush::SelectionInput(window, grid);
+        //Brush::MouseInput(window, grid, &quadTreeObject);
+        //Brush::SelectionInput(window, grid);
+
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        world.Render(renderer->GetShader());
 
 		//grid->UpdateGrid();
 		//renderer->UpdateDirtyBuffers(grid);
         //renderer->Draw();
 
-        glClear(GL_COLOR_BUFFER_BIT);
 
-        quadTreeObject.Render(renderer->GetShader());
+        //quadTreeObject.Render(renderer->GetShader());
 
         // Start the Dear ImGui frame
         ImGui_ImplOpenGL3_NewFrame();
@@ -128,7 +137,7 @@ int main(void)
     }
 
     delete renderer;
-	delete grid;
+	//delete grid;
     glfwTerminate();
     return 0;
 }

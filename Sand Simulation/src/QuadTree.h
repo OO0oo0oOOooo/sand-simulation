@@ -6,8 +6,10 @@
 // Get Detail where required.
 // Exclude cells that are occupied but shouldnt be checked for updates
 // 
-// [ ] Add/remove function
-// [ ] check nehbouring cells for updates
+// Functionality:
+// [ ] check nehbouring cells
+// 
+// Optimizations:
 // [ ] Collapse tree if all cells are the same
 
 
