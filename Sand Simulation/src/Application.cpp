@@ -83,7 +83,7 @@ int main(void)
     std::cout << "OpenGL Version: " << glGetString(GL_VERSION) << std::endl;
 
     Renderer* renderer = new Renderer(windowWidth, windowHeight);
-    World world;
+    World* world = new World;
 
 	//Grid* grid = new Grid(windowWidth, windowHeight, gridResolution);
 
@@ -106,7 +106,7 @@ int main(void)
 
         glClear(GL_COLOR_BUFFER_BIT);
 
-        world.Render(renderer->GetShader());
+        world->Render(renderer->GetShader());
 
 		//grid->UpdateGrid();
 		//renderer->UpdateDirtyBuffers(grid);
