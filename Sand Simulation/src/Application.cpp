@@ -10,12 +10,12 @@
 #include "Renderer.h"
 #include "Brush.h"
 
-#include "Grid.h"
-#include "Quadtree.h"
-#include "QuadTreeObject.h"
+//#include "Grid.h"
+//#include "Quadtree.h"
+//#include "QuadTreeObject.h"
 #include "World.h"
 
-#include <iostream>
+//#include <iostream>
 
 // TODO:
 // 
@@ -84,6 +84,7 @@ int main(void)
 
     Renderer* renderer = new Renderer(windowWidth, windowHeight);
     World* world = new World;
+    world->Render(renderer->GetShader());
 
 	//Grid* grid = new Grid(windowWidth, windowHeight, gridResolution);
 

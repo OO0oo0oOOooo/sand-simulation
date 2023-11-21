@@ -47,10 +47,10 @@ const Cell ParticleMetal =     { 6, { 0.3f, 0.3f, 0.3f, 1.0f } };
 const Cell ParticleGunpowder = { 7, { 0.2f, 0.2f, 0.2f, 1.0f } };
 
 const glm::vec3 vertexPositions[] = {
-	glm::vec3(-0.0f, -0.0f, 0.0f),
-	glm::vec3(-0.0f,  1.0f, 0.0f),
-	glm::vec3( 1.0f, -0.0f, 0.0f),
-	glm::vec3( 1.0f,  1.0f, 0.0f),
+	glm::vec3( 0.0f, 0.0f, 0.0f ),
+	glm::vec3( 0.0f, 1.0f, 0.0f ),
+	glm::vec3( 1.0f, 0.0f, 0.0f ),
+	glm::vec3( 1.0f, 1.0f, 0.0f ),
 };
 
 const unsigned int meshTriangles[] = {

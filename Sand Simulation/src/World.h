@@ -1,8 +1,9 @@
 #pragma once
 
 #include "glm/glm.hpp"
+
 #include "Chunk.h"
-#include <map>
+#include <unordered_map>
 
 class World
 {
@@ -13,25 +14,21 @@ public:
 	void Render(Shader* shader);
 
 private:
-	std::map<glm::vec2, Chunk*> chunks;
+	struct KeyHash {
+		std::size_t operator()(const glm::vec2& k) const {
+			return std::hash<float>()(k.x) ^ std::hash<float>()(k.y);
+		}
+	};
+
+	struct KeyEqual {
+		bool operator()(const glm::vec2& lhs, const glm::vec2& rhs) const {
+			return lhs.x == rhs.x && lhs.y == rhs.y;
+		}
+	};
+
+	std::unordered_map<glm::vec2, Chunk*, KeyHash, KeyEqual> chunks;
 	//std::vector<Chunk> chunks;
 
 	int numChunksWidth = 20;
 	int numChunksHeight = 11;
 };
-
-World::World()
-{
-	for (int x = 0; x < 20; x++)
-	{
-		for (int y = 0; y < 11; y++)
-		{
-			chunks[glm::vec2(x, y)] = new Chunk();
-
-		}
-	}
-}
-
-World::~World()
-{
-}
