@@ -102,8 +102,8 @@ int main(void)
 
     while (!glfwWindowShouldClose(glwindow))
     {
-        //Brush::MouseInput(window, grid, &quadTreeObject);
-        //Brush::SelectionInput(window, grid);
+        Brush::MouseInput(window, world);
+        Brush::SelectionInput(window);
 
         glClear(GL_COLOR_BUFFER_BIT);
 

@@ -1,7 +1,5 @@
 #include "Chunk.h"
 
-#include <iostream>
-
 Chunk::Chunk(int x, int y)
 	: position(x, y)
 {
@@ -26,8 +24,6 @@ Chunk::~Chunk()
 
 void Chunk::CreateMesh()
 {
-	std::cout << "Chunk: X " << position.x << ", Y " << position.y << std::endl;
-
 	mesh->vertices.resize(chunkSizeInCells * chunkSizeInCells * 4);
 	mesh->indices.resize(chunkSizeInCells * chunkSizeInCells * 6);
 
@@ -37,20 +33,15 @@ void Chunk::CreateMesh()
 		{
 			int baseVertexIndex = (y * chunkSizeInCells + x) * 4;
 			int baseIndexIndex = (y * chunkSizeInCells + x) * 6;
-			//Cell& cell = ChunkData[y * chunkSizeInCells + x];
+			Cell& cell = ChunkData[y * chunkSizeInCells + x];
 
-			int newX = x + position.x;
-			int newY = y + position.y;
+			int newX = x + (int)position.x;
+			int newY = y + (int)position.y;
 
 			for (int i = 0; i < 4; i++)
 			{
 				mesh->vertices[baseVertexIndex + i].position = (glm::vec3(newX, newY, 0) + vertexPositions[i]) * (float)cellSize;
-				if ( newX % chunkSizeInCells == 0)
-					mesh->vertices[baseVertexIndex + i].color = { 1, 0, 0, 1 };
-				else if ( newY % chunkSizeInCells == 0)
-					mesh->vertices[baseVertexIndex + i].color = { 0, 1, 0, 1 };
-				else
-					mesh->vertices[baseVertexIndex + i].color = { 1, 1, 1, 1 };
+				mesh->vertices[baseVertexIndex + i].color = cell.color;
 			}
 
 			for (int i = 0; i < 6; i++)
@@ -68,4 +59,3 @@ void Chunk::DrawMesh(Shader* shader)
 {
 	mesh->Draw(shader);
 }
-

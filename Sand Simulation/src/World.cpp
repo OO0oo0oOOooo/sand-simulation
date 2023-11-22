@@ -2,9 +2,9 @@
 
 World::World()
 {
-	for (int x = 0; x < 5; x++)
+	for (int x = 0; x < numChunksWidth; x++)
 	{
-		for (int y = 0; y < 3; y++)
+		for (int y = 0; y < numChunksHeight; y++)
 		{
 			chunks[glm::vec2(x, y)] = new Chunk(x * 64, y * 64);;
 		}
@@ -21,9 +21,9 @@ World::~World()
 
 void World::Render(Shader* shader)
 {
-	for (int x = 0; x < 20; x++)
+	for (int x = 0; x < numChunksWidth; x++)
 	{
-		for (int y = 0; y < 11; y++)
+		for (int y = 0; y < numChunksHeight; y++)
 		{
 			Chunk* chunk = chunks[glm::vec2(x, y)];
 

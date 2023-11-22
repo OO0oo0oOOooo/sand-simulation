@@ -5,45 +5,20 @@ namespace Brush
 	Cell selectedParticle = ParticleSand;
 	int brushSize = 1;
 
-	void MouseInput(Window window, Grid* grid, QuadTreeObject* quadTreeObject)
+	void MouseInput(Window window, World* world)
 	{
 		if (Input::IsKeyPressed(GLFW_MOUSE_BUTTON_LEFT))
 		{
-			quadTreeObject->Insert(Input::mousePosition, selectedParticle);
+			world->EditCell(Input::normalizedMousePosition, selectedParticle);
 		}
 
 		if (Input::IsKeyPressed(GLFW_MOUSE_BUTTON_RIGHT))
 		{
-			quadTreeObject->Remove(glm::vec2(Input::mousePosition));
+			world->EditCell(Input::normalizedMousePosition, ParticleAir);
 		}
 	}
 
-	//void MouseInput(Window window, Grid* grid, QuadTreeObject* quadTreeObject)
-	//{
-	//	if (Input::IsKeyPressed(GLFW_MOUSE_BUTTON_LEFT))
-	//	{
-	//		glm::ivec2 index = grid->GetCellIndex(Input::normalizedMousePosition);
-	//		//std::cout << "x: " << Input::normalizedMousePosition.x << " y: " << Input::normalizedMousePosition.y << std::endl;
-	//		//std::cout << "Tile X: " << index.x << " Tile Y: " << index.y << std::endl;
-
-	//		int rx = rand() % (2 * brushSize + 1) - brushSize;
-	//		int ry = rand() % (2 * brushSize + 1) - brushSize;
-
-	//		index += glm::ivec2(rx, ry);
-
-	//		if (index.x > grid->GridWidth || index.x < 0)
-	//			return;
-
-	//		if (index.y > grid->GridHeight || index.y < 0)
-	//			return;
-
-	//		grid->SetCell((int)index.x, (int)index.y, selectedParticle);
-	//		quadTreeObject->Insert(glm::vec2(Input::mousePosition.x, Input::mousePosition.y), selectedParticle);
-
-	//	}
-	//}
-
-	void SelectionInput(Window window, Grid* grid)
+	void SelectionInput(Window window)
 	{
 		if (Input::IsKeyPressed(GLFW_KEY_ESCAPE))
 		{

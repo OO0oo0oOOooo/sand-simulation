@@ -1,16 +1,15 @@
 #pragma once
 
-#include "QuadTreeObject.h"
-#include "Cell.h"
-#include "Window.h"
-#include "Grid.h"
+#include "World.h"
 #include "Input.h"
+#include "Window.h"
+#include "Cell.h"
 
 namespace Brush
 {
 	extern Cell selectedParticle;
 	extern int brushSize;
 
-	void MouseInput(Window window, Grid* grid, QuadTreeObject* quadTreeObject);
-	void SelectionInput(Window window, Grid* grid);
+	void MouseInput(Window window, World* world);
+	void SelectionInput(Window window);
 }

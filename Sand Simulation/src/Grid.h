@@ -49,7 +49,6 @@ public:
 	{
 		int x = (int)(normalizedPos.x * GridWidth);
 		int y = (int)(normalizedPos.y * GridHeight);
-
 		return glm::ivec2(x, y);
 	}
 

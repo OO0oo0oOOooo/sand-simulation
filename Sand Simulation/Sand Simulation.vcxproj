@@ -178,6 +178,7 @@
   <ItemGroup>
     <ClInclude Include="src\Brush.h" />
     <ClInclude Include="src\Chunk.h" />
+    <ClInclude Include="src\ChunkData.h" />
     <ClInclude Include="src\Grid.h" />
     <ClInclude Include="src\IndexBuffer.h" />
     <ClInclude Include="src\Input.h" />
