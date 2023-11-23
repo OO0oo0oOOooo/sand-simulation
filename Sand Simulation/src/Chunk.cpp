@@ -9,7 +9,7 @@ Chunk::Chunk(int x, int y)
 	{
 		for (int y = 0; y < chunkSizeInCells; y++)
 		{
-			ChunkData[x + y * chunkSizeInCells] = ParticleAir;
+			ChunkData[GetCellIndex(x, y)] = ParticleAir;
 		}
 	}
 
@@ -31,9 +31,11 @@ void Chunk::CreateMesh()
 	{
 		for (int y = 0; y < chunkSizeInCells; y++)
 		{
-			int baseVertexIndex = (y * chunkSizeInCells + x) * 4;
-			int baseIndexIndex = (y * chunkSizeInCells + x) * 6;
-			Cell& cell = ChunkData[y * chunkSizeInCells + x];
+			int cellIndex = GetCellIndex(x, y);
+
+			int baseVertexIndex = (cellIndex) * 4;
+			int baseIndexIndex = (cellIndex) * 6;
+			Cell& cell = ChunkData[cellIndex];
 
 			int newX = x + (int)position.x;
 			int newY = y + (int)position.y;

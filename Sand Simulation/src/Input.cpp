@@ -72,8 +72,8 @@ namespace Input {
 		mousePosition.x = (float)xpos;
 		mousePosition.y = height - (float)ypos;
 
-		normalizedMousePosition.x = (float)xpos / (float)width;
-		normalizedMousePosition.y = (height - (float)ypos) / (float)height;
+		//normalizedMousePosition.x = (float)xpos / (float)width;
+		//normalizedMousePosition.y = (height - (float)ypos) / (float)height;
 	}
 
 	void MouseScrollCallback(GLFWwindow* window, double xoffset, double yoffset)
