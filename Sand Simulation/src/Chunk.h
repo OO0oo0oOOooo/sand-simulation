@@ -22,8 +22,8 @@ public:
 
 	inline void SetCell(int x, int y, Cell cell)
 	{
-		/*if (x < 0 || x >= chunkSizeInCells || y < 0 || y >= chunkSizeInCells)
-			return;*/
+		if (x < 0 || x >= chunkSizeInCells || y < 0 || y >= chunkSizeInCells)
+			return;
 
 		int index = GetCellIndex(x, y);
 

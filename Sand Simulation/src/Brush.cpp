@@ -9,12 +9,12 @@ namespace Brush
 	{
 		if (Input::IsKeyPressed(GLFW_MOUSE_BUTTON_LEFT))
 		{
-			world->EditCell(Input::normalizedMousePosition, selectedParticle);
+			world->EditCell(Input::mousePosition, Input::aspectRatio, selectedParticle);
 		}
 
 		if (Input::IsKeyPressed(GLFW_MOUSE_BUTTON_RIGHT))
 		{
-			world->EditCell(Input::normalizedMousePosition, ParticleAir);
+			world->EditCell(Input::mousePosition, Input::aspectRatio, ParticleAir);
 		}
 	}
 
