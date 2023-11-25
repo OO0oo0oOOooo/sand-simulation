@@ -1,7 +1,7 @@
 #include "Chunk.h"
 
 Chunk::Chunk(int x, int y)
-	: position(x, y)
+	: position(x, y), dirty(false)
 {
 	ChunkData = std::vector<Cell>(chunkSizeInCells * chunkSizeInCells);
 

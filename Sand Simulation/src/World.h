@@ -14,6 +14,9 @@ public:
 
 	void Render(Shader* shader);
 
+	void UpdateChunks();
+	void UpdateCells(Chunk* chunk);
+
 	////Normalized position
 	//inline glm::ivec2 GetChunkFromNormalizedPos(glm::vec2 normalizedPos)
 	//{
@@ -31,40 +34,21 @@ public:
 	//}
 
 	//// Raw position
-	//inline glm::ivec2 GetChunkFromPos(glm::vec2 position)
-	//{
-	//	int x = floor(position.x / (chunkSizeInCells * cellSize));
-	//	int y = floor(position.y / (chunkSizeInCells * cellSize));
-	//	return glm::ivec2(x, y);
-	//}
+	/*inline glm::ivec2 GetChunkFromPos(glm::vec2 position)
+	{
+		int x = floor(position.x / (chunkSizeInCells * cellSize));
+		int y = floor(position.y / (chunkSizeInCells * cellSize));
+		return glm::ivec2(x, y);
+	}
 
-	//inline glm::ivec2 GetCellFromPos(glm::vec2 position)
-	//{
-	//	int x = static_cast<int>(floor(position.x / cellSize)) % chunkSizeInCells;
-	//	int y = static_cast<int>(floor(position.y / cellSize)) % chunkSizeInCells;
-	//	return glm::ivec2(x, y);
-	//}
+	inline glm::ivec2 GetCellFromPos(glm::vec2 position)
+	{
+		int x = static_cast<int>(floor(position.x / cellSize)) % chunkSizeInCells;
+		int y = static_cast<int>(floor(position.y / cellSize)) % chunkSizeInCells;
+		return glm::ivec2(x, y);
+	}*/
 
-	//inline glm::ivec2 GetChunkFromPos(glm::vec2 position, float aspectRatio)
-	//{
-	//	// Adjust the position based on the aspect ratio
-	//	glm::vec2 adjustedPos = position * glm::vec2(aspectRatio, 1.0f);
-
-	//	int x = floor(adjustedPos.x / (chunkSizeInCells * cellSize));
-	//	int y = floor(adjustedPos.y / (chunkSizeInCells * cellSize));
-	//	return glm::ivec2(x, y);
-	//}
-
-	//inline glm::ivec2 GetCellFromPos(glm::vec2 position, float aspectRatio)
-	//{
-	//	// Adjust the position based on the aspect ratio
-	//	glm::vec2 adjustedPos = position * glm::vec2(aspectRatio, 1.0f);
-
-	//	int x = static_cast<int>(floor(adjustedPos.x / cellSize)) % chunkSizeInCells;
-	//	int y = static_cast<int>(floor(adjustedPos.y / cellSize)) % chunkSizeInCells;
-	//	return glm::ivec2(x, y);
-	//}
-
+	// 
 	inline glm::ivec2 GetChunkFromPos(glm::vec2 position, glm::vec2 aspectRatio)
 	{
 		// Adjust the chunk size based on the aspect ratio
@@ -85,32 +69,13 @@ public:
 		return glm::ivec2(x, y);
 	}
 
-	/*glm::ivec2 WorldToChunkSpace(glm::vec2 worldPos, glm::vec2 chunkSize)
+	inline void EditCell(glm::vec2 position, glm::vec2 aspectRatio, Cell cell)
 	{
-		return glm::floor(worldPos / chunkSize);
-	}
-
-	glm::ivec2 ChunkToCellSpace(glm::vec2 chunkPos, glm::vec2 cellSize)
-	{
-		return glm::floor(chunkPos / cellSize);
-	}*/
-
-	inline void EditCell(glm::vec2 worldPosition, glm::vec2 aspectRatio, Cell cell)
-	{
-		//glm::ivec2 chunkPos = WorldToChunkSpace(worldPosition, {64, 64});
-		//glm::ivec2 cellPos = ChunkToCellSpace(chunkPos, {4, 4});
-
-		glm::ivec2 chunkPos = GetChunkFromPos(worldPosition, aspectRatio);
-		glm::ivec2 cellPos = GetCellFromPos(worldPosition, aspectRatio);
-
-		std::cout << "World: " << worldPosition.x << ", " << worldPosition.y << std::endl;
-		std::cout << "Chunk: " << chunkPos.x << ", " << chunkPos.y << std::endl;
-		std::cout << "Cell: " << cellPos.x << ", " << cellPos.y << std::endl;
+		glm::ivec2 chunkPos = GetChunkFromPos(position, aspectRatio);
+		glm::ivec2 cellPos = GetCellFromPos(position, aspectRatio);
 
 		Chunk* chunk = chunks[chunkPos];
 		chunk->SetCell(cellPos.x, cellPos.y, cell);
-
-		chunk->CreateMesh();
 	}
 
 private:

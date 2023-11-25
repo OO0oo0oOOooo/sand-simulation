@@ -1,14 +1,10 @@
 #include "Input.h"
-
 #include <iostream>
 
 namespace Input {
 	glm::vec2 mousePosition = { 0.0f, 0.0f };
 	glm::vec2 normalizedMousePosition = { 0.0f, 0.0f };
 	glm::vec2 worldMousePosition = { 0.0f, 0.0f };
-
-	glm::vec2 aspectRatio = {16, 9};
-
 	glm::vec2 mouseScroll = { 0.0f, 0.0f };
 
 	std::map<int, bool> m_Keys;
@@ -69,61 +65,16 @@ namespace Input {
 		SetKeyDown(button, action != GLFW_RELEASE);
 	}
 
-	glm::vec2 ScreenToWorldSpace(glm::vec2 screenPos, glm::vec2 cameraPos, glm::vec2 cameraSize)
-	{
-		return cameraPos + (screenPos / cameraSize);
-	}
-
-
-
-
-
-	glm::vec3 ScreenToClipSpace(glm::vec2 screenPos, glm::vec2 screenSize)
-	{
-		float x = (screenPos.x / screenSize.x) * 2.0f - 1.0f;
-		float y = (screenPos.y / screenSize.y) * 2.0f - 1.0f;
-		return glm::vec3(x, y, 0.0f);
-	}
-
-	glm::vec4 ClipToWorldSpace(glm::vec4 clipPos, glm::mat4 invMVP)
-	{
-		glm::vec4 worldPos = invMVP * clipPos;
-		return worldPos;// / worldPos.w;
-	}
-
 	void MousePositionCallback(GLFWwindow* window, double xpos, double ypos)
 	{
 		int width, height;
 		glfwGetFramebufferSize(window, &width, &height);
 
-		aspectRatio = { (float)width, (float)height };
-
 		mousePosition.x = (float)xpos;
-		mousePosition.y = height - (float)ypos;
+		mousePosition.y = (height - (float)ypos);
 
-		// Normalized in screen space
-		//normalizedMousePosition.x = (float)xpos / (float)width;
-		//normalizedMousePosition.y = (height - (float)ypos) / (float)height;
-
-		// Normalized in chunk space
-		//normalizedMousePosition.x = (float)xpos / (5.0f * (64 * 4));
-		//normalizedMousePosition.y = (height - (float)ypos) / (3.0f * (64 * 4));
-
-		//glm::mat4 proj = glm::ortho(0.0f, (float)width, 0.0f, (float)height, -1.0f, 1.0f);
-		//glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f));
-
-		//glm::mat4 VP = proj * view;
-		//glm::mat4 invMVP = glm::inverse(VP);
-
-		//glm::vec3 clipSpace = ScreenToClipSpace(mousePosition, {(float)width, (float)height});
-		////std::cout << clipSpace.x << ", " << clipSpace.y << std::endl;
-
-		//glm::vec4 clipPos = glm::vec4(clipSpace.x, clipSpace.y, 0, 1.0f);
-		//glm::vec4 worldPos = ClipToWorldSpace(glm::vec4(clipPos), invMVP);
-		////std::cout << worldPos.x << ", " << worldPos.y << std::endl;
-
-		//worldMousePosition.x = worldPos.x;
-		//worldMousePosition.y = worldPos.y;
+		normalizedMousePosition.x = (float)xpos / width;
+		normalizedMousePosition.y = 1.0f - (float)ypos / height; // y is flipped because glfw's coordinate system's origin is at the top left
 	}
 
 	void MouseScrollCallback(GLFWwindow* window, double xoffset, double yoffset)

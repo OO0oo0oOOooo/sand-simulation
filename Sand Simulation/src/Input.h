@@ -2,7 +2,7 @@
 
 #include <GLFW/glfw3.h>
 #include "glm/glm.hpp"
-#include "glm/gtc/matrix_transform.hpp"
+#include "Window.h"
 
 #include <map>
 #include <vector>
@@ -12,7 +12,6 @@ namespace Input {
     extern glm::vec2 mousePosition;
     extern glm::vec2 normalizedMousePosition;
     extern glm::vec2 worldMousePosition;
-    extern glm::vec2 aspectRatio;
     extern glm::vec2 mouseScroll;
 
     void SetupKeyInputs(GLFWwindow* window);

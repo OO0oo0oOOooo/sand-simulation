@@ -998,9 +998,6 @@
     <ClInclude Include="src\World.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Log.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\Chunk.h">
       <Filter>Header Files</Filter>
     </ClInclude>

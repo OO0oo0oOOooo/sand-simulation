@@ -32,17 +32,20 @@
 // [ ] Particle Selection UI
 //
 // Optimizations:
-// [ ] Chunks
 // [ ] Dirty Quads
-// [ ] Multithreading
+// [ ] Multithreading Chunks
 // [ ] Instanced Rendering
 // [ ] Compute Shaders
 // [ ] Reduce size of buffer (Build Quads on gpu)
 // 
-// Chunks:
-// [ ] Map of Chunks
-// [ ] Chunks have a 1d array of cells
 // 
+// World:
+// [ ] Update only dirty chunks
+// [ ] UpdateCells across borders
+// [ ] Dirty Quads
+// 
+// Chunks:
+// [ ]
 // 
 // Grid:
 // [ ] Build mesh inside grid class
@@ -86,11 +89,8 @@ int main(void)
     World* world = new World;
     world->Render(renderer->GetShader());
 
-	//Grid* grid = new Grid(windowWidth, windowHeight, gridResolution);
 
-    //QuadTreeObject quadTreeObject(windowWidth, 6);
 
-    //renderer->InitBuffers(grid);
     Input::SetupKeyInputs(glwindow);
 
     IMGUI_CHECKVERSION();
@@ -107,14 +107,8 @@ int main(void)
 
         glClear(GL_COLOR_BUFFER_BIT);
 
+        world->UpdateChunks();
         world->Render(renderer->GetShader());
-
-		//grid->UpdateGrid();
-		//renderer->UpdateDirtyBuffers(grid);
-        //renderer->Draw();
-
-
-        //quadTreeObject.Render(renderer->GetShader());
 
         // Start the Dear ImGui frame
         ImGui_ImplOpenGL3_NewFrame();

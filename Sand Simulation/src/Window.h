@@ -1,6 +1,7 @@
 #pragma once
 
 #include <GLFW/glfw3.h>
+#include "glm/glm.hpp"
 
 class Window {
 public:
@@ -10,12 +11,19 @@ public:
 
 	inline int GetWidth() { return m_WindowWidth; }
 	inline int GetHeight() { return m_WindowHeight; }
+	inline glm::vec2 GetAspectRatio() { return m_AspectRatio; }
 	inline const char* GetTitle() { return m_Title; }
 	inline GLFWwindow* GetNativeWindow() { return m_NativeWindow; }
 
 	static void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 	{
 		glViewport(0, 0, width, height);
+
+		Window* win = static_cast<Window*>(glfwGetWindowUserPointer(window));
+
+		win->m_WindowWidth = width;
+		win->m_WindowHeight = height;
+		win->m_AspectRatio = glm::vec2((float)width / 1280.0f, (float)height / 720.0f);
 	}
 
 private:
@@ -23,4 +31,6 @@ private:
 	int m_WindowHeight;
 	const char* m_Title;
 	GLFWwindow* m_NativeWindow;
+
+	glm::vec2 m_AspectRatio;
 };

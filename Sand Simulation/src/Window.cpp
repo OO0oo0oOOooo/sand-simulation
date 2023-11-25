@@ -1,7 +1,7 @@
 #include "Window.h"
 
 Window::Window(int width, int height, const char* title)
-	: m_WindowWidth(width), m_WindowHeight(height), m_Title(title)
+	: m_WindowWidth(width), m_WindowHeight(height), m_Title(title), m_AspectRatio(glm::vec2((float)width / 1280.0f, (float)height / 720.0f))
 {
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
@@ -13,7 +13,8 @@ Window::Window(int width, int height, const char* title)
 	glfwMakeContextCurrent(m_NativeWindow);
 	//glfwSwapInterval(0);
 
-	//Set callbacks
+	glfwSetWindowUserPointer(m_NativeWindow, this);
+
 	glfwSetFramebufferSizeCallback(m_NativeWindow, framebuffer_size_callback);
 
 	if (!m_NativeWindow)
