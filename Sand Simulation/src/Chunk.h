@@ -39,14 +39,38 @@ public:
 		glm::vec2 pos = {x, y};
 
 		ChunkData[index] = cell;
-		ChunkData[index].position = pos;
+		ChunkData[index].position = position + pos;
 		//ChunkData[index].dirty = true;
 
-		// I need the chunk offset for this
 		Vertex v[4];
 		for (int i = 0; i < 4; i++)
 		{
 			v[i].position = (glm::vec3(position.x + x, position.y + y, 0) + vertexPositions[i]) * (float)cellSize;
+			v[i].color = cell.color;
+		}
+
+		int baseVertexIndex = index * 4;
+
+		mesh->UploadVBOSubData(v, 4 * sizeof(Vertex), baseVertexIndex * sizeof(Vertex));
+	}
+
+	inline void SetCellFromWorldPos(int x, int y, Cell cell)
+	{
+		glm::vec2 pos = {x, y};
+		glm::vec2 localPos = pos - position;
+		
+		if ((int)localPos.x % chunkSizeInCells == 0 || (int)localPos.y % chunkSizeInCells == 0)
+			return;
+
+		int index = GetCellIndex(localPos.x, localPos.y);
+
+		ChunkData[index] = cell;
+		ChunkData[index].position = pos;
+
+		Vertex v[4];
+		for (int i = 0; i < 4; i++)
+		{
+			v[i].position = (glm::vec3(pos, 0) + vertexPositions[i]) * (float)cellSize;
 			v[i].color = cell.color;
 		}
 

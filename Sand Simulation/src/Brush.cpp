@@ -15,6 +15,7 @@ namespace Brush
 		if (Input::IsKeyPressed(GLFW_MOUSE_BUTTON_RIGHT))
 		{
 			world->EditCell(Input::mousePosition, window.GetAspectRatio(), ParticleAir);
+
 		}
 	}
 
