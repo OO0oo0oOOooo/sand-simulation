@@ -19,8 +19,6 @@ struct Cell
 	int explosiveness = 0;
 
 	char lightLevel = 0;
-
-	bool dirty = true;
 };
 
 const glm::vec4 particleColors[] = {
@@ -46,16 +44,16 @@ const Cell ParticleWood =	   { 5, { 0.4f, 0.2f, 0.1f, 1.0f } };
 const Cell ParticleMetal =     { 6, { 0.3f, 0.3f, 0.3f, 1.0f } };
 const Cell ParticleGunpowder = { 7, { 0.2f, 0.2f, 0.2f, 1.0f } };
 
-glm::vec2 NeighbourTable[8] = {
-	glm::vec2( 0, -1), // Bot
-	glm::vec2(-1, -1), // Bot Left
-	glm::vec2( 1, -1), // Bot Right
-	glm::vec2(-1,  0), // Left
-	glm::vec2( 1,  0), // Right
-	glm::vec2( 0,  1), // Top
-	glm::vec2(-1,  1), // Top Left
-	glm::vec2( 1,  1), // Top Right
-};
+//glm::vec2 NeighbourTable[8] = {
+//	glm::vec2( 0, -1), // Bot
+//	glm::vec2(-1, -1), // Bot Left
+//	glm::vec2( 1, -1), // Bot Right
+//	glm::vec2(-1,  0), // Left
+//	glm::vec2( 1,  0), // Right
+//	glm::vec2( 0,  1), // Top
+//	glm::vec2(-1,  1), // Top Left
+//	glm::vec2( 1,  1), // Top Right
+//};
 
 const glm::vec3 vertexPositions[] = {
 	glm::vec3( 0.0f, 0.0f, 0.0f ),

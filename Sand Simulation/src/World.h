@@ -15,8 +15,8 @@ public:
 	void Render(Shader* shader);
 
     void Update(float deltaTime);
-	void UpdateChunks();
-	void UpdateCells(Chunk* chunk);
+	//void UpdateChunks();
+	//void UpdateCells(Chunk* chunk);
 
 	////Normalized position
 	//inline glm::ivec2 GetChunkFromNormalizedPos(glm::vec2 normalizedPos)
@@ -50,7 +50,7 @@ public:
 	}*/
 
 	
-	inline glm::ivec2 GetChunkFromWorldPos(glm::vec2 position, glm::vec2 aspectRatio)
+	inline glm::ivec2 GetChunkFromPixelPos(glm::vec2 position)
 	{
 		// Adjust the chunk size based on the aspect ratio
 		glm::vec2 adjustedChunkSize = glm::vec2(chunkSizeInCells * cellSize * aspectRatio.x, chunkSizeInCells * cellSize * aspectRatio.y);
@@ -60,7 +60,7 @@ public:
 		return glm::ivec2(x, y);
 	}
 
-	inline glm::ivec2 GetCellFromWorldPos(glm::vec2 position, glm::vec2 aspectRatio)
+	inline glm::ivec2 GetCellFromPixelPos(glm::vec2 position)
 	{
 		// Adjust the cell size based on the aspect ratio
 		glm::vec2 adjustedCellSize = glm::vec2(cellSize * aspectRatio.x, cellSize * aspectRatio.y);
@@ -70,14 +70,36 @@ public:
 		return glm::ivec2(x, y);
 	}
 
-	inline void EditCell(glm::vec2 position, glm::vec2 aspectRatio, Cell cell)
+
+
+
+
+	inline Chunk* GetChunkFromWorldPos(glm::vec2 position)
 	{
-		glm::ivec2 chunkPos = GetChunkFromWorldPos(position, aspectRatio);
-		glm::ivec2 cellPos = GetCellFromWorldPos(position, aspectRatio);
+		glm::ivec2 chunkPos = { ((int)position.x / chunkSizeInCells), ((int)position.y / chunkSizeInCells) };
+		return chunks[chunkPos];
+	}
+
+	inline Cell GetCellFromWorldPos(glm::vec2 position)
+	{
+		Chunk* chunk = GetChunkFromWorldPos(position);
+		glm::vec2 localPos = glm::vec2(position - chunk->position);
+
+		return chunk->GetCell(localPos, LocalSpace);
+	}
+
+
+
+
+
+	inline void EditCell(glm::vec2 position, Cell cell)
+	{
+		glm::ivec2 chunkPos = GetChunkFromPixelPos(position);
+		glm::ivec2 cellPos = GetCellFromPixelPos(position);
 
 		Chunk* chunk = chunks[chunkPos];
-		chunk->SetCell(cellPos.x, cellPos.y, cell);
-		dirtyCells.push_back(chunk->GetCell(cellPos.x, cellPos.y));
+		chunk->SetCell(cellPos, cell, LocalSpace);
+		dirtyCells.push_back(chunk->GetCell(cellPos, LocalSpace));
 	}
 
 	std::vector<Cell> dirtyCells;
@@ -96,4 +118,5 @@ private:
 	};
 
 	std::unordered_map<glm::ivec2, Chunk*, KeyHash, KeyEqual> chunks;
+	glm::vec2 aspectRatio = glm::vec2(1.0f, 1.0f);
 };

@@ -31,37 +31,22 @@ void World::Render(Shader* shader)
 			{
 				chunk->DrawMesh(shader);
 			}
-
-			//glm::vec2 key(x, y);
-			//auto it = chunks.find(key);
-			//if (it != chunks.end())
-			//{
-			//	Chunk* chunk = it->second;
-			//	chunk->CreateMesh();
-			//	chunk->DrawMesh(shader);
-			//}
-			//else
-			//{
-			//	// Handle the case where the key is not in the map...
-			//}
 		}
 	}
 }
 
 void World::Update(float deltaTime)
 {
-	// Dirty Quad algorithm find and stores all the cells i need to update.
-	// Then i can update all cells from the world position.
-	// 
-	// Dirty Cells array holds all the cells that need to be updated.
-	// 
+	if(dirtyCells.size() <= 0)
+		return;
+
 	for(int i = 0; i < dirtyCells.size(); i++)
 	{
-		// Get cells world position
-		glm::vec2 position = dirtyCells[i].position;
+		// dirtycells is just a copy not a refrence to the actual cell
+		Cell cell = dirtyCells[i];
+		glm::vec2 position = cell.position;
 
-		// Get Neighbours
-		glm::vec2 NeighbourTable[8] = 
+		glm::vec2 Neighbours[8] = 
 		{
 			position + glm::vec2( 0, -1), // Bot
 			position + glm::vec2(-1, -1), // Bot Left
@@ -73,38 +58,38 @@ void World::Update(float deltaTime)
 			position + glm::vec2( 1,  1), // Top Right
 		};
 
-		// Check neighbours for interaction
-		for (int j = 0; j < 8; j++)
+		if (cell.Id == ParticleSand.Id)
 		{
-			// Do interactions
+			Chunk* chunk = GetChunkFromWorldPos(position);
+			Chunk* chunk0 = GetChunkFromWorldPos(Neighbours[0]);
+
+			if (chunk0->GetCell(Neighbours[0], WorldSpace).Id == ParticleAir.Id)
+			{
+				chunk0->SetCell(Neighbours[0], ParticleSand, WorldSpace);
+				chunk->SetCell(position, ParticleAir, WorldSpace);
+
+				dirtyCells.push_back(chunk0->GetCell(Neighbours[0], WorldSpace));
+			}
 		}
+
+		// Set cell dirty flag to true when setting a cell
+		// check if cell below is dirty during move interaction
+		// if it is then dont remove this from the dirty list so it can be checked again
+		dirtyCells.erase(dirtyCells.begin() + i);
+
+		// Check neighbours for interaction
+		//for (int j = 0; j < 8; j++)
+		//{
+		//	// Do interactions
+		//}
+		// if cell has no interactions available set dirty to false
 
 		// Do physics
 		// position += velocity * deltaTime;
 
-		// if cell has not changed set dirty to false
-
-
-		Chunk* chunk = chunks[GetChunkFromWorldPos(position, { 1, 1 })];
-		chunk->SetCellFromWorldPos(position.x, position.y, dirtyCells[i]);
+		// if this is a react case then set the cell to reaction result
+		// if this is a move case Swap with the cell we are interacting with
 	}
-	// 
-	
-	 
-	// Check neighbours for interaction
-	// Do interactions
-	// Do physics
-	// 
-	// if cell has not changed set dirty to false
-	// 
-	// 
-	// 
-	// chunk = GetChunkFromWorldPos(x, y)
-	// chunk->SetCellWorldPos(x, y)
-	
-
-
-	// Update cells
 }
 
 //void World::UpdateChunks()
@@ -139,16 +124,7 @@ void World::Update(float deltaTime)
 //			if (cellPosition.y <= 0 || cellPosition.y >= 64 * 3 || cellPosition.x <= 0 || cellPosition.x >= 64 * 5)
 //				continue;
 //
-//			// Get Chunk position world
-//			// Get cell position world
-//			// check cell neighbours
-//			
-//			// Update chunks
-//
-//
-//
-//
-//			/*if (chunk->GetCell(x, y).Id == ParticleSand.Id)
+//			if (chunk->GetCell(x, y).Id == ParticleSand.Id)
 //			{
 //				if (y % 64 == 0)
 //				{
@@ -179,7 +155,7 @@ void World::Update(float deltaTime)
 //					chunk->SetCell(x, y, ParticleAir);
 //					chunk->SetCell(x - 1, y - 1, ParticleSand);
 //				}
-//			}*/
+//			}
 //
 //		}
 //	}

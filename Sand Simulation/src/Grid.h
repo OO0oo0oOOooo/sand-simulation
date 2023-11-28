@@ -40,7 +40,6 @@ public:
 
 		CellMap[GetIndexFromFlat2DArray(x, y)] = particle;
 		CellMap[GetIndexFromFlat2DArray(x, y)].position = glm::vec2(x, y);
-		CellMap[GetIndexFromFlat2DArray(x, y)].dirty;
 
 		DirtyCells.push_back(GetCell(x, y));
 	}

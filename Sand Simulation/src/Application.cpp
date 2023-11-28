@@ -43,6 +43,7 @@
 // [ ] Update only dirty chunks
 // [ ] UpdateCells across borders
 // [ ] Dirty Quads
+// [ ] aspect ratio variable
 // 
 // Chunks:
 // [ ]
@@ -107,7 +108,7 @@ int main(void)
 
         glClear(GL_COLOR_BUFFER_BIT);
 
-        world->UpdateChunks();
+        world->Update(0.2f);
         world->Render(renderer->GetShader());
 
         // Start the Dear ImGui frame
