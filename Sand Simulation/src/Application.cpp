@@ -91,7 +91,6 @@ int main(void)
     world->Render(renderer->GetShader());
 
 
-
     Input::SetupKeyInputs(glwindow);
 
     IMGUI_CHECKVERSION();

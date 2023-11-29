@@ -26,12 +26,12 @@ public:
 		return y * chunkSizeInCells + x;
 	}
 
-	inline int GetCellIndex(glm::vec2 index)
+	inline int GetCellIndex(glm::ivec2 index)
 	{
 		return index.y * chunkSizeInCells + index.x;
 	}
 
-	inline Cell GetCell(glm::vec2 position, Space space)
+	inline Cell GetCell(glm::ivec2 position, Space space)
 	{
 		switch (space)
 		{
@@ -42,13 +42,13 @@ public:
 		case WorldSpace:
 			return GetCellFromWorldPos(position);
 			break;
-
 		default:
+			return ParticleVoid;
 			break;
 		}
 	}
 
-	inline void SetCell(glm::vec2 position, Cell cell, Space space)
+	inline void SetCell(glm::ivec2 position, Cell cell, Space space)
 	{
 		switch (space)
 		{
@@ -59,22 +59,19 @@ public:
 		case WorldSpace:
 			SetCellFromWorldPos(position, cell);
 			break;
-
-		default:
-			break;
 		}
 	}
 	
-	glm::vec2 position;
+	glm::ivec2 position;
 	std::vector<Cell> ChunkData;
 	bool dirty;
 
 private:
 	Mesh* mesh;
 
-	inline Cell GetCellLocal(glm::vec2 localPos)
+	inline Cell GetCellLocal(glm::ivec2 localPos)
 	{
-		if ((int)localPos.x % 64 == 0 || (int)localPos.y % 64 == 0)
+		if (localPos.x < 0 || localPos.x > chunkSizeInCells - 1 || localPos.y < 0 || localPos.y > chunkSizeInCells - 1)
 			return ParticleVoid;
 
 		int index = GetCellIndex(localPos.x, localPos.y);
@@ -82,9 +79,9 @@ private:
 		return ChunkData[index];
 	}
 
-	inline void SetCellLocal(glm::vec2 localPos, Cell cell)
+	inline void SetCellLocal(glm::ivec2 localPos, Cell cell)
 	{
-		if ((int)localPos.x % 64 == 0 || (int)localPos.y % 64 == 0)
+		if (localPos.x < 0 || localPos.x > chunkSizeInCells - 1 || localPos.y < 0 || localPos.y > chunkSizeInCells - 1)
 			return;
 
 		int index = GetCellIndex(localPos.x, localPos.y);
@@ -104,11 +101,11 @@ private:
 		mesh->UploadVBOSubData(v, 4 * sizeof(Vertex), baseVertexIndex * sizeof(Vertex));
 	}
 
-	inline Cell GetCellFromWorldPos(glm::vec2 worldPosition)
+	inline Cell GetCellFromWorldPos(glm::ivec2 worldPosition)
 	{
-		glm::vec2 localPos = worldPosition - position;
+		glm::ivec2 localPos = worldPosition - position;
 
-		if ((int)localPos.x % chunkSizeInCells == 0 || (int)localPos.y % chunkSizeInCells == 0)
+		if (localPos.x < 0 || localPos.x > chunkSizeInCells - 1 || localPos.y < 0 || localPos.y > chunkSizeInCells - 1)
 			return ParticleVoid;
 
 		int index = GetCellIndex(localPos.x, localPos.y);
@@ -116,11 +113,11 @@ private:
 		return ChunkData[index];
 	}
 
-	inline void SetCellFromWorldPos(glm::vec2 worldPosition, Cell cell)
+	inline void SetCellFromWorldPos(glm::ivec2 worldPosition, Cell cell)
 	{
-		glm::vec2 localPos = worldPosition - position;
+		glm::ivec2 localPos = worldPosition - position;
 
-		if ((int)localPos.x % chunkSizeInCells == 0 || (int)localPos.y % chunkSizeInCells == 0)
+		if (localPos.x < 0 || localPos.x > chunkSizeInCells - 1 || localPos.y < 0 || localPos.y > chunkSizeInCells - 1)
 			return;
 
 		int index = GetCellIndex(localPos.x, localPos.y);

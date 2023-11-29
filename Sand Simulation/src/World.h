@@ -49,14 +49,14 @@ public:
 		return glm::ivec2(x, y);
 	}*/
 
-	
+
 	inline glm::ivec2 GetChunkFromPixelPos(glm::vec2 position)
 	{
 		// Adjust the chunk size based on the aspect ratio
 		glm::vec2 adjustedChunkSize = glm::vec2(chunkSizeInCells * cellSize * aspectRatio.x, chunkSizeInCells * cellSize * aspectRatio.y);
 
-		int x = floor(position.x / adjustedChunkSize.x);
-		int y = floor(position.y / adjustedChunkSize.y);
+		int x = static_cast<int>(floor(position.x / adjustedChunkSize.x));
+		int y = static_cast<int>(floor(position.y / adjustedChunkSize.y));
 		return glm::ivec2(x, y);
 	}
 
@@ -71,16 +71,13 @@ public:
 	}
 
 
-
-
-
-	inline Chunk* GetChunkFromWorldPos(glm::vec2 position)
+	inline Chunk* GetChunkFromWorldPos(glm::ivec2 position)
 	{
 		glm::ivec2 chunkPos = { ((int)position.x / chunkSizeInCells), ((int)position.y / chunkSizeInCells) };
 		return chunks[chunkPos];
 	}
 
-	inline Cell GetCellFromWorldPos(glm::vec2 position)
+	inline Cell GetCellFromWorldPos(glm::ivec2 position)
 	{
 		Chunk* chunk = GetChunkFromWorldPos(position);
 		glm::vec2 localPos = glm::vec2(position - chunk->position);
@@ -88,18 +85,16 @@ public:
 		return chunk->GetCell(localPos, LocalSpace);
 	}
 
-
-
-
-
 	inline void EditCell(glm::vec2 position, Cell cell)
 	{
-		glm::ivec2 chunkPos = GetChunkFromPixelPos(position);
-		glm::ivec2 cellPos = GetCellFromPixelPos(position);
+		if(position.x < 0 || position.x > 1280 || position.y < 0 || position.y > 720)
+			return;
 
-		Chunk* chunk = chunks[chunkPos];
-		chunk->SetCell(cellPos, cell, LocalSpace);
-		dirtyCells.push_back(chunk->GetCell(cellPos, LocalSpace));
+		glm::ivec2 cellPos = (position / glm::vec2(4, 4));
+		Chunk* chunk = GetChunkFromWorldPos(cellPos);
+
+		chunk->SetCell(cellPos, cell, WorldSpace);
+		dirtyCells.push_back(chunk->GetCell(cellPos, WorldSpace));
 	}
 
 	std::vector<Cell> dirtyCells;
@@ -107,7 +102,7 @@ public:
 private:
 	struct KeyHash {
 		std::size_t operator()(const glm::ivec2& k) const {
-			return std::hash<float>()(k.x) ^ std::hash<float>()(k.y);
+			return std::hash<int>()(k.x) ^ std::hash<int>()(k.y);
 		}
 	};
 

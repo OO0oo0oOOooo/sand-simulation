@@ -62,6 +62,8 @@ void World::Update(float deltaTime)
 		{
 			Chunk* chunk = GetChunkFromWorldPos(position);
 			Chunk* chunk0 = GetChunkFromWorldPos(Neighbours[0]);
+			Chunk* chunk1 = GetChunkFromWorldPos(Neighbours[1]);
+			Chunk* chunk2 = GetChunkFromWorldPos(Neighbours[2]);
 
 			if (chunk0->GetCell(Neighbours[0], WorldSpace).Id == ParticleAir.Id)
 			{
@@ -69,6 +71,20 @@ void World::Update(float deltaTime)
 				chunk->SetCell(position, ParticleAir, WorldSpace);
 
 				dirtyCells.push_back(chunk0->GetCell(Neighbours[0], WorldSpace));
+			}
+			else if (chunk1->GetCell(Neighbours[1], WorldSpace).Id == ParticleAir.Id)
+			{
+				chunk1->SetCell(Neighbours[1], ParticleSand, WorldSpace);
+				chunk->SetCell(position, ParticleAir, WorldSpace);
+
+				dirtyCells.push_back(chunk1->GetCell(Neighbours[1], WorldSpace));
+			}
+			else if (chunk2->GetCell(Neighbours[2], WorldSpace).Id == ParticleAir.Id)
+			{
+				chunk2->SetCell(Neighbours[2], ParticleSand, WorldSpace);
+				chunk->SetCell(position, ParticleAir, WorldSpace);
+
+				dirtyCells.push_back(chunk2->GetCell(Neighbours[2], WorldSpace));
 			}
 		}
 
