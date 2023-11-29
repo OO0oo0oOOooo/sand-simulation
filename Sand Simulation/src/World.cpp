@@ -40,7 +40,7 @@ void World::Update(float deltaTime)
 	if(dirtyCells.size() <= 0)
 		return;
 
-	for(int i = 0; i < dirtyCells.size(); i++)
+	for(unsigned int i = 0; i < dirtyCells.size(); i++)
 	{
 		// dirtycells is just a copy not a refrence to the actual cell
 		Cell cell = dirtyCells[i];
