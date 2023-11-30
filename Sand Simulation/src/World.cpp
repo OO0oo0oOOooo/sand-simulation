@@ -42,7 +42,6 @@ void World::Update(float deltaTime)
 
 	for(unsigned int i = 0; i < dirtyCells.size(); i++)
 	{
-		// dirtycells is just a copy not a refrence to the actual cell
 		Cell cell = dirtyCells[i];
 		glm::vec2 position = cell.position;
 
@@ -87,6 +86,52 @@ void World::Update(float deltaTime)
 				dirtyCells.push_back(chunk2->GetCell(Neighbours[2], WorldSpace));
 			}
 		}
+
+		//if (cell.Id == ParticleWater.Id)
+		//{
+		//	Chunk* chunk = GetChunkFromWorldPos(position);
+		//	Chunk* chunk0 = GetChunkFromWorldPos(Neighbours[0]);
+		//	Chunk* chunk1 = GetChunkFromWorldPos(Neighbours[1]);
+		//	Chunk* chunk2 = GetChunkFromWorldPos(Neighbours[2]);
+		//	Chunk* chunk3 = GetChunkFromWorldPos(Neighbours[3]);
+		//	Chunk* chunk4 = GetChunkFromWorldPos(Neighbours[4]);
+
+		//	if (chunk0->GetCell(Neighbours[0], WorldSpace).Id == ParticleAir.Id)
+		//	{
+		//		chunk0->SetCell(Neighbours[0], ParticleWater, WorldSpace);
+		//		chunk->SetCell(position, ParticleAir, WorldSpace);
+
+		//		dirtyCells.push_back(chunk0->GetCell(Neighbours[0], WorldSpace));
+		//	}
+		//	else if (chunk1->GetCell(Neighbours[1], WorldSpace).Id == ParticleAir.Id)
+		//	{
+		//		chunk1->SetCell(Neighbours[1], ParticleWater, WorldSpace);
+		//		chunk->SetCell(position, ParticleAir, WorldSpace);
+
+		//		dirtyCells.push_back(chunk1->GetCell(Neighbours[1], WorldSpace));
+		//	}
+		//	else if (chunk2->GetCell(Neighbours[2], WorldSpace).Id == ParticleAir.Id)
+		//	{
+		//		chunk2->SetCell(Neighbours[2], ParticleWater, WorldSpace);
+		//		chunk->SetCell(position, ParticleAir, WorldSpace);
+
+		//		dirtyCells.push_back(chunk2->GetCell(Neighbours[2], WorldSpace));
+		//	}
+		//	else if (chunk3->GetCell(Neighbours[3], WorldSpace).Id == ParticleAir.Id)
+		//	{
+		//		chunk3->SetCell(Neighbours[3], ParticleWater, WorldSpace);
+		//		chunk->SetCell(position, ParticleAir, WorldSpace);
+
+		//		dirtyCells.push_back(chunk3->GetCell(Neighbours[3], WorldSpace));
+		//	}
+		//	else if (chunk4->GetCell(Neighbours[4], WorldSpace).Id == ParticleAir.Id)
+		//	{
+		//		chunk4->SetCell(Neighbours[4], ParticleWater, WorldSpace);
+		//		chunk->SetCell(position, ParticleAir, WorldSpace);
+
+		//		dirtyCells.push_back(chunk4->GetCell(Neighbours[4], WorldSpace));
+		//	}
+		//}
 
 		// Set cell dirty flag to true when setting a cell
 		// check if cell below is dirty during move interaction

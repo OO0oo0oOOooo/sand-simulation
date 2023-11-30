@@ -9,10 +9,6 @@
 #include "Input.h"
 #include "Renderer.h"
 #include "Brush.h"
-
-//#include "Grid.h"
-//#include "Quadtree.h"
-//#include "QuadTreeObject.h"
 #include "World.h"
 
 //#include <iostream>
@@ -20,12 +16,9 @@
 // TODO:
 // 
 // [ ] STPImage
-// [ ] Replace Grid with QuadTree
-// [ ] Check QuadTree cells for updates
-// [ ] Seperate QuadTree debug mesh from QuadTreeGridMesh
-// [ ] Quadtree features/optimizations
 // 
 // [ ] Update loop
+// [ ] Delta Time
 // [ ] tick and late tick
 //
 // UI:
@@ -38,19 +31,11 @@
 // [ ] Compute Shaders
 // [ ] Reduce size of buffer (Build Quads on gpu)
 // 
-// 
 // World:
-// [ ] Update only dirty chunks
-// [ ] UpdateCells across borders
 // [ ] Dirty Quads
-// [ ] aspect ratio variable
 // 
 // Chunks:
 // [ ]
-// 
-// Grid:
-// [ ] Build mesh inside grid class
-// [ ] Get rid of DirtyCells vector
 //
 // Reactions:
 // [ ] Wood + Fire = Fire
@@ -90,7 +75,6 @@ int main(void)
     World* world = new World;
     world->Render(renderer->GetShader());
 
-
     Input::SetupKeyInputs(glwindow);
 
     IMGUI_CHECKVERSION();
@@ -110,7 +94,6 @@ int main(void)
         world->Update(0.2f);
         world->Render(renderer->GetShader());
 
-        // Start the Dear ImGui frame
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
@@ -132,7 +115,7 @@ int main(void)
     }
 
     delete renderer;
-	//delete grid;
+    delete world;
     glfwTerminate();
     return 0;
 }

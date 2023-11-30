@@ -103,7 +103,7 @@ private:
 
 	inline Cell GetCellFromWorldPos(glm::ivec2 worldPosition)
 	{
-		if (worldPosition.x < 0 || worldPosition.x > worldSizeInCells.x - 1 || worldPosition.y < 0 || worldPosition.y > worldSizeInCells.y)
+		if (worldPosition.x < 0 || worldPosition.x > worldSizeInCells.x - 1 || worldPosition.y < 0 || worldPosition.y > worldSizeInCells.y - 1)
 			return ParticleVoid;
 
 		glm::ivec2 localPos = worldPosition - position;
@@ -116,7 +116,7 @@ private:
 
 	inline void SetCellFromWorldPos(glm::ivec2 worldPosition, Cell cell)
 	{
-		if (worldPosition.x < 0 || worldPosition.x > worldSizeInCells.x - 1 || worldPosition.y < 0 || worldPosition.y > worldSizeInCells.y)
+		if (worldPosition.x < 0 || worldPosition.x > worldSizeInCells.x - 1 || worldPosition.y < 0 || worldPosition.y > worldSizeInCells.y - 1)
 			return;
 
 		glm::ivec2 localPos = worldPosition - position;

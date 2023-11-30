@@ -4,7 +4,6 @@
 
 #include "Chunk.h"
 #include <unordered_map>
-#include <iostream>
 
 class World
 {
@@ -52,7 +51,6 @@ public:
 
 	inline glm::ivec2 GetChunkFromPixelPos(glm::vec2 position)
 	{
-		// Adjust the chunk size based on the aspect ratio
 		glm::vec2 adjustedChunkSize = glm::vec2(chunkSizeInCells * cellSize * aspectRatio.x, chunkSizeInCells * cellSize * aspectRatio.y);
 
 		int x = static_cast<int>(floor(position.x / adjustedChunkSize.x));
@@ -62,7 +60,6 @@ public:
 
 	inline glm::ivec2 GetCellFromPixelPos(glm::vec2 position)
 	{
-		// Adjust the cell size based on the aspect ratio
 		glm::vec2 adjustedCellSize = glm::vec2(cellSize * aspectRatio.x, cellSize * aspectRatio.y);
 
 		int x = static_cast<int>(floor(position.x / adjustedCellSize.x)) % chunkSizeInCells;
