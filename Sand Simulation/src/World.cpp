@@ -35,15 +35,19 @@ void World::Render(Shader* shader)
 	}
 }
 
+
 void World::Update(float deltaTime)
 {
 	if(dirtyCells.size() <= 0)
 		return;
 
+	std::cout << dirtyCells.size() << std::endl;
+
 	for(unsigned int i = 0; i < dirtyCells.size(); i++)
 	{
 		Cell cell = dirtyCells[i];
 		glm::vec2 position = cell.position;
+		bool hasMoves = false;
 
 		glm::vec2 Neighbours[8] = 
 		{
@@ -57,99 +61,36 @@ void World::Update(float deltaTime)
 			position + glm::vec2( 1,  1), // Top Right
 		};
 
+		Chunk* chunk = GetChunkFromWorldPos(position);
+		Chunk* chunk0 = nullptr;
+
 		if (cell.Id == ParticleSand.Id)
 		{
-			Chunk* chunk = GetChunkFromWorldPos(position);
-			Chunk* chunk0 = GetChunkFromWorldPos(Neighbours[0]);
-			Chunk* chunk1 = GetChunkFromWorldPos(Neighbours[1]);
-			Chunk* chunk2 = GetChunkFromWorldPos(Neighbours[2]);
 
-			if (chunk0->GetCell(Neighbours[0], WorldSpace).Id == ParticleAir.Id)
+			for (int j = 0; j <= 2; j++)
 			{
-				chunk0->SetCell(Neighbours[0], ParticleSand, WorldSpace);
-				chunk->SetCell(position, ParticleAir, WorldSpace);
+				chunk0 = GetChunkFromWorldPos(Neighbours[j]);
 
-				dirtyCells.push_back(chunk0->GetCell(Neighbours[0], WorldSpace));
-			}
-			else if (chunk1->GetCell(Neighbours[1], WorldSpace).Id == ParticleAir.Id)
-			{
-				chunk1->SetCell(Neighbours[1], ParticleSand, WorldSpace);
-				chunk->SetCell(position, ParticleAir, WorldSpace);
+				if (chunk0->GetCell(Neighbours[j], WorldSpace).Id == ParticleAir.Id)
+				{
+					chunk->SetCell(position, ParticleAir, WorldSpace);
+					chunk0->SetCell(Neighbours[j], ParticleSand, WorldSpace);
 
-				dirtyCells.push_back(chunk1->GetCell(Neighbours[1], WorldSpace));
-			}
-			else if (chunk2->GetCell(Neighbours[2], WorldSpace).Id == ParticleAir.Id)
-			{
-				chunk2->SetCell(Neighbours[2], ParticleSand, WorldSpace);
-				chunk->SetCell(position, ParticleAir, WorldSpace);
+					dirtyCells[i] = chunk0->GetCell(Neighbours[j], WorldSpace);
+					dirtyCells.push_back(chunk->GetCell(position, WorldSpace));
+					hasMoves = true;
 
-				dirtyCells.push_back(chunk2->GetCell(Neighbours[2], WorldSpace));
+					break;
+				}
+
 			}
 		}
 
-		//if (cell.Id == ParticleWater.Id)
-		//{
-		//	Chunk* chunk = GetChunkFromWorldPos(position);
-		//	Chunk* chunk0 = GetChunkFromWorldPos(Neighbours[0]);
-		//	Chunk* chunk1 = GetChunkFromWorldPos(Neighbours[1]);
-		//	Chunk* chunk2 = GetChunkFromWorldPos(Neighbours[2]);
-		//	Chunk* chunk3 = GetChunkFromWorldPos(Neighbours[3]);
-		//	Chunk* chunk4 = GetChunkFromWorldPos(Neighbours[4]);
-
-		//	if (chunk0->GetCell(Neighbours[0], WorldSpace).Id == ParticleAir.Id)
-		//	{
-		//		chunk0->SetCell(Neighbours[0], ParticleWater, WorldSpace);
-		//		chunk->SetCell(position, ParticleAir, WorldSpace);
-
-		//		dirtyCells.push_back(chunk0->GetCell(Neighbours[0], WorldSpace));
-		//	}
-		//	else if (chunk1->GetCell(Neighbours[1], WorldSpace).Id == ParticleAir.Id)
-		//	{
-		//		chunk1->SetCell(Neighbours[1], ParticleWater, WorldSpace);
-		//		chunk->SetCell(position, ParticleAir, WorldSpace);
-
-		//		dirtyCells.push_back(chunk1->GetCell(Neighbours[1], WorldSpace));
-		//	}
-		//	else if (chunk2->GetCell(Neighbours[2], WorldSpace).Id == ParticleAir.Id)
-		//	{
-		//		chunk2->SetCell(Neighbours[2], ParticleWater, WorldSpace);
-		//		chunk->SetCell(position, ParticleAir, WorldSpace);
-
-		//		dirtyCells.push_back(chunk2->GetCell(Neighbours[2], WorldSpace));
-		//	}
-		//	else if (chunk3->GetCell(Neighbours[3], WorldSpace).Id == ParticleAir.Id)
-		//	{
-		//		chunk3->SetCell(Neighbours[3], ParticleWater, WorldSpace);
-		//		chunk->SetCell(position, ParticleAir, WorldSpace);
-
-		//		dirtyCells.push_back(chunk3->GetCell(Neighbours[3], WorldSpace));
-		//	}
-		//	else if (chunk4->GetCell(Neighbours[4], WorldSpace).Id == ParticleAir.Id)
-		//	{
-		//		chunk4->SetCell(Neighbours[4], ParticleWater, WorldSpace);
-		//		chunk->SetCell(position, ParticleAir, WorldSpace);
-
-		//		dirtyCells.push_back(chunk4->GetCell(Neighbours[4], WorldSpace));
-		//	}
-		//}
-
-		// Set cell dirty flag to true when setting a cell
-		// check if cell below is dirty during move interaction
-		// if it is then dont remove this from the dirty list so it can be checked again
-		dirtyCells.erase(dirtyCells.begin() + i);
-
-		// Check neighbours for interaction
-		//for (int j = 0; j < 8; j++)
-		//{
-		//	// Do interactions
-		//}
-		// if cell has no interactions available set dirty to false
+		if(!hasMoves)
+			dirtyCells.erase(dirtyCells.begin() + i);
 
 		// Do physics
 		// position += velocity * deltaTime;
-
-		// if this is a react case then set the cell to reaction result
-		// if this is a move case Swap with the cell we are interacting with
 	}
 }
 

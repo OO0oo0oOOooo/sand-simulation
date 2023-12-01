@@ -5,6 +5,7 @@
 #include "ChunkData.h"
 
 #include <vector>
+#include <iostream>
 
 enum Space
 {
@@ -29,6 +30,17 @@ public:
 	inline int GetCellIndex(glm::ivec2 index)
 	{
 		return index.y * chunkSizeInCells + index.x;
+	}
+
+	inline Cell& GetCellRefrence(glm::ivec2 worldPosition)
+	{
+		if (worldPosition.x < 0 || worldPosition.x > worldSizeInCells.x - 1 || worldPosition.y < 0 || worldPosition.y > worldSizeInCells.y - 1)
+			throw std::out_of_range("Index out of bounds");
+
+		glm::ivec2 localPos = worldPosition - position;
+		int index = GetCellIndex(localPos.x, localPos.y);
+
+		return ChunkData[index];
 	}
 
 	inline Cell GetCell(glm::ivec2 position, Space space)
