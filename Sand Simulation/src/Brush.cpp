@@ -10,6 +10,7 @@ namespace Brush
 		if (Input::IsKeyPressed(GLFW_MOUSE_BUTTON_LEFT))
 		{
 			world->EditCell(Input::mousePosition, selectedParticle);
+			// 
 		}
 
 		if (Input::IsKeyPressed(GLFW_MOUSE_BUTTON_RIGHT))

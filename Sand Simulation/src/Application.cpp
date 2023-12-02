@@ -25,17 +25,26 @@
 // [ ] Particle Selection UI
 //
 // Optimizations:
-// [ ] Dirty Quads
-// [ ] Multithreading Chunks
+// [ ] Dirty Rect per chunk
+// [ ] Multithreading Chunks in checkered pattern
 // [ ] Instanced Rendering
 // [ ] Compute Shaders
 // [ ] Reduce size of buffer (Build Quads on gpu)
 // 
 // World:
-// [ ] Dirty Quads
+// [ ] Interation Look up table
 // 
 // Chunks:
-// [ ]
+// [ ] Each chunk has a dirty rect that will be updated
+// 
+// Dirty Rect:
+// [ ] Bounds
+// [ ] Add to dirty rect
+// [ ] Remove from dirty rect
+// For every cell that needs to be updated i need to check if the new point is in the bounds
+// [ ] Update through every cell in the bounds
+// 
+// 
 //
 // Reactions:
 // [ ] Wood + Fire = Fire

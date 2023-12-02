@@ -14,8 +14,8 @@ public:
 	void Render(Shader* shader);
 
     void Update(float deltaTime);
-	//void UpdateChunks();
-	//void UpdateCells(Chunk* chunk);
+	void UpdateChunks();
+	void UpdateCells(Chunk* chunk);
 
 	////Normalized position
 	//inline glm::ivec2 GetChunkFromNormalizedPos(glm::vec2 normalizedPos)
@@ -40,7 +40,7 @@ public:
 		int y = floor(position.y / (chunkSizeInCells * cellSize));
 		return glm::ivec2(x, y);
 	}
-
+	
 	inline glm::ivec2 GetCellFromPos(glm::vec2 position)
 	{
 		int x = static_cast<int>(floor(position.x / cellSize)) % chunkSizeInCells;

@@ -38,8 +38,18 @@ void World::Render(Shader* shader)
 
 void World::Update(float deltaTime)
 {
-	if(dirtyCells.size() <= 0)
+	// Multi-threading
+	// if any thread is idle, give it a chunk to slow update
+
+	
+	// velocity = acceleration * deltaTime;
+
+
+	if (dirtyCells.size() <= 0)
+	{
+		UpdateChunks();
 		return;
+	}
 
 	std::cout << dirtyCells.size() << std::endl;
 
@@ -80,6 +90,9 @@ void World::Update(float deltaTime)
 					dirtyCells.push_back(chunk->GetCell(position, WorldSpace));
 					hasMoves = true;
 
+					chunk->dirty = true;
+					chunk0->dirty = true;
+
 					break;
 				}
 
@@ -94,71 +107,62 @@ void World::Update(float deltaTime)
 	}
 }
 
-//void World::UpdateChunks()
-//{
-//	for (int x = 0; x < numChunksWidth; x++)
-//	{
-//		for (int y = 0; y < numChunksHeight; y++)
-//		{
-//			Chunk* chunk = chunks[glm::vec2(x, y)];
-//
-//			/* && chunk->dirty*/
-//			if (chunk != nullptr)
-//			{
-//				UpdateCells(chunk);
-//			}
-//		}
-//	}
-//}
+void World::UpdateChunks()
+{
+	for (int x = 0; x < numChunksWidth; x++)
+	{
+		for (int y = 0; y < numChunksHeight; y++)
+		{
+			Chunk* chunk = chunks[glm::vec2(x, y)];
 
+			if (chunk != nullptr && chunk->dirty)
+			{
+				UpdateCells(chunk);
+			}
+		}
+	}
+}
 
-//void World::UpdateCells(Chunk* chunk)
-//{
-//	// Update inside the chunk or Update outside the chunk then pass the data back in?
-//
-//
-//	for (int x = 0; x < chunkSizeInCells; x++)
-//	{
-//		for (int y = 0; y < chunkSizeInCells; y++)
-//		{
-//			glm::vec2 cellPosition = chunk->position + glm::vec2(x, y);
-//
-//			if (cellPosition.y <= 0 || cellPosition.y >= 64 * 3 || cellPosition.x <= 0 || cellPosition.x >= 64 * 5)
-//				continue;
-//
-//			if (chunk->GetCell(x, y).Id == ParticleSand.Id)
-//			{
-//				if (y % 64 == 0)
-//				{
-//					glm::vec2 testPos = (cellPosition + glm::vec2(0, -1)) * glm::vec2(4, 4);
-//					Chunk* newChunk = chunks[GetChunkFromWorldPos(testPos, { 1, 1 })];
-//
-//					if (newChunk->GetCell(x, y + 63).Id == ParticleAir.Id)
-//					{
-//						chunk->SetCell(x, y, ParticleAir);
-//						newChunk->SetCell(x, y+63, ParticleSand);
-//					}
-//
-//					continue;
-//				}
-//
-//				if (chunk->GetCell(x, y - 1).Id == ParticleAir.Id)
-//				{
-//					chunk->SetCell(x, y, ParticleAir);
-//					chunk->SetCell(x, y - 1, ParticleSand);
-//				}
-//				else if (chunk->GetCell(x + 1, y - 1).Id == ParticleAir.Id)
-//				{
-//					chunk->SetCell(x, y, ParticleAir);
-//					chunk->SetCell(x + 1, y - 1, ParticleSand);
-//				}
-//				else if (chunk->GetCell(x - 1, y - 1).Id == ParticleAir.Id)
-//				{
-//					chunk->SetCell(x, y, ParticleAir);
-//					chunk->SetCell(x - 1, y - 1, ParticleSand);
-//				}
-//			}
-//
-//		}
-//	}
-//}
+void World::UpdateCells(Chunk* chunk)
+{
+	std::cout << chunk->position.x << ", " << chunk->position.y << std::endl;
+	for (int x = 0; x < chunkSizeInCells; x++)
+	{
+		for (int y = 0; y < chunkSizeInCells; y++)
+		{
+			Cell cell = chunk->GetCell(glm::vec2(x, y), LocalSpace);
+			glm::vec2 position = cell.position;
+
+			glm::vec2 Neighbours[8] =
+			{
+				position + glm::vec2(0, -1), // Bot
+				position + glm::vec2(-1, -1), // Bot Left
+				position + glm::vec2(1, -1), // Bot Right
+				position + glm::vec2(-1,  0), // Left
+				position + glm::vec2(1,  0), // Right
+				position + glm::vec2(0,  1), // Top
+				position + glm::vec2(-1,  1), // Top Left
+				position + glm::vec2(1,  1), // Top Right
+			};
+
+			if (cell.Id == ParticleSand.Id)
+			{
+				for (int j = 0; j <= 0; j++)
+				{
+					Chunk* newChunk = GetChunkFromWorldPos(Neighbours[j]);
+
+					if (newChunk->GetCell(Neighbours[j], WorldSpace).Id == ParticleAir.Id)
+					{
+						//chunk->SetCell(position, ParticleAir, WorldSpace);
+						//newChunk->SetCell(Neighbours[j], ParticleSand, WorldSpace);
+						dirtyCells.push_back(chunk->GetCell(position, WorldSpace));
+					}
+
+				}
+			}
+		}
+	}
+
+	chunk->dirty = false;
+
+}
