@@ -19,6 +19,8 @@ struct Cell
 	int explosiveness = 0;
 
 	char lightLevel = 0;
+
+	bool active = false;
 };
 
 const glm::vec4 particleColors[] = {

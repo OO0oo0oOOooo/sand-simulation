@@ -39,11 +39,8 @@
 // 
 // Dirty Rect:
 // [ ] Bounds
-// [ ] Add to dirty rect
-// [ ] Remove from dirty rect
-// For every cell that needs to be updated i need to check if the new point is in the bounds
 // [ ] Update through every cell in the bounds
-// 
+// - If i want to add a cell to the dirty quad i just have to check if it is inside the bounds
 // 
 //
 // Reactions:

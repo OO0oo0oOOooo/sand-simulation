@@ -91,7 +91,7 @@ public:
 		Chunk* chunk = GetChunkFromWorldPos(cellPos);
 
 		chunk->SetCell(cellPos, cell, WorldSpace);
-		dirtyCells.push_back(chunk->GetCell(cellPos, WorldSpace));
+		//dirtyCells.push_back(chunk->GetCell(cellPos, WorldSpace));
 	}
 
 	std::vector<Cell> dirtyCells;

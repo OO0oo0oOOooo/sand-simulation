@@ -3,9 +3,21 @@
 #include "Cell.h"
 #include "Mesh.h"
 #include "ChunkData.h"
+//#include "World.h"
 
 #include <vector>
 #include <iostream>
+
+
+struct Bounds
+{
+	glm::ivec2 min;
+	glm::ivec2 max;
+
+	glm::ivec2 position;
+	glm::ivec2 size;
+
+};
 
 enum Space
 {
@@ -74,11 +86,22 @@ public:
 		}
 	}
 	
+
 	glm::ivec2 position;
 	std::vector<Cell> ChunkData;
 	bool dirty;
 
+
+	// Dirty Rect
+	std::vector<glm::ivec2> ActiveCells;
+	Bounds bounds;
+	// resize bounds
+
+	void RecalculateBounds();
+	void UpdateActive();
+
 private:
+	//World* world;
 	Mesh* mesh;
 
 	inline Cell GetCellLocal(glm::ivec2 localPos)
@@ -100,6 +123,9 @@ private:
 
 		ChunkData[index] = cell;
 		ChunkData[index].position = position + localPos;
+		ChunkData[index].active = true;
+
+		ActiveCells.push_back(localPos);
 
 		Vertex v[4];
 		for (int i = 0; i < 4; i++)
@@ -119,8 +145,6 @@ private:
 			return ParticleVoid;
 
 		glm::ivec2 localPos = worldPosition - position;
-
-
 		int index = GetCellIndex(localPos.x, localPos.y);
 
 		return ChunkData[index];
@@ -137,6 +161,9 @@ private:
 
 		ChunkData[index] = cell;
 		ChunkData[index].position = worldPosition;
+		ChunkData[index].active = true;
+
+		ActiveCells.push_back(localPos);
 
 		Vertex v[4];
 		for (int i = 0; i < 4; i++)
