@@ -3,7 +3,8 @@
 #include "Cell.h"
 #include "Mesh.h"
 #include "ChunkData.h"
-//#include "World.h"
+
+class World;
 
 #include <vector>
 #include <iostream>
@@ -28,7 +29,7 @@ enum Space
 class Chunk
 {
 public:
-	Chunk(int x, int y);
+	Chunk(World* world, int x, int y);
 	~Chunk();
 
 	void CreateMesh();
@@ -101,7 +102,7 @@ public:
 	void UpdateActive();
 
 private:
-	//World* world;
+	World* world;
 	Mesh* mesh;
 
 	inline Cell GetCellLocal(glm::ivec2 localPos)

@@ -1,7 +1,8 @@
 #include "Chunk.h"
+#include "World.h"
 
-Chunk::Chunk(int x, int y)
-	: position(x, y), dirty(false)
+Chunk::Chunk(World* world, int x, int y)
+	: position(x, y), dirty(false), world(world)
 {
 	ChunkData = std::vector<Cell>(chunkSizeInCells * chunkSizeInCells);
 
@@ -119,25 +120,12 @@ void Chunk::UpdateActive()
 			{
 				for (int j = 0; j <= 2; j++)
 				{
-					Cell neighbour;
-
-					if ((Neighbours[j].x - position.x) < 0 || (Neighbours[j].x - position.x) > 63 || (Neighbours[j].y - position.y) < 0 || (Neighbours[j].y - position.y) > 63)
-						continue;
-					else
-						neighbour = GetCell(Neighbours[j], WorldSpace);
+					Cell neighbour = world->GetChunkFromWorldPos(Neighbours[j])->GetCell(Neighbours[j], WorldSpace);
 
 					if (neighbour.Id == ParticleAir.Id)
 					{
-						//if (Neighbours[j].x % 64 == 0 || Neighbours[j].y % 64 == 0)
-						//	std::cout << "World" << std::endl; //world->GetChunkFromWorldPos(Neighbours[j])->SetCell(Neighbours[j], ParticleSand, WorldSpace);
-						//else
-						//{
 						SetCell(cellPosition, ParticleAir, WorldSpace);
-						SetCell(Neighbours[j], ParticleSand, WorldSpace);
-
-						ActiveCells.push_back(cellPosition - position);
-						ActiveCells.push_back(Neighbours[j] - position);
-						//}
+						world->GetChunkFromWorldPos(Neighbours[j])->SetCell(Neighbours[j], ParticleSand, WorldSpace);
 
 						break;
 					}

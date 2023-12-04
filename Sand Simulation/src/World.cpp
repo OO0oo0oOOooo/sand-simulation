@@ -6,7 +6,7 @@ World::World()
 	{
 		for (int y = 0; y < numChunksHeight; y++)
 		{
-			chunks[glm::vec2(x, y)] = new Chunk(x * 64, y * 64);
+			chunks[glm::vec2(x, y)] = new Chunk(this, x * 64, y * 64);
 		}
 	}
 }
