@@ -27,7 +27,7 @@ const glm::vec4 particleColors[] = {
 	{ 0.0f, 0.0f, 0.0f, 0.0f }, // Void
 	{ 0.1f, 0.1f, 0.1f, 1.0f }, // Air
 	{ 0.9f, 0.7f, 0.2f, 1.0f }, // Sand
-	{ 0.2f, 0.5f, 0.8f, 1.0f }, // Water
+	{ 0.2f, 0.5f, 0.8f, 0.5f }, // Water
 	{ 0.5f, 0.5f, 0.5f, 1.0f }, // Rock
 	{ 0.4f, 0.2f, 0.1f, 1.0f }, // Wood
 	{ 0.3f, 0.3f, 0.3f, 1.0f }, // Metal
@@ -40,22 +40,22 @@ const glm::vec4 particleColors[] = {
 const Cell ParticleVoid =      { 0, { 0.0f, 0.0f, 0.0f, 0.0f } };
 const Cell ParticleAir =       { 1, { 0.1f, 0.1f, 0.1f, 1.0f } };
 const Cell ParticleSand =      { 2, { 0.9f, 0.7f, 0.2f, 1.0f } };
-const Cell ParticleWater =     { 3, { 0.2f, 0.5f, 0.8f, 1.0f } };
+const Cell ParticleWater =     { 3, { 0.2f, 0.5f, 0.8f, 0.5f } };
 const Cell ParticleRock =      { 4, { 0.5f, 0.5f, 0.5f, 1.0f } };
 const Cell ParticleWood =	   { 5, { 0.4f, 0.2f, 0.1f, 1.0f } };
 const Cell ParticleMetal =     { 6, { 0.3f, 0.3f, 0.3f, 1.0f } };
 const Cell ParticleGunpowder = { 7, { 0.2f, 0.2f, 0.2f, 1.0f } };
 
-//glm::vec2 NeighbourTable[8] = {
-//	glm::vec2( 0, -1), // Bot
-//	glm::vec2(-1, -1), // Bot Left
-//	glm::vec2( 1, -1), // Bot Right
-//	glm::vec2(-1,  0), // Left
-//	glm::vec2( 1,  0), // Right
-//	glm::vec2( 0,  1), // Top
-//	glm::vec2(-1,  1), // Top Left
-//	glm::vec2( 1,  1), // Top Right
-//};
+const glm::ivec2 NeighbourTable[8] = {
+	glm::ivec2( 0, -1), // Bot
+	glm::ivec2(-1, -1), // Bot Left
+	glm::ivec2( 1, -1), // Bot Right
+	glm::ivec2(-1,  0), // Left
+	glm::ivec2( 1,  0), // Right
+	glm::ivec2( 0,  1), // Top
+	glm::ivec2(-1,  1), // Top Left
+	glm::ivec2( 1,  1), // Top Right
+};
 
 const glm::vec3 vertexPositions[] = {
 	glm::vec3( 0.0f, 0.0f, 0.0f ),

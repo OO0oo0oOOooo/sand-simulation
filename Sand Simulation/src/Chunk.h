@@ -3,6 +3,7 @@
 #include "Cell.h"
 #include "Mesh.h"
 #include "ChunkData.h"
+#include "Time.h"
 
 class World;
 
@@ -99,7 +100,7 @@ public:
 	// resize bounds
 
 	void RecalculateBounds();
-	void UpdateActive(float deltaTime);
+	void UpdateActive();
 
 private:
 	World* world;

@@ -13,7 +13,7 @@ public:
 
 	void Render(Shader* shader);
 
-    void Update(float deltaTime);
+    void Update();
 	void UpdateChunks();
 	void UpdateCells(Chunk* chunk);
 

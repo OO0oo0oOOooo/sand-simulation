@@ -35,7 +35,7 @@ void World::Render(Shader* shader)
 	}
 }
 
-void World::Update(float deltaTime)
+void World::Update()
 {
 	// Multi-threading
 	// if any thread is idle, give it a chunk to fully check
@@ -48,7 +48,7 @@ void World::Update(float deltaTime)
 
 			if (chunk != nullptr)
 			{
-				chunk->UpdateActive(deltaTime);
+				chunk->UpdateActive();
 			}
 		}
 	}
