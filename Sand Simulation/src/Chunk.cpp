@@ -83,7 +83,7 @@ void Chunk::RecalculateBounds()
 	bounds.position = bounds.min;
 }
 
-void Chunk::UpdateActive()
+void Chunk::UpdateActive(float deltaTime)
 {
 	if(ActiveCells.size() <= 0)
 		return;
@@ -103,6 +103,9 @@ void Chunk::UpdateActive()
 			glm::ivec2 boundsPosition = bounds.position + glm::ivec2(x, y);
 			Cell cell = GetCell(boundsPosition, LocalSpace);
 			glm::ivec2 cellPosition = cell.position;
+			glm::vec2 cellVelocity = cell.velocity;
+
+			cellVelocity.y -= 0.1f * deltaTime;
 
 			glm::ivec2 Neighbours[8] = 
 			{

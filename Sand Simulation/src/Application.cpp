@@ -63,6 +63,8 @@ unsigned int windowWidth = 1280;
 unsigned int windowHeight = 720;
 unsigned int gridResolution = 256;
 
+double lastTime = glfwGetTime(), currentTime, deltaTime;
+
 int main(void)
 {
     if (!glfwInit())
@@ -92,12 +94,16 @@ int main(void)
 
     while (!glfwWindowShouldClose(glwindow))
     {
+        currentTime = glfwGetTime();
+        float deltaTime = currentTime - lastTime;
+        lastTime = currentTime;
+
         Brush::MouseInput(window, world);
         Brush::SelectionInput(window);
 
         glClear(GL_COLOR_BUFFER_BIT);
 
-        world->Update(0.2f);
+        world->Update(deltaTime);
         world->Render(renderer->GetShader());
 
         ImGui_ImplOpenGL3_NewFrame();

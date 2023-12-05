@@ -48,7 +48,7 @@ void World::Update(float deltaTime)
 
 			if (chunk != nullptr)
 			{
-				chunk->UpdateActive();
+				chunk->UpdateActive(deltaTime);
 			}
 		}
 	}

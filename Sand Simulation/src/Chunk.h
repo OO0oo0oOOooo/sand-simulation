@@ -99,7 +99,7 @@ public:
 	// resize bounds
 
 	void RecalculateBounds();
-	void UpdateActive();
+	void UpdateActive(float deltaTime);
 
 private:
 	World* world;
