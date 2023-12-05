@@ -93,11 +93,8 @@ public:
 	std::vector<Cell> ChunkData;
 	bool dirty;
 
-
-	// Dirty Rect
 	std::vector<glm::ivec2> ActiveCells;
 	Bounds bounds;
-	// resize bounds
 
 	void RecalculateBounds();
 	void UpdateActive();

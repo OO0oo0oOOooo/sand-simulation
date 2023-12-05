@@ -23,6 +23,15 @@ struct Cell
 	bool active = false;
 };
 
+const Cell ParticleVoid =		{ 0, { 0.0f, 0.0f, 0.0f, 0.0f } };
+const Cell ParticleAir =		{ 1, { 0.1f, 0.1f, 0.1f, 1.0f } };
+const Cell ParticleSand =		{ 2, { 0.9f, 0.7f, 0.2f, 1.0f } };
+const Cell ParticleWater =		{ 3, { 0.2f, 0.5f, 0.8f, 1.0f } };
+const Cell ParticleRock =		{ 4, { 0.5f, 0.5f, 0.5f, 1.0f } };
+const Cell ParticleWood =		{ 5, { 0.4f, 0.2f, 0.1f, 1.0f } };
+const Cell ParticleMetal =		{ 6, { 0.3f, 0.3f, 0.3f, 1.0f } };
+const Cell ParticleGunpowder =	{ 7, { 0.2f, 0.2f, 0.2f, 1.0f } };
+
 const glm::vec4 particleColors[] = {
 	{ 0.0f, 0.0f, 0.0f, 0.0f }, // Void
 	{ 0.1f, 0.1f, 0.1f, 1.0f }, // Air
@@ -36,15 +45,6 @@ const glm::vec4 particleColors[] = {
 	{ 0.2f, 0.2f, 0.2f, 1.0f }, // Smoke
 	{ 0.2f, 0.2f, 0.2f, 1.0f }, // Steam
 };
-
-const Cell ParticleVoid =      { 0, { 0.0f, 0.0f, 0.0f, 0.0f } };
-const Cell ParticleAir =       { 1, { 0.1f, 0.1f, 0.1f, 1.0f } };
-const Cell ParticleSand =      { 2, { 0.9f, 0.7f, 0.2f, 1.0f } };
-const Cell ParticleWater =     { 3, { 0.2f, 0.5f, 0.8f, 0.5f } };
-const Cell ParticleRock =      { 4, { 0.5f, 0.5f, 0.5f, 1.0f } };
-const Cell ParticleWood =	   { 5, { 0.4f, 0.2f, 0.1f, 1.0f } };
-const Cell ParticleMetal =     { 6, { 0.3f, 0.3f, 0.3f, 1.0f } };
-const Cell ParticleGunpowder = { 7, { 0.2f, 0.2f, 0.2f, 1.0f } };
 
 const glm::ivec2 NeighbourTable[8] = {
 	glm::ivec2( 0, -1), // Bot
