@@ -92,18 +92,21 @@ void Chunk::UpdateActive()
 
 	for (int y = 0; y < bounds.size.y; y++)
 	{
-		for (int x = 0; x < bounds.size.x; x++)
+		bool alternate = (y % 2 == 0);
+		int startX = alternate ? 0 : bounds.size.x - 1;
+		int endX = alternate ? bounds.size.x : -1;
+		int stepX = alternate ? 1 : -1;
+
+		for (int x = startX; x != endX; x += stepX)
 		{
 			glm::ivec2 boundsPosition = bounds.position + glm::ivec2(x, y);
 			Cell cell = GetCell(boundsPosition, LocalSpace);
-
 			glm::ivec2 cellPosition = cell.position;
 
 			if (cell.Id == ParticleSand.Id)
 			{
 				for (int j = 0; j <= 2; j++)
 				{
-
 					glm::ivec2 neighbourPosition = cellPosition + NeighbourTable[j];
 					Cell neighbour = world->GetChunkFromWorldPos(neighbourPosition)->GetCell(neighbourPosition, WorldSpace);
 
@@ -116,12 +119,10 @@ void Chunk::UpdateActive()
 
 						break;
 					}
-
 				}
 			}
 
 			ActiveCells.erase(std::remove(ActiveCells.begin(), ActiveCells.end(), cellPosition - position), ActiveCells.end());
 		}
 	}
-
 }
