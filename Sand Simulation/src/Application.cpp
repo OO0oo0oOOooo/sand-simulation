@@ -22,6 +22,10 @@
 // [ ] Update loop
 // [ ] Delta Time
 // [ ] tick and late tick
+// 
+// Multitreading:
+// [ ] Thread Pool
+// [ ] Multithreading Chunks in checkered pattern
 //
 // UI:
 // [ ] Particle Selection UI

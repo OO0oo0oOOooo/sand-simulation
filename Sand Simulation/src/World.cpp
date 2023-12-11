@@ -37,9 +37,6 @@ void World::Render(Shader* shader)
 
 void World::Update()
 {
-	// Multi-threading
-	// if any thread is idle, give it a chunk to fully check
-
 	for (int x = 0; x < numChunksWidth; x++)
 	{
 		for (int y = 0; y < numChunksHeight; y++)
@@ -56,8 +53,6 @@ void World::Update()
 
 //void World::Update(float deltaTime)
 //{
-//	// Multi-threading
-//	// if any thread is idle, give it a chunk to slow update
 //
 //	
 //	// velocity = acceleration * deltaTime;
