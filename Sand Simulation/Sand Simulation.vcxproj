@@ -189,6 +189,7 @@
     <ClInclude Include="src\QuadTreeObject.h" />
     <ClInclude Include="src\Renderer.h" />
     <ClInclude Include="src\shader.h" />
+    <ClInclude Include="src\ThreadPool.h" />
     <ClInclude Include="src\Time.h" />
     <ClInclude Include="src\vendor\glm\common.hpp" />
     <ClInclude Include="src\vendor\glm\detail\compute_common.hpp" />
