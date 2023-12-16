@@ -9,7 +9,7 @@
 
 class ThreadPool {
 public:
-    explicit ThreadPool(size_t thread_count = std::thread::hardware_concurrency())
+    /*explicit ThreadPool(size_t thread_count = std::thread::hardware_concurrency())
     {
         if (!thread_count)
             return;
@@ -23,7 +23,7 @@ public:
     ThreadPool(const ThreadPool&) = delete;
     ThreadPool(const ThreadPool&&) = delete;
     ThreadPool& operator = (const ThreadPool&) = delete;
-    ThreadPool& operator = (ThreadPool&&) = delete;
+    ThreadPool& operator = (ThreadPool&&) = delete;*/
 
 private:
     std::vector<std::thread> workers;
