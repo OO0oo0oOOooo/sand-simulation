@@ -1,5 +1,6 @@
 #include "World.h"
 
+
 World::World()
 {
 	for (int x = 0; x < numChunksWidth; x++)
@@ -37,16 +38,12 @@ void World::Render(Shader* shader)
 
 void World::Update()
 {
-	for (int x = 0; x < numChunksWidth; x++)
+	for (auto& chunkPair : chunks)
 	{
-		for (int y = 0; y < numChunksHeight; y++)
+		Chunk* chunk = chunkPair.second;
+		if (chunk != nullptr)
 		{
-			Chunk* chunk = chunks[glm::vec2(x, y)];
-
-			if (chunk != nullptr)
-			{
-				chunk->UpdateActive();
-			}
+			chunk->UpdateActive();
 		}
 	}
 }

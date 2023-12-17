@@ -155,7 +155,6 @@
     <ClCompile Include="src\Brush.cpp" />
     <ClCompile Include="src\Cell.cpp" />
     <ClCompile Include="src\Chunk.cpp" />
-    <ClCompile Include="src\Grid.cpp" />
     <ClCompile Include="src\IndexBuffer.cpp" />
     <ClCompile Include="src\Input.cpp" />
     <ClCompile Include="src\Mesh.cpp" />
@@ -163,7 +162,6 @@
     <ClCompile Include="src\QuadTreeObject.cpp" />
     <ClCompile Include="src\Renderer.cpp" />
     <ClCompile Include="src\Shader.cpp" />
-    <ClCompile Include="src\ThreadPool.cpp" />
     <ClCompile Include="src\Time.cpp" />
     <ClCompile Include="src\vendor\glm\detail\glm.cpp" />
     <ClCompile Include="src\vendor\imgui\imgui.cpp" />
@@ -181,7 +179,6 @@
     <ClInclude Include="src\Brush.h" />
     <ClInclude Include="src\Chunk.h" />
     <ClInclude Include="src\ChunkData.h" />
-    <ClInclude Include="src\Grid.h" />
     <ClInclude Include="src\IndexBuffer.h" />
     <ClInclude Include="src\Input.h" />
     <ClInclude Include="src\Cell.h" />
@@ -190,7 +187,6 @@
     <ClInclude Include="src\QuadTreeObject.h" />
     <ClInclude Include="src\Renderer.h" />
     <ClInclude Include="src\shader.h" />
-    <ClInclude Include="src\ThreadPool.h" />
     <ClInclude Include="src\Time.h" />
     <ClInclude Include="src\vendor\glm\common.hpp" />
     <ClInclude Include="src\vendor\glm\detail\compute_common.hpp" />

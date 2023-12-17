@@ -23,7 +23,7 @@ public:
 
 		win->m_WindowWidth = width;
 		win->m_WindowHeight = height;
-		win->m_AspectRatio = glm::vec2((float)width / 1280.0f, (float)height / 720.0f);
+		win->m_AspectRatio = glm::vec2((float)width / 1920.0f, (float)height / 1080.0f);
 	}
 
 private:

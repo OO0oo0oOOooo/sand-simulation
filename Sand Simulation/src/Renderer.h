@@ -10,17 +10,13 @@
 #include "Mesh.h"
 
 #include "Cell.h"
-#include "Grid.h"
+
 
 class Renderer
 {
 public:
 	Renderer(int windowWidth, int windowHeight);
 	~Renderer();
-
-	void InitBuffers(Grid* grid);
-	void UpdateBuffers(Grid* grid);
-	void UpdateDirtyBuffers(Grid* grid);
 
 	void Clear() const;
 	void Draw();
