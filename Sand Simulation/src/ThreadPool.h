@@ -9,26 +9,22 @@
 
 class ThreadPool {
 public:
-    /*explicit ThreadPool(size_t thread_count = std::thread::hardware_concurrency())
-    {
-        if (!thread_count)
-            return;
-    }
-
-    ~ThreadPool()
-    {
-
-    }
+    void Start();
+    void QueueJob(const std::function<void()>& job);
+    void Stop();
+    bool busy();
 
     ThreadPool(const ThreadPool&) = delete;
     ThreadPool(const ThreadPool&&) = delete;
     ThreadPool& operator = (const ThreadPool&) = delete;
-    ThreadPool& operator = (ThreadPool&&) = delete;*/
+    ThreadPool& operator = (ThreadPool&&) = delete;
 
 private:
-    std::vector<std::thread> workers;
-    std::queue<std::function<void()>> tasks;
-    std::mutex queue_mutex;
-    std::condition_variable condition;
-    bool stop;
+    void ThreadLoop();
+
+    bool should_terminate = false;           // Tells threads to stop looking for jobs
+    std::mutex queue_mutex;                  // Prevents data races to the job queue
+    std::condition_variable mutex_condition; // Allows threads to wait on new jobs or termination 
+    std::vector<std::thread> threads;
+    std::queue<std::function<void()>> jobs;
 };

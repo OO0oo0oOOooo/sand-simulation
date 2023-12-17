@@ -5,6 +5,8 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
+#include "ctpl/ctpl_stl.h"
+
 #include "Window.h"
 #include "Input.h"
 #include "Renderer.h"
@@ -26,6 +28,11 @@
 // Multitreading:
 // [ ] Thread Pool
 // [ ] Multithreading Chunks in checkered pattern
+//      4 Updates per frame
+//      First I check if the chunk is dirty
+//      Then I find which update the chunk is on
+//      Queue the chunk to the thread pool
+//      When the thread is done repeat for the second update
 //
 // UI:
 // [ ] Particle Selection UI
