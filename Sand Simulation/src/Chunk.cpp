@@ -80,7 +80,7 @@ void Chunk::RecalculateBounds()
 	bounds.position = bounds.min;
 }
 
-void Chunk::UpdateActive()
+void Chunk::UpdateActive(int id)
 {
 	if (ActiveCells.size() <= 0)
 		return;

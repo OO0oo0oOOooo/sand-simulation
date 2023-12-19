@@ -5,10 +5,12 @@
 #include "Chunk.h"
 #include <unordered_map>
 
+#include "ctpl/ctpl_stl.h"
+
 class World
 {
 public:
-	World();
+	World(ctpl::thread_pool* pool);
 	~World();
 
 	void Render(Shader* shader);
@@ -62,6 +64,7 @@ public:
 	}
 
 	std::vector<Cell> dirtyCells;
+	ctpl::thread_pool* threadPool;
 
 private:
 	struct KeyHash {

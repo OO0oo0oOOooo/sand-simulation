@@ -1,7 +1,9 @@
 #include "World.h"
 
 
-World::World()
+
+World::World(ctpl::thread_pool* pool)
+	: threadPool(pool)
 {
 	for (int x = 0; x < numChunksWidth; x++)
 	{
@@ -43,7 +45,7 @@ void World::Update()
 		Chunk* chunk = chunkPair.second;
 		if (chunk != nullptr)
 		{
-			chunk->UpdateActive();
+			//threadPool->push([chunk](int id) { chunk->UpdateActive(id); });
 		}
 	}
 }

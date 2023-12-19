@@ -97,7 +97,7 @@ public:
 	Bounds bounds;
 
 	void RecalculateBounds();
-	void UpdateActive();
+	void UpdateActive(int id);
 
 private:
 	World* world;

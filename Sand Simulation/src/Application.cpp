@@ -76,11 +76,6 @@ unsigned int windowWidth = 1920;
 unsigned int windowHeight = 1080;
 unsigned int gridResolution = 256;
 
-void testMultiThreading(int id)
-{
-	std::cout << "Hello from thread " << id << std::endl;
-}
-
 int main(void)
 {
     if (!glfwInit())
@@ -95,8 +90,9 @@ int main(void)
 
     std::cout << "OpenGL Version: " << glGetString(GL_VERSION) << std::endl;
 
+    ctpl::thread_pool* threadPool = new ctpl::thread_pool(4);
     Renderer* renderer = new Renderer(windowWidth, windowHeight);
-    World* world = new World();
+    World* world = new World(threadPool);
     world->Render(renderer->GetShader());
 
     Input::SetupKeyInputs(glwindow);
@@ -107,12 +103,6 @@ int main(void)
     ImGui::StyleColorsDark();
     ImGui_ImplGlfw_InitForOpenGL(glwindow, true);
     ImGui_ImplOpenGL3_Init("#version 430");
-
-    ctpl::thread_pool threadPool(4);
-
-    for (int i = 0; i < 4; ++i) {
-        threadPool.push(testMultiThreading); // Push jobs to the thread pool
-    }
 
     while (!glfwWindowShouldClose(glwindow))
     {
