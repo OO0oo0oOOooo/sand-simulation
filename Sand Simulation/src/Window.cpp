@@ -8,7 +8,7 @@ Window::Window(int width, int height, const char* title)
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_SCALE_TO_MONITOR, GLFW_TRUE);
 
-	GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+	GLFWmonitor* monitor = nullptr;//glfwGetPrimaryMonitor();
 	m_NativeWindow = glfwCreateWindow(width, height, title, monitor, NULL);
 	glfwMakeContextCurrent(m_NativeWindow);
 	//glfwSwapInterval(0);

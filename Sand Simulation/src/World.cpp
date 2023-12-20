@@ -45,7 +45,7 @@ void World::Update()
 		Chunk* chunk = chunkPair.second;
 		if (chunk != nullptr)
 		{
-			//threadPool->push([chunk](int id) { chunk->UpdateActive(id); });
+			threadPool->push([chunk](int) { chunk->UpdateActive(0); });
 		}
 	}
 }
