@@ -74,7 +74,7 @@ namespace Input {
 		mousePosition.y = (height - (float)ypos);
 
 		normalizedMousePosition.x = (float)xpos / width;
-		normalizedMousePosition.y = 1.0f - (float)ypos / height; // y is flipped because glfw's coordinate system's origin is at the top left
+		normalizedMousePosition.y = 1.0f - (float)ypos / height;
 	}
 
 	void MouseScrollCallback(GLFWwindow* window, double xoffset, double yoffset)

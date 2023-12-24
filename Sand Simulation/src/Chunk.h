@@ -83,7 +83,7 @@ public:
 			break;
 
 		case WorldSpace:
-			SetCellFromWorldPos(position, cell);
+			SetCellWorld(position, cell);
 			break;
 		}
 	}
@@ -149,7 +149,7 @@ private:
 		return ChunkData[index];
 	}
 
-	inline void SetCellFromWorldPos(glm::ivec2 worldPosition, Cell cell)
+	inline void SetCellWorld(glm::ivec2 worldPosition, Cell cell)
 	{
 		if (worldPosition.x < 0 || worldPosition.x > worldSizeInCells.x - 1 || worldPosition.y < 0 || worldPosition.y > worldSizeInCells.y - 1)
 			return;

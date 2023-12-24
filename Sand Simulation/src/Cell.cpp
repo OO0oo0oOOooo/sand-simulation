@@ -92,20 +92,3 @@
 //
 //	}
 //}
-
-//void UpdateGunpowder(Renderer* renderer, int x, int y);
-//
-//void UpdateStone(Renderer* renderer, int x, int y);
-//void UpdateWood(Renderer* renderer, int x, int y);
-//
-//void UpdateWater(Renderer* renderer, int x, int y);
-//void UpdateOil(Renderer* renderer, int x, int y);
-//void UpdateLava(Renderer* renderer, int x, int y);
-//void UpdateAcid(Renderer* renderer, int x, int y);
-//
-//void UpdateSmoke(Renderer* renderer, int x, int y);
-//void UpdateSteam(Renderer* renderer, int x, int y);
-//
-//void UpdateFire(Renderer* renderer, int x, int y);
-//
-//void UpdateCloud(Renderer* renderer, int x, int y);

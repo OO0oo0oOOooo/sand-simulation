@@ -114,6 +114,8 @@ void Chunk::UpdateActive(int id)
 					{
 						Cell particle = ParticleSand;
 
+						std::cout << "Moved" << std::endl;
+						
 						SetCell(cell.position, ParticleAir, WorldSpace);
 						world->GetChunkFromWorldPos(neighbourPosition)->SetCell(neighbourPosition, particle, WorldSpace);
 
