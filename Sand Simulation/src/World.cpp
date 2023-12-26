@@ -58,15 +58,19 @@ void World::Update()
 		{
 			for (int x = 0; x < numChunksWidth; x++)
 			{
+
 				if ((x + y + pass) % 4 == 0)
 				{
 					Chunk* chunk = chunks[glm::vec2(x, y)];
 
-					if (chunk != nullptr && chunk->dirty)
+					if (chunk != nullptr/* && chunk->dirty*/)
 					{
 						futures.push_back(threadPool->push([chunk](int) { chunk->UpdateActive(0); }));
+						//threadPool->push([chunk](int) { chunk->UpdateActive(0); });
+						//chunk->UpdateActive(0);
 					}
 				}
+
 			}
 		}
 
