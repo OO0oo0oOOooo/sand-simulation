@@ -40,12 +40,39 @@ void World::Render(Shader* shader)
 
 void World::Update()
 {
-	for (auto& chunkPair : chunks)
+	//for (auto& chunkPair : chunks)
+	//{
+	//	Chunk* chunk = chunkPair.second;
+	//	if (chunk != nullptr)
+	//	{
+	//		//threadPool->push([chunk](int) { chunk->UpdateActive(0); });
+	//		chunk->UpdateActive(0);
+	//	}
+	//}
+
+	for (int pass = 0; pass < 4; ++pass)
 	{
-		Chunk* chunk = chunkPair.second;
-		if (chunk != nullptr)
+		std::vector<std::future<void>> futures;
+
+		for (int y = 0; y < numChunksHeight; y++)
 		{
-			threadPool->push([chunk](int) { chunk->UpdateActive(0); });
+			for (int x = 0; x < numChunksWidth; x++)
+			{
+				if ((x + y + pass) % 4 == 0)
+				{
+					Chunk* chunk = chunks[glm::vec2(x, y)];
+
+					if (chunk != nullptr && chunk->dirty)
+					{
+						futures.push_back(threadPool->push([chunk](int) { chunk->UpdateActive(0); }));
+					}
+				}
+			}
+		}
+
+		for (auto& f : futures)
+		{
+			f.get();
 		}
 	}
 }
