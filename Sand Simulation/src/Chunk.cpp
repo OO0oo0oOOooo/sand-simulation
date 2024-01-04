@@ -80,9 +80,9 @@ void Chunk::RecalculateBounds()
 	bounds.position = bounds.min;
 }
 
-void testMultiThreading()
+void testMultiThreading(int id)
 {
-	std::cout << "Hello from thread " << std::this_thread::get_id() << std::endl;
+	std::cout << "Hello from thread " << id << std::endl;
 }
 
 void Chunk::UpdateActive(int id)
@@ -90,7 +90,7 @@ void Chunk::UpdateActive(int id)
 	if (ActiveCells.size() <= 0)
 		return;
 
-	testMultiThreading();
+	testMultiThreading(id);
 	RecalculateBounds();
 
 	if (bounds.size.x <= 0 || bounds.size.y <= 0)
@@ -120,8 +120,6 @@ void Chunk::UpdateActive(int id)
 					{
 						Cell particle = ParticleSand;
 
-						std::cout << "Moved" << std::endl;
-						
 						SetCell(cell.position, ParticleAir, WorldSpace);
 						world->GetChunkFromWorldPos(neighbourPosition)->SetCell(neighbourPosition, particle, WorldSpace);
 

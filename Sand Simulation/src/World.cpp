@@ -38,6 +38,14 @@ void World::Render(Shader* shader)
 	}
 }
 
+void CellularAutomata(int id, Chunk* chunk)
+{
+	//std::cout << "Thread: " << id << " || Chunk XY: " << chunk->position.x << ", " << chunk->position.y << std::endl;
+
+	chunk->UpdateActive(id);
+
+}
+
 void World::Update()
 {
 	//for (auto& chunkPair : chunks)
@@ -65,7 +73,11 @@ void World::Update()
 
 					if (chunk != nullptr/* && chunk->dirty*/)
 					{
-						futures.push_back(threadPool->push([chunk](int) { chunk->UpdateActive(0); }));
+						//futures.push_back(threadPool->push([chunk](int) { chunk->UpdateActive(0); }));
+
+						//futures.push_back(threadPool->push( CellularAutomata ));
+						futures.push_back(threadPool->push(CellularAutomata, chunk));
+
 						//threadPool->push([chunk](int) { chunk->UpdateActive(0); });
 						//chunk->UpdateActive(0);
 					}
@@ -80,6 +92,8 @@ void World::Update()
 		}
 	}
 }
+
+
 
 //void World::Update(float deltaTime)
 //{

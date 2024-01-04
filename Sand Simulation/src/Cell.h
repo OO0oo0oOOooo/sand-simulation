@@ -152,3 +152,14 @@ const unsigned int meshTriangles[] = {
 //private:
 //	
 //};
+
+
+
+
+
+
+// Cell Interaction types
+// Swap
+// Interact
+
+
