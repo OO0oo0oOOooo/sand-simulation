@@ -38,12 +38,72 @@ void World::Render(Shader* shader)
 	}
 }
 
+void RecalculateBounds(Chunk* chunk)
+{
+	chunk->bounds.min = chunk->ActiveCells[0];
+	chunk->bounds.max = chunk->ActiveCells[0];
+
+	for (unsigned int i = 0; i < chunk->ActiveCells.size(); i++)
+	{
+		chunk->bounds.min.x = std::min(chunk->bounds.min.x, chunk->ActiveCells[i].x);
+		chunk->bounds.min.y = std::min(chunk->bounds.min.y, chunk->ActiveCells[i].y);
+		chunk->bounds.max.x = std::max(chunk->bounds.max.x, chunk->ActiveCells[i].x);
+		chunk->bounds.max.y = std::max(chunk->bounds.max.y, chunk->ActiveCells[i].y);
+	}
+
+	chunk->bounds.size = (chunk->bounds.max - chunk->bounds.min) + 1;
+	chunk->bounds.position = chunk->bounds.min;
+}
+
 void CellularAutomata(int id, Chunk* chunk)
 {
 	//std::cout << "Thread: " << id << " || Chunk XY: " << chunk->position.x << ", " << chunk->position.y << std::endl;
 
-	chunk->UpdateActive(id);
+	//chunk->UpdateActive(id);
 
+	if (chunk->ActiveCells.size() <= 0)
+		return;
+
+	RecalculateBounds();
+
+	if (chunk->bounds.size.x <= 0 || chunk->bounds.size.y <= 0)
+		return;
+
+	for (int y = 0; y < chunk->bounds.size.y; y++)
+	{
+		bool alternate = (y % 2 == 0);
+		int startX = alternate ? 0 : chunk->bounds.size.x - 1;
+		int endX = alternate ? chunk->bounds.size.x : -1;
+		int stepX = alternate ? 1 : -1;
+
+		for (int x = startX; x != endX; x += stepX)
+		{
+			glm::ivec2 boundsPosition = chunk->bounds.position + glm::ivec2(x, y);
+			Cell cell = chunk->GetCell(boundsPosition, LocalSpace);
+			glm::ivec2 cellPosition = cell.position;
+
+			if (cell.Id == ParticleSand.Id)
+			{
+				for (int j = 0; j <= 2; j++)
+				{
+					glm::ivec2 neighbourPosition = cellPosition + NeighbourTable[j];
+					Cell neighbour = GetChunkFromWorldPos(neighbourPosition)->GetCell(neighbourPosition, WorldSpace);
+
+					if (neighbour.Id == ParticleAir.Id)
+					{
+						Cell particle = ParticleSand;
+
+						chunk->SetCell(cell.position, ParticleAir, WorldSpace);
+						GetChunkFromWorldPos(neighbourPosition)->SetCell(neighbourPosition, particle, WorldSpace);
+
+						break;
+					}
+				}
+			}
+
+			chunk->ActiveCells.erase(std::remove(chunk->ActiveCells.begin(), chunk->ActiveCells.end(), cellPosition - chunk->position), chunk->ActiveCells.end());
+		}
+	}
 }
 
 void World::Update()
