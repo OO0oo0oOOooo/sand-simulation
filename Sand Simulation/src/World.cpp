@@ -59,68 +59,15 @@ void CellularAutomata(int id, Chunk* chunk)
 {
 	//std::cout << "Thread: " << id << " || Chunk XY: " << chunk->position.x << ", " << chunk->position.y << std::endl;
 
-	//chunk->UpdateActive(id);
-
-	if (chunk->ActiveCells.size() <= 0)
-		return;
-
-	RecalculateBounds();
-
-	if (chunk->bounds.size.x <= 0 || chunk->bounds.size.y <= 0)
-		return;
-
-	for (int y = 0; y < chunk->bounds.size.y; y++)
-	{
-		bool alternate = (y % 2 == 0);
-		int startX = alternate ? 0 : chunk->bounds.size.x - 1;
-		int endX = alternate ? chunk->bounds.size.x : -1;
-		int stepX = alternate ? 1 : -1;
-
-		for (int x = startX; x != endX; x += stepX)
-		{
-			glm::ivec2 boundsPosition = chunk->bounds.position + glm::ivec2(x, y);
-			Cell cell = chunk->GetCell(boundsPosition, LocalSpace);
-			glm::ivec2 cellPosition = cell.position;
-
-			if (cell.Id == ParticleSand.Id)
-			{
-				for (int j = 0; j <= 2; j++)
-				{
-					glm::ivec2 neighbourPosition = cellPosition + NeighbourTable[j];
-					Cell neighbour = GetChunkFromWorldPos(neighbourPosition)->GetCell(neighbourPosition, WorldSpace);
-
-					if (neighbour.Id == ParticleAir.Id)
-					{
-						Cell particle = ParticleSand;
-
-						chunk->SetCell(cell.position, ParticleAir, WorldSpace);
-						GetChunkFromWorldPos(neighbourPosition)->SetCell(neighbourPosition, particle, WorldSpace);
-
-						break;
-					}
-				}
-			}
-
-			chunk->ActiveCells.erase(std::remove(chunk->ActiveCells.begin(), chunk->ActiveCells.end(), cellPosition - chunk->position), chunk->ActiveCells.end());
-		}
-	}
+	chunk->UpdateActive();
 }
 
 void World::Update()
 {
-	//for (auto& chunkPair : chunks)
-	//{
-	//	Chunk* chunk = chunkPair.second;
-	//	if (chunk != nullptr)
-	//	{
-	//		//threadPool->push([chunk](int) { chunk->UpdateActive(0); });
-	//		chunk->UpdateActive(0);
-	//	}
-	//}
-
 	for (int pass = 0; pass < 4; ++pass)
 	{
-		std::vector<std::future<void>> futures;
+		//std::vector<std::future<void>> futures;
+		std::vector<std::pair<std::future<void>, Chunk*>> futures;
 
 		for (int y = 0; y < numChunksHeight; y++)
 		{
@@ -133,13 +80,8 @@ void World::Update()
 
 					if (chunk != nullptr/* && chunk->dirty*/)
 					{
-						//futures.push_back(threadPool->push([chunk](int) { chunk->UpdateActive(0); }));
-
-						//futures.push_back(threadPool->push( CellularAutomata ));
-						futures.push_back(threadPool->push(CellularAutomata, chunk));
-
-						//threadPool->push([chunk](int) { chunk->UpdateActive(0); });
-						//chunk->UpdateActive(0);
+						//futures.push_back(threadPool->push(CellularAutomata, chunk));
+						futures.push_back(std::make_pair(threadPool->push(CellularAutomata, chunk), chunk));
 					}
 				}
 
@@ -148,11 +90,11 @@ void World::Update()
 
 		for (auto& f : futures)
 		{
-			f.get();
+			f.first.get();
+			f.second->UpdateMesh();
 		}
 	}
 }
-
 
 
 //void World::Update(float deltaTime)

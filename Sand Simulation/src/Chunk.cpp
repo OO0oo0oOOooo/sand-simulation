@@ -80,17 +80,11 @@ void Chunk::RecalculateBounds()
 	bounds.position = bounds.min;
 }
 
-void testMultiThreading(int id)
-{
-	std::cout << "Hello from thread " << id << std::endl;
-}
-
-void Chunk::UpdateActive(int id)
+void Chunk::UpdateActive()
 {
 	if (ActiveCells.size() <= 0)
 		return;
 
-	testMultiThreading(id);
 	RecalculateBounds();
 
 	if (bounds.size.x <= 0 || bounds.size.y <= 0)

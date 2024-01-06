@@ -36,6 +36,11 @@ public:
 	void CreateMesh();
 	void DrawMesh(Shader* shader);
 
+	void UpdateMesh()
+	{
+		mesh->UploadVBOData();
+	}
+
 	inline int GetCellIndex(int x, int y)
 	{
 		return y * chunkSizeInCells + x;
@@ -97,10 +102,10 @@ public:
 	Bounds bounds;
 
 	void RecalculateBounds();
-	void UpdateActive(int id);
+	void UpdateActive();
 
-private:
 	World* world;
+private:
 	Mesh* mesh;
 
 	inline Cell GetCellLocal(glm::ivec2 localPos)
@@ -133,9 +138,10 @@ private:
 			v[i].color = cell.color;
 		}
 
-		int baseVertexIndex = index * 4;
+		mesh->vertices[index * 4 + 0] = v[0];
 
-		mesh->UploadVBOSubData(v, 4 * sizeof(Vertex), baseVertexIndex * sizeof(Vertex));
+		/*int baseVertexIndex = index * 4;
+		mesh->UploadVBOSubData(v, 4 * sizeof(Vertex), baseVertexIndex * sizeof(Vertex));*/
 	}
 
 	inline Cell GetCellFromWorldPos(glm::ivec2 worldPosition)
@@ -171,8 +177,9 @@ private:
 			v[i].color = cell.color;
 		}
 
-		int baseVertexIndex = index * 4;
+		mesh->vertices[index * 4 + 0] = v[0];
 
-		mesh->UploadVBOSubData(v, 4 * sizeof(Vertex), baseVertexIndex * sizeof(Vertex));
+		/*int baseVertexIndex = index * 4;
+		mesh->UploadVBOSubData(v, 4 * sizeof(Vertex), baseVertexIndex * sizeof(Vertex));*/
 	}
 };
