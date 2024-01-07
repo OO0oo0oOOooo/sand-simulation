@@ -136,9 +136,9 @@ private:
 		{
 			v[i].position = (glm::vec3(position + localPos, 0) + vertexPositions[i]) * (float)cellSize;
 			v[i].color = cell.color;
-		}
 
-		mesh->vertices[index * 4 + 0] = v[0];
+			mesh->vertices[index * 4 + i] = v[i];
+		}
 
 		/*int baseVertexIndex = index * 4;
 		mesh->UploadVBOSubData(v, 4 * sizeof(Vertex), baseVertexIndex * sizeof(Vertex));*/
@@ -175,9 +175,9 @@ private:
 		{
 			v[i].position = (glm::vec3(worldPosition, 0) + vertexPositions[i]) * (float)cellSize;
 			v[i].color = cell.color;
-		}
 
-		mesh->vertices[index * 4 + 0] = v[0];
+			mesh->vertices[index * 4 + i] = v[i];
+		}
 
 		/*int baseVertexIndex = index * 4;
 		mesh->UploadVBOSubData(v, 4 * sizeof(Vertex), baseVertexIndex * sizeof(Vertex));*/

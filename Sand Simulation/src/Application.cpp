@@ -27,7 +27,7 @@
 // 
 // Multitreading:
 // [ ] Thread Pool
-// [ ] Multithreading Chunks in checkered pattern
+// [x] Multithreading Chunks in checkered pattern
 //      4 Updates per frame
 //      First I check if the chunk is dirty
 //      Then I find which update the chunk is on
@@ -115,6 +115,8 @@ int main(void)
 
         world->Update();
         world->Render(renderer->GetShader());
+
+        world->DrawChunkBorders();
 
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();

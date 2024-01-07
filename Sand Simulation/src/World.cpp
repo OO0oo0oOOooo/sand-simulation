@@ -58,7 +58,6 @@ void RecalculateBounds(Chunk* chunk)
 void CellularAutomata(int id, Chunk* chunk)
 {
 	//std::cout << "Thread: " << id << " || Chunk XY: " << chunk->position.x << ", " << chunk->position.y << std::endl;
-
 	chunk->UpdateActive();
 }
 
@@ -96,6 +95,16 @@ void World::Update()
 	}
 }
 
+void World::DrawChunkBorders()
+{
+	for (int x = 0; x < numChunksWidth; x++)
+	{
+		for (int y = 0; y < numChunksHeight; y++)
+		{
+			
+		}
+	}
+}
 
 //void World::Update(float deltaTime)
 //{
