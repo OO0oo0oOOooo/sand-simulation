@@ -67,9 +67,12 @@
 // [ ] Texturing Groups
 // [ ] Tiled textures across the world
 //      Cells will get the texture for there block ID
+// 
+// Bugs:
+// [ ] Falling sand doesnt draw on chunkborders or something
 //
 // Refactoring:
-// [ ] Cell.cpp doesnt do anything anymore and has a lot of comments
+// [ ] Cell.cpp doesnt do anything
 // [ ] Cell.h has a lot of comments
 
 unsigned int windowWidth = 1920;
@@ -94,8 +97,10 @@ int main(void)
     Renderer* renderer = new Renderer(windowWidth, windowHeight);
     World* world = new World(threadPool);
     world->Render(renderer->GetShader());
+    
 
     Input::SetupKeyInputs(glwindow);
+
 
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -115,8 +120,9 @@ int main(void)
 
         world->Update();
         world->Render(renderer->GetShader());
+        world->DrawChunkBorders(renderer->GetShader());
 
-        world->DrawChunkBorders();
+        
 
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();

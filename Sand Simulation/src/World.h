@@ -14,12 +14,12 @@ public:
 	~World();
 
 	void Render(Shader* shader);
+	void DrawChunkBorders(Shader* shader);
 
     void Update();
 	void UpdateChunks();
 	void UpdateCells(Chunk* chunk);
 
-	void DrawChunkBorders();
 
 	inline glm::ivec2 GetChunkFromPixelPos(glm::vec2 position)
 	{

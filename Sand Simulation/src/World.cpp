@@ -95,13 +95,36 @@ void World::Update()
 	}
 }
 
-void World::DrawChunkBorders()
+void World::DrawChunkBorders(Shader* shader)
 {
 	for (int x = 0; x < numChunksWidth; x++)
 	{
 		for (int y = 0; y < numChunksHeight; y++)
 		{
-			
+			int cx = (x * 64) * cellSize;
+			int cy = (y * 64) * cellSize;
+
+			std::vector<Vertex> vertices = {
+				{{cx, cy, 0.1f}, {0.1, 1.0, 0.1, 1}},
+				{{cx + (64 * cellSize), cy, 0.1f}, {0.1, 1.0, 0.1, 1}},
+				{{cx + (64 * cellSize), cy + (64 * cellSize), 0.1f}, {0.1, 1.0, 0.1, 1}},
+				{{cx, cy + (64 * cellSize), 0.1f}, {0.1, 1.0, 0.1, 1}},
+			};
+
+			std::vector<unsigned int> indices = {
+				0, 1, // Bottom edge
+				1, 2, // Right edge
+				2, 3, // Top edge
+				3, 0  // Left edge
+			};
+
+			Mesh squareOutline;
+			squareOutline.vertices = vertices;
+			squareOutline.indices = indices;
+			squareOutline.UploadVBOData();
+			squareOutline.UploadIBOData();
+
+			squareOutline.DrawLine(shader);
 		}
 	}
 }

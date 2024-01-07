@@ -20,8 +20,18 @@ public:
         glBindVertexArray(*vao);
         shader->Bind();
         ib->Bind();
+
         glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, nullptr);
     }
+
+    void DrawLine(Shader* shader) const noexcept
+    {
+		glBindVertexArray(*vao);
+		shader->Bind();
+		ib->Bind();
+
+		glDrawElements(GL_LINES, indices.size(), GL_UNSIGNED_INT, nullptr);
+	}
 
     void Clear() noexcept
     {
