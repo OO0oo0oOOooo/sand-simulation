@@ -93,7 +93,6 @@ public:
 		}
 	}
 	
-
 	glm::ivec2 position;
 	std::vector<Cell> ChunkData;
 	bool dirty;
