@@ -127,7 +127,6 @@ void Chunk::UpdateActive()
 				for (int j = 0; j <= 4; j++)
 				{
 
-
 					glm::ivec2 neighbourPosition = cellPosition + NeighbourTable[j];
 					Cell neighbour = world->GetChunkFromWorldPos(neighbourPosition)->GetCell(neighbourPosition, WorldSpace);
 
