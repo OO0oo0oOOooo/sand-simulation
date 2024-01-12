@@ -122,6 +122,25 @@ void Chunk::UpdateActive()
 				}
 			}
 
+			else if (cell.Id == ParticleWater.Id)
+			{
+				for (int j = 0; j <= 4; j++)
+				{
+					glm::ivec2 neighbourPosition = cellPosition + NeighbourTable[j];
+					Cell neighbour = world->GetChunkFromWorldPos(neighbourPosition)->GetCell(neighbourPosition, WorldSpace);
+
+					if (neighbour.Id == ParticleAir.Id)
+					{
+						Cell particle = ParticleWater;
+
+						SetCell(cell.position, ParticleAir, WorldSpace);
+						world->GetChunkFromWorldPos(neighbourPosition)->SetCell(neighbourPosition, particle, WorldSpace);
+
+						break;
+					}
+				}
+			}
+
 			ActiveCells.erase(std::remove(ActiveCells.begin(), ActiveCells.end(), cellPosition - position), ActiveCells.end());
 		}
 	}
