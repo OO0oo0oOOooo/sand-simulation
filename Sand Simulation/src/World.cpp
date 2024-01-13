@@ -30,10 +30,13 @@ void World::Render(Shader* shader)
 
 			if(chunk != nullptr)
 			{
+				chunk->UpdateMesh();
 				chunk->DrawMesh(shader);
 			}
 		}
 	}
+
+	
 }
 
 void CellularAutomata(int id, Chunk* chunk)
@@ -46,7 +49,7 @@ void World::Update()
 {
 	for (int pass = 0; pass < 4; ++pass)
 	{
-		std::vector<std::pair<std::future<void>, Chunk*>> futures;
+		std::vector<std::future<void>> futures;
 
 		for (int y = 0; y < numChunksHeight; y++)
 		{
@@ -57,9 +60,9 @@ void World::Update()
 				{
 					Chunk* chunk = chunks[glm::vec2(x, y)];
 
-					if (chunk != nullptr/* && chunk->dirty*/)
+					if (chunk != nullptr /*&& chunk->dirty*/)
 					{
-						futures.push_back(std::make_pair(threadPool->push(CellularAutomata, chunk), chunk));
+						futures.push_back(threadPool->push(CellularAutomata, chunk));
 					}
 				}
 
@@ -68,10 +71,38 @@ void World::Update()
 
 		for (auto& f : futures)
 		{
-			f.first.get();
-			f.second->UpdateMesh();
+			f.get();
 		}
 	}
+
+	//for (int pass = 0; pass < 4; ++pass)
+	//{
+	//	std::vector<std::pair<std::future<void>, Chunk*>> futures;
+
+	//	for (int y = 0; y < numChunksHeight; y++)
+	//	{
+	//		for (int x = 0; x < numChunksWidth; x++)
+	//		{
+
+	//			if ((x + y + pass) % 4 == 0)
+	//			{
+	//				Chunk* chunk = chunks[glm::vec2(x, y)];
+
+	//				if (chunk != nullptr /*&& chunk->dirty*/)
+	//				{
+	//					futures.push_back(std::make_pair(threadPool->push(CellularAutomata, chunk), chunk));
+	//				}
+	//			}
+
+	//		}
+	//	}
+
+	//	for (auto& f : futures)
+	//	{
+	//		f.first.get();
+	//		f.second->UpdateMesh();
+	//	}
+	//}
 }
 
 void World::DrawChunkBorders(Shader* shader)
