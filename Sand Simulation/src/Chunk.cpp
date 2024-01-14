@@ -80,6 +80,66 @@ void Chunk::RecalculateBounds()
 	bounds.position = bounds.min;
 }
 
+// Particle ID | Neighbor Index | Neighbor ID
+
+// Cell Ids
+// 1 = Air
+// 2 = Sand
+// 3 = Water
+
+// Neighbor Index
+// 0 = Bot
+// 1 = Bot Left
+// 2 = Bot Right
+// 3 = Left
+// 4 = Right
+// 5 = Top
+// 6 = Top Left
+// 7 = Top Right
+
+std::map<int, int> LUT = {
+	//Sand
+	{201, 1 },
+	{202, 0 },
+	{203, 1 },
+
+	{211, 1 },
+	{212, 0 },
+	{213, 1 },
+
+	{221, 1 },
+	{222, 0 },
+	{223, 1 },
+
+
+	// Water
+	{301, 1 },
+	{302, 0 },
+	{303, 0 },
+
+	{311, 1 },
+	{312, 0 },
+	{313, 0 },
+
+	{321, 1 },
+	{322, 0 },
+	{323, 0 },
+
+	{331, 1 },
+	{332, 0 },
+	{333, 0 },
+
+	{341, 1 },
+	{342, 0 },
+	{343, 0 },
+};
+
+void SwapCells(Chunk* chunk, glm::ivec2 cellPosition, Cell Neighbour, glm::ivec2 neighbourPosition)
+{
+	chunk->SetCell(cellPosition, ParticleAir, WorldSpace);
+	chunk->world->GetChunkFromWorldPos(neighbourPosition)->SetCell(neighbourPosition, ParticleSand, WorldSpace);
+}
+
 void Chunk::UpdateActive()
 {
 	if (ActiveCells.size() <= 0)
@@ -103,7 +163,70 @@ void Chunk::UpdateActive()
 			Cell cell = GetCell(boundsPosition, LocalSpace);
 			glm::ivec2 cellPosition = cell.position;
 
-			if (cell.Id == ParticleSand.Id)
+			//ParticleUpdate(this, cell, cellPosition);
+			// SwapCells(this, cellPosition, neighbour, neighbourPosition);
+
+			bool shouldBreak = false;
+
+			for (int j = 0; j < 8; j++)
+			{
+				glm::ivec2 neighbourPosition = cellPosition + NeighbourTable[j];
+				Cell neighbour = world->GetChunkFromWorldPos(neighbourPosition)->GetCell(neighbourPosition, WorldSpace);
+
+				int key = cell.Id * 100 + j * 10 + neighbour.Id;
+
+				auto it = LUT.find(key);
+
+				if (it != LUT.end()) 
+				{ 
+					switch (LUT[key])
+					{
+						case 0:
+							std::cout << "No Result" << std::endl;
+							break;
+
+						case 1:
+						{
+							SetCell(cellPosition, neighbour, WorldSpace);
+							world->GetChunkFromWorldPos(neighbourPosition)->SetCell(neighbourPosition, cell, WorldSpace);
+							shouldBreak = true;
+							break;
+						}
+
+						case 2:
+						{
+							std::cout << "Cell Reaction" << std::endl;
+							shouldBreak = true;
+							return;
+						}
+
+						default:
+							break;
+					}
+				}
+
+				if(shouldBreak)
+					break;
+
+				/*if (neighbour.Id == ParticleAir.Id)
+				{
+					Cell particle = ParticleSand;
+
+					chunk->SetCell(cellPosition, ParticleAir, WorldSpace);
+					chunk->world->GetChunkFromWorldPos(neighbourPosition)->SetCell(neighbourPosition, particle, WorldSpace);
+
+					break;
+				}*/
+			}
+
+			ActiveCells.erase(std::remove(ActiveCells.begin(), ActiveCells.end(), cellPosition - position), ActiveCells.end());
+		}
+	}
+}
+
+
+
+/*if (cell.Id == ParticleSand.Id)
 			{
 				for (int j = 0; j <= 2; j++)
 				{
@@ -140,9 +263,4 @@ void Chunk::UpdateActive()
 						break;
 					}
 				}
-			}
-
-			ActiveCells.erase(std::remove(ActiveCells.begin(), ActiveCells.end(), cellPosition - position), ActiveCells.end());
-		}
-	}
-}
+			}*/

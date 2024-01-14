@@ -31,6 +31,7 @@ const Cell ParticleRock =		{ 4, { 0.5f, 0.5f, 0.5f, 1.0f } };
 const Cell ParticleWood =		{ 5, { 0.4f, 0.2f, 0.1f, 1.0f } };
 const Cell ParticleMetal =		{ 6, { 0.3f, 0.3f, 0.3f, 1.0f } };
 const Cell ParticleGunpowder =	{ 7, { 0.2f, 0.2f, 0.2f, 1.0f } };
+const Cell ParticleFire =		{ 8, { 0.9f, 0.2f, 0.2f, 1.0f } };
 
 const glm::vec4 particleColors[] = {
 	{ 0.0f, 0.0f, 0.0f, 0.0f }, // Void
