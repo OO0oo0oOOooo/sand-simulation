@@ -80,7 +80,6 @@ void Chunk::RecalculateBounds()
 	bounds.position = bounds.min;
 }
 
-// Particle ID | Neighbor Index | Neighbor ID
 
 // Cell Ids
 // 1 = Air
@@ -97,42 +96,43 @@ void Chunk::RecalculateBounds()
 // 6 = Top Left
 // 7 = Top Right
 
+// Particle ID | Neighbor Index | Neighbor ID
+
 std::map<int, int> LUT = {
-	//Sand
-	{201, 1 },
-	{202, 0 },
-	{203, 1 },
 
+	//Sand-Air
+	{210, 1 },
 	{211, 1 },
-	{212, 0 },
-	{213, 1 },
+	{212, 1 },
 
-	{221, 1 },
-	{222, 0 },
-	{223, 1 },
+	//Sand-Water
+	{230, 1 },
+	{231, 1 },
+	{232, 1 },
 
-
-	// Water
-	{301, 1 },
-	{302, 0 },
-	{303, 0 },
-
+	// Water-Air
+	{310, 1 },
 	{311, 1 },
-	{312, 0 },
-	{313, 0 },
-
-	{321, 1 },
-	{322, 0 },
-	{323, 0 },
-
-	{331, 1 },
-	{332, 0 },
-	{333, 0 },
-
-	{341, 1 },
-	{342, 0 },
-	{343, 0 },
+	{312, 1 },
+	{313, 1 },
+	{314, 1 },
 };
+
+//#include <string>
+
+//std::map<std::string, std::string> LUT = {
+//	// Bottom, Middle, Top
+//
+//	// Sand
+//	{"111 121 111", "121 111 111"},
+//	{"121 121 111", "221 111 111"},
+//	{"221 121 111", "122 111 111"},
+//
+//	// Water
+//	{"111 131 111", "131 111 111"}
+//	{"111 131 111", "331 131 111"}
+//
+//};
 
 void SwapCells(Chunk* chunk, glm::ivec2 cellPosition, Cell Neighbour, glm::ivec2 neighbourPosition)
 {
@@ -173,7 +173,7 @@ void Chunk::UpdateActive()
 				glm::ivec2 neighbourPosition = cellPosition + NeighbourTable[j];
 				Cell neighbour = world->GetChunkFromWorldPos(neighbourPosition)->GetCell(neighbourPosition, WorldSpace);
 
-				int key = cell.Id * 100 + j * 10 + neighbour.Id;
+				int key = cell.Id * 100 + neighbour.Id * 10 + j;
 
 				auto it = LUT.find(key);
 
