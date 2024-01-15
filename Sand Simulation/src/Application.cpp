@@ -69,7 +69,8 @@
 //      Cells will get the texture for there block ID
 // 
 // Bugs:
-// [ ] Falling sand doesnt draw on chunkborders or something
+// [ ] Falling sand doesnt draw on chunkborders
+// [ ] Huge memory leak with chunk multithreading
 //
 // Refactoring:
 // [ ] Cell.cpp doesnt do anything

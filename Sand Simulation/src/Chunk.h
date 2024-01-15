@@ -74,7 +74,6 @@ public:
 			return GetCellFromWorldPos(position);
 			break;
 		default:
-			return ParticleVoid;
 			break;
 		}
 	}
@@ -110,7 +109,7 @@ private:
 	inline Cell GetCellLocal(glm::ivec2 localPos)
 	{
 		if (localPos.x < 0 || localPos.x > chunkSizeInCells - 1 || localPos.y < 0 || localPos.y > chunkSizeInCells - 1)
-			return ParticleVoid;
+			return VOID;
 
 		int index = GetCellIndex(localPos.x, localPos.y);
 
@@ -146,7 +145,7 @@ private:
 	inline Cell GetCellFromWorldPos(glm::ivec2 worldPosition)
 	{
 		if (worldPosition.x < 0 || worldPosition.x > worldSizeInCells.x - 1 || worldPosition.y < 0 || worldPosition.y > worldSizeInCells.y - 1)
-			return ParticleVoid;
+			return VOID;
 
 		glm::ivec2 localPos = worldPosition - position;
 		int index = GetCellIndex(localPos.x, localPos.y);

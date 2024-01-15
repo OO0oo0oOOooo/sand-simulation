@@ -10,7 +10,7 @@ Chunk::Chunk(World* world, int x, int y)
 	{
 		for (int y = 0; y < chunkSizeInCells; y++)
 		{
-			ChunkData[GetCellIndex(x, y)] = ParticleAir;
+			ChunkData[GetCellIndex(x, y)] = AIR;
 		}
 	}
 
@@ -101,44 +101,55 @@ void Chunk::RecalculateBounds()
 std::map<int, int> LUT = {
 
 	//Sand-Air
-	{210, 1 },
-	{211, 1 },
-	{212, 1 },
+	{300, 1 },
+	{301, 1 },
+	{302, 1 },
 
 	//Sand-Water
-	{230, 1 },
-	{231, 1 },
-	{232, 1 },
+	{340, 1 },
+	{341, 1 },
+	{342, 1 },
 
 	// Water-Air
-	{310, 1 },
-	{311, 1 },
-	{312, 1 },
-	{313, 1 },
-	{314, 1 },
+	{400, 1 },
+	{401, 1 },
+	{402, 1 },
+	{403, 1 },
+	{404, 1 },
 };
 
 //#include <string>
 
-//std::map<std::string, std::string> LUT = {
-//	// Bottom, Middle, Top
-//
-//	// Sand
-//	{"111 121 111", "121 111 111"},
-//	{"121 121 111", "221 111 111"},
-//	{"221 121 111", "122 111 111"},
-//
-//	// Water
-//	{"111 131 111", "131 111 111"}
-//	{"111 131 111", "331 131 111"}
-//
-//};
+std::map<std::string, std::string> FULL_LUT = {
+	// bot, Middle, top
+	// Sand
+	{"000030000", "030000000"},
+	{"****3****", "030000000"},
 
-void SwapCells(Chunk* chunk, glm::ivec2 cellPosition, Cell Neighbour, glm::ivec2 neighbourPosition)
-{
-	chunk->SetCell(cellPosition, ParticleAir, WorldSpace);
-	chunk->world->GetChunkFromWorldPos(neighbourPosition)->SetCell(neighbourPosition, ParticleSand, WorldSpace);
-}
+	{"121 121 111", "221 111 111"},
+	{"221 121 111", "122 111 111"},
+
+	// Water
+	{"*** *3* *_*", "*** *_* *3*"},
+	{"*** *3* _3_", "*** *3* _3_"},
+
+};
+
+// Water Move Map
+// {0, 0, 0}
+// {1, *, 1}
+// {2, 3, 2}
+// 
+// Water should find the lowest point and flow down.
+// Iterate through the neighbours and move toward the highest score available.
+// 
+// Can Move through
+// AIR
+
+// Water Interaction Map
+// {WATER + FIRE, STEAM}
+// {WATER + LAVA, ROCK}
+
 
 void Chunk::UpdateActive()
 {
@@ -152,6 +163,37 @@ void Chunk::UpdateActive()
 
 	for (int y = 0; y < bounds.size.y; y++)
 	{
+		for (int x = 0; x < bounds.size.x; x++)
+		{
+			glm::ivec2 boundsPosition = bounds.position + glm::ivec2(x, y);
+			Cell cell = GetCell(boundsPosition, LocalSpace);
+			glm::ivec2 cellPosition = cell.position;
+			bool shouldBreak = false;
+
+			unsigned char key[] = {
+				{0},{0},{0},
+
+				{0},{0},{0},
+
+				{0},{0},{0},
+			};
+
+			for (int j = 0; j < 9; j++)
+			{
+				glm::ivec2 neighbourPosition = cellPosition + NeighbourTable2[j];
+				Cell neighbour = world->GetChunkFromWorldPos(neighbourPosition)->GetCell(neighbourPosition, WorldSpace);
+
+				key[j] = neighbour.Id;
+			}
+
+			std::cout << "\n" << (int)key[0] << (int)key[1] << (int)key[2] << "\n" << (int)key[3] << (int)key[4] << (int)key[5] << "\n" << (int)key[6] << (int)key[7] << (int)key[8] << std::endl;
+
+			ActiveCells.erase(std::remove(ActiveCells.begin(), ActiveCells.end(), cellPosition - position), ActiveCells.end());
+		}
+	}
+
+	/*for (int y = 0; y < bounds.size.y; y++)
+	{
 		bool alternate = (y % 2 == 0);
 		int startX = alternate ? 0 : bounds.size.x - 1;
 		int endX = alternate ? bounds.size.x : -1;
@@ -162,10 +204,6 @@ void Chunk::UpdateActive()
 			glm::ivec2 boundsPosition = bounds.position + glm::ivec2(x, y);
 			Cell cell = GetCell(boundsPosition, LocalSpace);
 			glm::ivec2 cellPosition = cell.position;
-
-			//ParticleUpdate(this, cell, cellPosition);
-			// SwapCells(this, cellPosition, neighbour, neighbourPosition);
-
 			bool shouldBreak = false;
 
 			for (int j = 0; j < 8; j++)
@@ -207,60 +245,50 @@ void Chunk::UpdateActive()
 
 				if(shouldBreak)
 					break;
-
-				/*if (neighbour.Id == ParticleAir.Id)
-				{
-					Cell particle = ParticleSand;
-
-					chunk->SetCell(cellPosition, ParticleAir, WorldSpace);
-					chunk->world->GetChunkFromWorldPos(neighbourPosition)->SetCell(neighbourPosition, particle, WorldSpace);
-
-					break;
-				}*/
 			}
 
 			ActiveCells.erase(std::remove(ActiveCells.begin(), ActiveCells.end(), cellPosition - position), ActiveCells.end());
 		}
-	}
+	}*/
 }
 
 
 
 /*if (cell.Id == ParticleSand.Id)
-			{
-				for (int j = 0; j <= 2; j++)
-				{
-					glm::ivec2 neighbourPosition = cellPosition + NeighbourTable[j];
-					Cell neighbour = world->GetChunkFromWorldPos(neighbourPosition)->GetCell(neighbourPosition, WorldSpace);
+{
+	for (int j = 0; j <= 2; j++)
+	{
+		glm::ivec2 neighbourPosition = cellPosition + NeighbourTable[j];
+		Cell neighbour = world->GetChunkFromWorldPos(neighbourPosition)->GetCell(neighbourPosition, WorldSpace);
 
-					if (neighbour.Id == ParticleAir.Id)
-					{
-						Cell particle = ParticleSand;
+		if (neighbour.Id == ParticleAir.Id)
+		{
+			Cell particle = ParticleSand;
 
-						SetCell(cell.position, ParticleAir, WorldSpace);
-						world->GetChunkFromWorldPos(neighbourPosition)->SetCell(neighbourPosition, particle, WorldSpace);
+			SetCell(cell.position, ParticleAir, WorldSpace);
+			world->GetChunkFromWorldPos(neighbourPosition)->SetCell(neighbourPosition, particle, WorldSpace);
 
-						break;
-					}
-				}
-			}
+			break;
+		}
+	}
+}
 
-			else if (cell.Id == ParticleWater.Id)
-			{
-				for (int j = 0; j <= 4; j++)
-				{
+else if (cell.Id == ParticleWater.Id)
+{
+	for (int j = 0; j <= 4; j++)
+	{
 
-					glm::ivec2 neighbourPosition = cellPosition + NeighbourTable[j];
-					Cell neighbour = world->GetChunkFromWorldPos(neighbourPosition)->GetCell(neighbourPosition, WorldSpace);
+		glm::ivec2 neighbourPosition = cellPosition + NeighbourTable[j];
+		Cell neighbour = world->GetChunkFromWorldPos(neighbourPosition)->GetCell(neighbourPosition, WorldSpace);
 
-					if (neighbour.Id == ParticleAir.Id)
-					{
-						Cell particle = ParticleWater;
+		if (neighbour.Id == ParticleAir.Id)
+		{
+			Cell particle = ParticleWater;
 
-						SetCell(cell.position, ParticleAir, WorldSpace);
-						world->GetChunkFromWorldPos(neighbourPosition)->SetCell(neighbourPosition, particle, WorldSpace);
+			SetCell(cell.position, ParticleAir, WorldSpace);
+			world->GetChunkFromWorldPos(neighbourPosition)->SetCell(neighbourPosition, particle, WorldSpace);
 
-						break;
-					}
-				}
-			}*/
+			break;
+		}
+	}
+}*/
