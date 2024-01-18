@@ -126,8 +126,8 @@ std::map<std::string, std::string> FULL_LUT = {
 	{"000030000", "030000000"},
 	{"****3****", "030000000"},
 
-	{"121 121 111", "221 111 111"},
-	{"221 121 111", "122 111 111"},
+	{"121 121 111", 1},
+	{"221 121 111", 1},
 
 	// Water
 	{"*** *3* *_*", "*** *_* *3*"},
@@ -185,6 +185,8 @@ void Chunk::UpdateActive()
 
 				key[j] = neighbour.Id;
 			}
+
+
 
 			std::cout << "\n" << (int)key[0] << (int)key[1] << (int)key[2] << "\n" << (int)key[3] << (int)key[4] << (int)key[5] << "\n" << (int)key[6] << (int)key[7] << (int)key[8] << std::endl;
 
