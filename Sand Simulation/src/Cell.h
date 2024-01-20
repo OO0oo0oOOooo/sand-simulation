@@ -41,6 +41,16 @@ const Cell LAVA =		{ 5, { 0.9f, 0.2f, 0.2f, 1.0f } };
 //const Cell LEAVES =	{ , { 0.1f, 0.5f, 0.1f, 1.0f } };
 //const Cell STEM =		{ , { 0.3f, 0.6f, 0.3f, 1.0f } };
 
+const Cell CellTable[] = {
+	AIR,
+	STONE,
+	DIRT,
+	SAND,
+	WATER,
+	LAVA,
+	VOID,
+};
+
 const glm::ivec2 NeighbourTable[8] = {
 	glm::ivec2( 0, -1), // Bot
 	glm::ivec2(-1, -1), // Bot Left

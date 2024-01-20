@@ -116,24 +116,81 @@ std::map<int, int> LUT = {
 	{402, 1 },
 	{403, 1 },
 	{404, 1 },
+
+	// Water-Lava
+	{451, 2},
+	{453, 2},
+	{455, 2},
+	{457, 2},
+
+
+};
+
+std::map<int, int> LUT2 = {
+
+	//Sand-Air
+	{300, 030 },
+	{301, 031 },
+	{302, 032 },
+
+	//Sand-Water
+	{340, 430 },
+	{341, 431 },
+	{342, 432 },
+
+	// Water-Air
+	{400, 040 },
+	{401, 041 },
+	{402, 042 },
+	{403, 043 },
+	{404, 044 },
+
+	// Water-Lava
+	{451, 011},
+	{453, 013},
+	{455, 015},
+	{457, 017},
+
+	//Lava-Air
+	{500, 050},
+	{501, 051},
+	{502, 052},
+	{503, 053},
+	{504, 054},
 };
 
 //#include <string>
-
-std::map<std::string, std::string> FULL_LUT = {
-	// bot, Middle, top
-	// Sand
-	{"000030000", "030000000"},
-	{"****3****", "030000000"},
-
-	{"121 121 111", 1},
-	{"221 121 111", 1},
-
-	// Water
-	{"*** *3* *_*", "*** *_* *3*"},
-	{"*** *3* _3_", "*** *3* _3_"},
-
-};
+//
+//std::map<std::string, std::string> FULL_LUT = {
+//
+//	// bot, Middle, top
+//	// Sand
+//	{"000030000", "030000000"},
+//	{"****3****", "030000000"},
+//
+//	//{"121 121 111", 1},
+//	//{"221 121 111", 1},
+//
+//	// Water
+//	{"*** *3* *_*", "*** *_* *3*"},
+//	{"*** *3* _3_", "*** *3* _3_"},
+//
+//};
+//
+//std::map<std::string, std::string> Water_LUT = {
+//
+//	{"000 040 000", "000 000 000"}, // Default State
+//
+//	// Water-Lava = Stone
+//	{"000 040 050", "000 000 010"},
+//	{"000 045 000", "000 001 000"},
+//	{"000 540 000", "000 100 000"},
+//	{"050 040 000", "010 000 000"},
+//
+//	// The issue with this is that if i have anyting but an air cell in the key it will not work.
+//
+//	// I need to find a way that will just look at the interacting cells and not the whole map. modify it then return it
+//};
 
 // Water Move Map
 // {0, 0, 0}
@@ -149,6 +206,8 @@ std::map<std::string, std::string> FULL_LUT = {
 // Water Interaction Map
 // {WATER + FIRE, STEAM}
 // {WATER + LAVA, ROCK}
+
+
 
 
 void Chunk::UpdateActive()
@@ -170,7 +229,65 @@ void Chunk::UpdateActive()
 			glm::ivec2 cellPosition = cell.position;
 			bool shouldBreak = false;
 
-			unsigned char key[] = {
+			for (int j = 0; j < 8; j++)
+			{
+				glm::ivec2 neighbourPosition = cellPosition + NeighbourTable[j];
+				Cell neighbour = world->GetChunkFromWorldPos(neighbourPosition)->GetCell(neighbourPosition, WorldSpace);
+
+				int key = cell.Id * 100 + neighbour.Id * 10 + j;
+				auto it = LUT2.find(key);
+
+				if (it != LUT2.end())
+				{
+					int result = LUT2[key];
+
+					int newCellId = result / 100;
+					int newNeighbourId = (result / 10) % 10;
+					int newNeighbourIndex = result % 10;
+
+					//Cell newCell = Cell(newCellId, cell.position);
+					//Cell newNeighbour = Cell(newNeighbourId, neighbour.position);
+
+					SetCell(neighbourPosition, CellTable[newNeighbourId], WorldSpace);
+					world->GetChunkFromWorldPos(neighbourPosition)->SetCell(neighbourPosition, cell, WorldSpace);
+
+					shouldBreak = true;
+					break;
+				}
+
+				/*if (it != LUT.end())
+				{
+					switch (LUT[key])
+					{
+					case 0:
+						std::cout << "No Result" << std::endl;
+						break;
+
+					case 1:
+					{
+						SetCell(cellPosition, neighbour, WorldSpace);
+						world->GetChunkFromWorldPos(neighbourPosition)->SetCell(neighbourPosition, cell, WorldSpace);
+						shouldBreak = true;
+						break;
+					}
+
+					case 2:
+					{
+						std::cout << "Cell Reaction" << std::endl;
+						shouldBreak = true;
+						return;
+					}
+
+					default:
+						break;
+					}
+				}*/
+
+				if (shouldBreak)
+					break;
+			}
+
+			/*unsigned char key[] = {
 				{0},{0},{0},
 
 				{0},{0},{0},
@@ -184,11 +301,9 @@ void Chunk::UpdateActive()
 				Cell neighbour = world->GetChunkFromWorldPos(neighbourPosition)->GetCell(neighbourPosition, WorldSpace);
 
 				key[j] = neighbour.Id;
-			}
+			}*/
 
-
-
-			std::cout << "\n" << (int)key[0] << (int)key[1] << (int)key[2] << "\n" << (int)key[3] << (int)key[4] << (int)key[5] << "\n" << (int)key[6] << (int)key[7] << (int)key[8] << std::endl;
+			//std::cout << "\n" << (int)key[0] << (int)key[1] << (int)key[2] << "\n" << (int)key[3] << (int)key[4] << (int)key[5] << "\n" << (int)key[6] << (int)key[7] << (int)key[8] << std::endl;
 
 			ActiveCells.erase(std::remove(ActiveCells.begin(), ActiveCells.end(), cellPosition - position), ActiveCells.end());
 		}
