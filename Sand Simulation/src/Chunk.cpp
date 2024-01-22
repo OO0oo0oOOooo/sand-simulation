@@ -80,135 +80,131 @@ void Chunk::RecalculateBounds()
 	bounds.position = bounds.min;
 }
 
+//std::map<int, int> LUT = {
+//
+//	//Sand-Air
+//	{300, 1 },
+//	{301, 1 },
+//	{302, 1 },
+//
+//	//Sand-Water
+//	{340, 1 },
+//	{341, 1 },
+//	{342, 1 },
+//
+//	// Water-Air
+//	{400, 1 },
+//	{401, 1 },
+//	{402, 1 },
+//	{403, 1 },
+//	{404, 1 },
+//
+//	// Water-Lava
+//	{451, 2},
+//	{453, 2},
+//	{455, 2},
+//	{457, 2},
+//
+//
+//};
 
-// Cell Ids
-// 1 = Air
-// 2 = Sand
-// 3 = Water
+#include <string>
 
-// Neighbor Index
-// 0 = Bot
-// 1 = Bot Left
-// 2 = Bot Right
-// 3 = Left
-// 4 = Right
-// 5 = Top
-// 6 = Top Left
-// 7 = Top Right
-
-// Particle ID | Neighbor Index | Neighbor ID
-
-std::map<int, int> LUT = {
-
-	//Sand-Air
-	{300, 1 },
-	{301, 1 },
-	{302, 1 },
-
-	//Sand-Water
-	{340, 1 },
-	{341, 1 },
-	{342, 1 },
-
-	// Water-Air
-	{400, 1 },
-	{401, 1 },
-	{402, 1 },
-	{403, 1 },
-	{404, 1 },
-
-	// Water-Lava
-	{451, 2},
-	{453, 2},
-	{455, 2},
-	{457, 2},
-
-
-};
-
-std::map<int, int> LUT2 = {
+std::map<std::string, std::string> LUT2 = {
 
 	//Sand-Air
-	{300, 030 },
-	{301, 031 },
-	{302, 032 },
+	{"300", "030"},
+	{"301", "031"},
+	{"302", "032"},
 
 	//Sand-Water
-	{340, 430 },
-	{341, 431 },
-	{342, 432 },
+	{"340", "430"},
+	{"341", "431"},
+	{"342", "432"},
 
 	// Water-Air
-	{400, 040 },
-	{401, 041 },
-	{402, 042 },
-	{403, 043 },
-	{404, 044 },
+	{"400", "040"},
+	{"401", "041"},
+	{"402", "042"},
+	{"403", "043"},
+	{"404", "044"},
 
 	// Water-Lava
-	{451, 011},
-	{453, 013},
-	{455, 015},
-	{457, 017},
+	{"451", "011"},
+	{"453", "013"},
+	{"455", "015"},
+	{"457", "017"},
 
 	//Lava-Air
-	{500, 050},
-	{501, 051},
-	{502, 052},
-	{503, 053},
-	{504, 054},
+	{"500", "050"},
+	{"501", "051"},
+	{"502", "052"},
+	{"503", "053"},
+	{"504", "054"},
 };
 
-//#include <string>
-//
-//std::map<std::string, std::string> FULL_LUT = {
-//
-//	// bot, Middle, top
-//	// Sand
-//	{"000030000", "030000000"},
-//	{"****3****", "030000000"},
-//
-//	//{"121 121 111", 1},
-//	//{"221 121 111", 1},
-//
-//	// Water
-//	{"*** *3* *_*", "*** *_* *3*"},
-//	{"*** *3* _3_", "*** *3* _3_"},
-//
+// Function that takes the center cell and returns the interaction map
+
+int SandAir[] = { 0, 3 };
+int SandWater[] = { 4, 3 };
+
+int WaterAir[] = { 0, 4 };
+int WaterLava[] = { 0, 1 };
+
+int LavaAir[] = { 0, 5 };
+int LavaWater[] = { 1, 0 };
+
+std::map<char, std::map<char, std::map<int, int*>>> LUT3 = {
+	{'3', {
+		{'0', {
+			{0, SandAir},
+			{1, SandAir},
+			{2, SandAir},
+		}},
+
+		{'4', {
+			{0, SandWater},
+			{1, SandWater},
+			{3, SandWater},
+			{5, SandWater},
+			{7, SandWater},
+		}},
+	}},
+
+	{'4', {
+		{'0', {
+			{0, WaterAir},
+			{1, WaterAir},
+			{2, WaterAir},
+			{3, WaterAir},
+			{4, WaterAir},
+		}},
+	}},
+
+	{'5', {
+		{'0', {
+			{0, LavaAir},
+			{3, LavaAir},
+			{4, LavaAir},
+		}},
+	}},
+};
+
+//std::map<int, int*> SAND_AIR_LUT = {
+//	{0, SandAir},
+//	{1, SandAir},
+//	{2, SandAir},
 //};
 //
-//std::map<std::string, std::string> Water_LUT = {
-//
-//	{"000 040 000", "000 000 000"}, // Default State
-//
-//	// Water-Lava = Stone
-//	{"000 040 050", "000 000 010"},
-//	{"000 045 000", "000 001 000"},
-//	{"000 540 000", "000 100 000"},
-//	{"050 040 000", "010 000 000"},
-//
-//	// The issue with this is that if i have anyting but an air cell in the key it will not work.
-//
-//	// I need to find a way that will just look at the interacting cells and not the whole map. modify it then return it
+//std::map<char, std::map<int, int*>> SAND_LUT = {
+//	{'0', SAND_AIR_LUT},
 //};
-
-// Water Move Map
-// {0, 0, 0}
-// {1, *, 1}
-// {2, 3, 2}
-// 
-// Water should find the lowest point and flow down.
-// Iterate through the neighbours and move toward the highest score available.
-// 
-// Can Move through
-// AIR
-
-// Water Interaction Map
-// {WATER + FIRE, STEAM}
-// {WATER + LAVA, ROCK}
-
-
-
+//
+//std::map<char, std::map<char, std::map<int, int*>>> LUT3 = {
+//	{'3', SAND_LUT},
+//	//{'4', WATER_LUT},
+//	//{'5', LAVA_LUT},
+//};
 
 void Chunk::UpdateActive()
 {
@@ -234,31 +230,189 @@ void Chunk::UpdateActive()
 				glm::ivec2 neighbourPosition = cellPosition + NeighbourTable[j];
 				Cell neighbour = world->GetChunkFromWorldPos(neighbourPosition)->GetCell(neighbourPosition, WorldSpace);
 
-				int key = cell.Id * 100 + neighbour.Id * 10 + j;
-				auto it = LUT2.find(key);
+				auto it1 = LUT3.find(cell.Id);
+				if (it1 != LUT3.end()) {
 
-				if (it != LUT2.end())
-				{
-					int result = LUT2[key];
+					std::cout << "Found it1" << std::endl;
+					auto it2 = it1->second.find(neighbour.Id);
+					if (it2 != it1->second.end()) {
 
-					int newCellId = result / 100;
-					int newNeighbourId = (result / 10) % 10;
-					int newNeighbourIndex = result % 10;
+						std::cout << "Found it2" << std::endl;
+						auto it3 = it2->second.find(j);
+						if (it3 != it2->second.end()) {
 
-					//Cell newCell = Cell(newCellId, cell.position);
-					//Cell newNeighbour = Cell(newNeighbourId, neighbour.position);
+							std::cout << "Found it3" << std::endl;
 
-					SetCell(neighbourPosition, CellTable[newNeighbourId], WorldSpace);
-					world->GetChunkFromWorldPos(neighbourPosition)->SetCell(neighbourPosition, cell, WorldSpace);
+							int* res = it3->second;
+							std::cout << res[0] << res[1] << std::endl;
 
-					shouldBreak = true;
-					break;
+							SetCell(cellPosition, CellTable[res[0]], WorldSpace);
+							world->GetChunkFromWorldPos(neighbourPosition)->SetCell(neighbourPosition, CellTable[res[1]], WorldSpace);
+
+							shouldBreak = true;
+							break;
+
+						}
+					}
 				}
 
-				/*if (it != LUT.end())
+				//auto it = LUT3[cell.Id][neighbour.Id].find(j);
+				//
+				//if (it != LUT3[cell.Id][neighbour.Id].end())
+				//{
+				//	int* res = it->second;
+				//	std::cout << res[0] << std::endl;
+				//
+				//	//SetCell(cellPosition, CellTable[res[0]], WorldSpace);
+				//	//world->GetChunkFromWorldPos(neighbourPosition)->SetCell(neighbourPosition, CellTable[res[1]], WorldSpace);
+				//
+				//	shouldBreak = true;
+				//	break;
+				//}
+				//else
+				//{
+				//	std::cout << "No Result" << std::endl;
+				//}
+
+				if (shouldBreak)
+					break;
+			}
+
+			ActiveCells.erase(std::remove(ActiveCells.begin(), ActiveCells.end(), cellPosition - position), ActiveCells.end());
+		}
+	}
+}
+
+//std::map<std::string, std::string> Water_LUT = {
+//
+//	{"000 040 000", "000 000 000"}, // Default State
+//
+//	// Water-Lava = Stone
+//	{"000 040 050", "000 000 010"},
+//	{"000 045 000", "000 001 000"},
+//	{"000 540 000", "000 100 000"},
+//	{"050 040 000", "010 000 000"},
+//
+//	// The issue with this is that if i have anyting but an air cell in the key it will not work.
+//
+//	// I need to find a way that will just look at the interacting cells and not the whole map. modify it then return it
+//};
+
+//std::map<char, std::map<char, std::map<int, int*>>> LUT3 = {
+//	{'3', {
+//		{'0', {
+//			{0, new int[2]{0, 3}},
+//			{2, new int[2]{0, 3}},
+//			{1, new int[2]{0, 3}},
+//		}},
+//	}},
+//};
+
+/*std::string key;
+key = std::to_string(cell.Id) + std::to_string(neighbour.Id) + std::to_string(j);
+
+auto it = LUT2.find(key);
+if (it != LUT2.end())
+{
+	std::string s = it->second;
+
+	int id = s[0] - '0';
+	int neighbourId = s[1] - '0';
+	int index = s[2] - '0';
+
+	SetCell(cellPosition, CellTable[id], WorldSpace);
+	world->GetChunkFromWorldPos(neighbourPosition)->SetCell(neighbourPosition, CellTable[neighbourId], WorldSpace);
+
+	shouldBreak = true;
+	break;
+}*/
+
+// Water Move Map
+// {0, 0, 0}
+// {1, *, 1}
+// {2, 3, 2}
+// 
+// Water should find the lowest point and flow down.
+// Iterate through the neighbours and move toward the highest score available.
+// 
+// Can Move through
+// AIR
+//
+// Water Interaction Map
+// {WATER + FIRE, STEAM}
+// {WATER + LAVA, ROCK}
+
+/*if (it != LUT.end())
+{
+	switch (LUT[key])
+	{
+	case 0:
+		std::cout << "No Result" << std::endl;
+		break;
+
+	case 1:
+	{
+		SetCell(cellPosition, neighbour, WorldSpace);
+		world->GetChunkFromWorldPos(neighbourPosition)->SetCell(neighbourPosition, cell, WorldSpace);
+		shouldBreak = true;
+		break;
+	}
+
+	case 2:
+	{
+		std::cout << "Cell Reaction" << std::endl;
+		shouldBreak = true;
+		return;
+	}
+
+	default:
+		break;
+	}
+}*/
+
+/*unsigned char key[] = {
+	{0},{0},{0},
+
+	{0},{0},{0},
+
+	{0},{0},{0},
+};
+
+for (int j = 0; j < 9; j++)
+{
+	glm::ivec2 neighbourPosition = cellPosition + NeighbourTable2[j];
+	Cell neighbour = world->GetChunkFromWorldPos(neighbourPosition)->GetCell(neighbourPosition, WorldSpace);
+
+	key[j] = neighbour.Id;
+}*/
+
+/*for (int y = 0; y < bounds.size.y; y++)
+{
+	bool alternate = (y % 2 == 0);
+	int startX = alternate ? 0 : bounds.size.x - 1;
+	int endX = alternate ? bounds.size.x : -1;
+	int stepX = alternate ? 1 : -1;
+
+	for (int x = startX; x != endX; x += stepX)
+	{
+		glm::ivec2 boundsPosition = bounds.position + glm::ivec2(x, y);
+		Cell cell = GetCell(boundsPosition, LocalSpace);
+		glm::ivec2 cellPosition = cell.position;
+		bool shouldBreak = false;
+
+		for (int j = 0; j < 8; j++)
+		{
+			glm::ivec2 neighbourPosition = cellPosition + NeighbourTable[j];
+			Cell neighbour = world->GetChunkFromWorldPos(neighbourPosition)->GetCell(neighbourPosition, WorldSpace);
+
+			int key = cell.Id * 100 + neighbour.Id * 10 + j;
+
+			auto it = LUT.find(key);
+
+			if (it != LUT.end())
+			{
+				switch (LUT[key])
 				{
-					switch (LUT[key])
-					{
 					case 0:
 						std::cout << "No Result" << std::endl;
 						break;
@@ -280,96 +434,16 @@ void Chunk::UpdateActive()
 
 					default:
 						break;
-					}
-				}*/
-
-				if (shouldBreak)
-					break;
-			}
-
-			/*unsigned char key[] = {
-				{0},{0},{0},
-
-				{0},{0},{0},
-
-				{0},{0},{0},
-			};
-
-			for (int j = 0; j < 9; j++)
-			{
-				glm::ivec2 neighbourPosition = cellPosition + NeighbourTable2[j];
-				Cell neighbour = world->GetChunkFromWorldPos(neighbourPosition)->GetCell(neighbourPosition, WorldSpace);
-
-				key[j] = neighbour.Id;
-			}*/
-
-			//std::cout << "\n" << (int)key[0] << (int)key[1] << (int)key[2] << "\n" << (int)key[3] << (int)key[4] << (int)key[5] << "\n" << (int)key[6] << (int)key[7] << (int)key[8] << std::endl;
-
-			ActiveCells.erase(std::remove(ActiveCells.begin(), ActiveCells.end(), cellPosition - position), ActiveCells.end());
-		}
-	}
-
-	/*for (int y = 0; y < bounds.size.y; y++)
-	{
-		bool alternate = (y % 2 == 0);
-		int startX = alternate ? 0 : bounds.size.x - 1;
-		int endX = alternate ? bounds.size.x : -1;
-		int stepX = alternate ? 1 : -1;
-
-		for (int x = startX; x != endX; x += stepX)
-		{
-			glm::ivec2 boundsPosition = bounds.position + glm::ivec2(x, y);
-			Cell cell = GetCell(boundsPosition, LocalSpace);
-			glm::ivec2 cellPosition = cell.position;
-			bool shouldBreak = false;
-
-			for (int j = 0; j < 8; j++)
-			{
-				glm::ivec2 neighbourPosition = cellPosition + NeighbourTable[j];
-				Cell neighbour = world->GetChunkFromWorldPos(neighbourPosition)->GetCell(neighbourPosition, WorldSpace);
-
-				int key = cell.Id * 100 + neighbour.Id * 10 + j;
-
-				auto it = LUT.find(key);
-
-				if (it != LUT.end()) 
-				{ 
-					switch (LUT[key])
-					{
-						case 0:
-							std::cout << "No Result" << std::endl;
-							break;
-
-						case 1:
-						{
-							SetCell(cellPosition, neighbour, WorldSpace);
-							world->GetChunkFromWorldPos(neighbourPosition)->SetCell(neighbourPosition, cell, WorldSpace);
-							shouldBreak = true;
-							break;
-						}
-
-						case 2:
-						{
-							std::cout << "Cell Reaction" << std::endl;
-							shouldBreak = true;
-							return;
-						}
-
-						default:
-							break;
-					}
 				}
-
-				if(shouldBreak)
-					break;
 			}
 
-			ActiveCells.erase(std::remove(ActiveCells.begin(), ActiveCells.end(), cellPosition - position), ActiveCells.end());
+			if(shouldBreak)
+				break;
 		}
-	}*/
-}
 
-
+		ActiveCells.erase(std::remove(ActiveCells.begin(), ActiveCells.end(), cellPosition - position), ActiveCells.end());
+	}
+}*/
 
 /*if (cell.Id == ParticleSand.Id)
 {

@@ -28,17 +28,27 @@ namespace Brush
 
 		if (Input::IsKeyPressed(GLFW_KEY_1))
 		{
-			selectedParticle = SAND;
+			selectedParticle = STONE;
 		}
 
 		if (Input::IsKeyPressed(GLFW_KEY_2))
 		{
-			selectedParticle = WATER;
+			selectedParticle = DIRT;
 		}
 
 		if (Input::IsKeyPressed(GLFW_KEY_3))
 		{
-			selectedParticle = STONE;
+			selectedParticle = SAND;
+		}
+
+		if (Input::IsKeyPressed(GLFW_KEY_4))
+		{
+			selectedParticle = WATER;
+		}
+
+		if (Input::IsKeyPressed(GLFW_KEY_5))
+		{
+			selectedParticle = LAVA;
 		}
 	}
 }

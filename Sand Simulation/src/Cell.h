@@ -48,7 +48,6 @@ const Cell CellTable[] = {
 	SAND,
 	WATER,
 	LAVA,
-	VOID,
 };
 
 const glm::ivec2 NeighbourTable[8] = {
