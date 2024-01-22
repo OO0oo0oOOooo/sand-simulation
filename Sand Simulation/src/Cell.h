@@ -1,6 +1,7 @@
 #pragma once
 
 #include <glm/glm.hpp>
+#include <map>
 
 struct Cell
 {
@@ -27,7 +28,7 @@ const Cell VOID =		{ 255, { 0.0f, 0.0f, 0.0f, 0.0f } };
 
 const Cell AIR =		{ 0, { 0.1f, 0.1f, 0.1f, 1.0f } };
 const Cell STONE =		{ 1, { 0.5f, 0.5f, 0.5f, 1.0f } };
-const Cell DIRT =		{ 2, { 0.5f, 0.5f, 0.5f, 1.0f } };
+const Cell DIRT =		{ 2, { 0.5f, 0.2f, 0.2f, 1.0f } };
 const Cell SAND =		{ 3, { 0.9f, 0.7f, 0.2f, 1.0f } };
 
 const Cell WATER =		{ 4, { 0.2f, 0.5f, 0.8f, 1.0f } };
@@ -59,20 +60,6 @@ const glm::ivec2 NeighbourTable[8] = {
 	glm::ivec2(-1,  1), // Top Left
 	glm::ivec2( 0,  1), // Top
 	glm::ivec2( 1,  1), // Top Right
-};
-
-const glm::ivec2 NeighbourTable2[9] = {
-	glm::ivec2(-1,  1), // Top Left
-	glm::ivec2(0,  1), // Top
-	glm::ivec2(1,  1), // Top Right
-
-	glm::ivec2(-1,  0), // Left
-	glm::ivec2(0, 0), // Center
-	glm::ivec2(1,  0), // Right
-
-	glm::ivec2(-1, -1), // Bot Left
-	glm::ivec2(0, -1), // Bot
-	glm::ivec2(1, -1), // Bot Right
 };
 
 const glm::vec3 vertexPositions[] = {

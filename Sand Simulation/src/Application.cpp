@@ -26,7 +26,7 @@
 // [ ] tick and late tick
 // 
 // Multitreading:
-// [ ] Thread Pool
+// [x] Thread Pool
 // [x] Multithreading Chunks in checkered pattern
 //      4 Updates per frame
 //      First I check if the chunk is dirty
@@ -39,26 +39,20 @@
 //
 // Optimizations:
 // [ ] Dirty Rect per chunk
-// [ ] Multithreading Chunks in checkered pattern
+// [x] Multithreading Chunks in checkered pattern
 // [ ] Instanced Rendering
 // [ ] Compute Shaders
 // [ ] Reduce size of buffer (Build Quads on gpu)
+// [ ] Dont draw air
 // 
 // World:
-// [ ] Interation Look up table
 // 
 // Chunks:
-// [ ] Each chunk has a dirty rect that will be updated
 // 
 // Dirty Rect:
 // [ ] Bounds
 // [ ] Update through every cell in the bounds
 // - If i want to add a cell to the dirty quad i just have to check if it is inside the bounds
-// 
-//
-// Reactions:
-// [ ] Wood + Fire = Fire
-// [ ] Water + Lava = Stone
 //
 // Effects:
 // [ ] Lighting
@@ -71,6 +65,7 @@
 // Bugs:
 // [ ] Falling sand doesnt draw on chunkborders
 // [ ] Huge memory leak with chunk multithreading
+// [ ] Water is weird and always flows left
 //
 // Refactoring:
 // [ ] Cell.cpp doesnt do anything

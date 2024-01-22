@@ -178,6 +178,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Brush.h" />
+    <ClInclude Include="src\CellInteractions.h" />
     <ClInclude Include="src\Chunk.h" />
     <ClInclude Include="src\ChunkData.h" />
     <ClInclude Include="src\IndexBuffer.h" />

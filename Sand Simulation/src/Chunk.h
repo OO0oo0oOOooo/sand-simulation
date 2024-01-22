@@ -9,7 +9,6 @@ class World;
 
 #include <vector>
 #include <iostream>
-#include <map>
 
 struct Bounds
 {
@@ -39,6 +38,34 @@ public:
 	void UpdateMesh()
 	{
 		mesh->UploadVBOData();
+	}
+
+	void DrawChunkBounds(Shader* shader)
+	{
+		if (bounds.size.x <= 0 || bounds.size.y <= 0)
+			return;
+
+		std::vector<Vertex> vertices = {
+			{{position.x + bounds.min.x, position.y + bounds.min.y, 0.2f}, {1.0, 0.2, 0.1, 1}},
+			{{position.x + bounds.max.x, position.y + bounds.min.y, 0.2f}, {1.0, 0.2, 0.1, 1}},
+			{{position.x + bounds.max.x, position.y + bounds.max.y, 0.2f}, {1.0, 0.2, 0.1, 1}},
+			{{position.x + bounds.min.x, position.y + bounds.max.y, 0.2f}, {1.0, 0.2, 0.1, 1}},
+		};
+
+		std::vector<unsigned int> indices = {
+			0, 1, // Bottom edge
+			1, 2, // Right edge
+			2, 3, // Top edge
+			3, 0  // Left edge
+		};
+
+		Mesh squareOutline;
+		squareOutline.vertices = vertices;
+		squareOutline.indices = indices;
+		squareOutline.UploadVBOData();
+		squareOutline.UploadIBOData();
+
+		squareOutline.DrawLine(shader);
 	}
 
 	inline int GetCellIndex(int x, int y)
@@ -103,6 +130,7 @@ public:
 	void UpdateActive();
 
 	World* world;
+
 private:
 	Mesh* mesh;
 
@@ -127,6 +155,16 @@ private:
 		ChunkData[index].position = position + localPos;
 		ChunkData[index].active = true;
 
+		// Update bounds
+		/*bounds.min.x = std::min(bounds.min.x, localPos.x);
+		bounds.min.y = std::min(bounds.min.y, localPos.y);
+		bounds.max.x = std::max(bounds.max.x, localPos.x);
+		bounds.max.y = std::max(bounds.max.y, localPos.y);
+
+		bounds.size = (bounds.max - bounds.min) + 1;
+		bounds.position = bounds.min;*/
+
+		// Maybe remove this
 		ActiveCells.push_back(localPos);
 
 		Vertex v[4];
@@ -165,6 +203,14 @@ private:
 		ChunkData[index] = cell;
 		ChunkData[index].position = worldPosition;
 		ChunkData[index].active = true;
+
+		/*bounds.min.x = std::min(bounds.min.x, localPos.x);
+		bounds.min.y = std::min(bounds.min.y, localPos.y);
+		bounds.max.x = std::max(bounds.max.x, localPos.x);
+		bounds.max.y = std::max(bounds.max.y, localPos.y);
+
+		bounds.size = (bounds.max - bounds.min) + 1;
+		bounds.position = bounds.min;*/
 
 		ActiveCells.push_back(localPos);
 

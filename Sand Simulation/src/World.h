@@ -20,7 +20,6 @@ public:
 	void UpdateChunks();
 	void UpdateCells(Chunk* chunk);
 
-
 	inline glm::ivec2 GetChunkFromPixelPos(glm::vec2 position)
 	{
 		//glm::vec2 adjustedChunkSize = glm::vec2(chunkSizeInCells * cellSize * aspectRatio.x, chunkSizeInCells * cellSize * aspectRatio.y);

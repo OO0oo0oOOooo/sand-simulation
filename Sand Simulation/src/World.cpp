@@ -135,6 +135,8 @@ void World::DrawChunkBorders(Shader* shader)
 			squareOutline.UploadIBOData();
 
 			squareOutline.DrawLine(shader);
+
+			chunks[glm::vec2(x, y)]->DrawChunkBounds(shader);
 		}
 	}
 }
