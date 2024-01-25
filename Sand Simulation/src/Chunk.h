@@ -156,13 +156,13 @@ private:
 		ChunkData[index].active = true;
 
 		// Update bounds
-		bounds.min.x = std::min(bounds.min.x, localPos.x);
+		/*bounds.min.x = std::min(bounds.min.x, localPos.x);
 		bounds.min.y = std::min(bounds.min.y, localPos.y);
 		bounds.max.x = std::max(bounds.max.x, localPos.x);
 		bounds.max.y = std::max(bounds.max.y, localPos.y);
 
 		bounds.size = (bounds.max - bounds.min) + 1;
-		bounds.position = bounds.min;
+		bounds.position = bounds.min;*/
 
 		// Maybe remove this
 		ActiveCells.push_back(localPos);
@@ -204,13 +204,13 @@ private:
 		ChunkData[index].position = worldPosition;
 		ChunkData[index].active = true;
 
-		bounds.min.x = std::min(bounds.min.x, localPos.x);
+		/*bounds.min.x = std::min(bounds.min.x, localPos.x);
 		bounds.min.y = std::min(bounds.min.y, localPos.y);
 		bounds.max.x = std::max(bounds.max.x, localPos.x);
 		bounds.max.y = std::max(bounds.max.y, localPos.y);
 
 		bounds.size = (bounds.max - bounds.min) + 1;
-		bounds.position = bounds.min;
+		bounds.position = bounds.min;*/
 
 		ActiveCells.push_back(localPos);
 

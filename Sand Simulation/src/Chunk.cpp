@@ -87,7 +87,7 @@ void Chunk::UpdateActive()
 	if (ActiveCells.size() <= 0)
 		return;
 
-	//RecalculateBounds();
+	RecalculateBounds();
 
 	if (bounds.size.x <= 0 || bounds.size.y <= 0)
 		return;
