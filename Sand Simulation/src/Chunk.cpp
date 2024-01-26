@@ -17,7 +17,7 @@ Chunk::Chunk(World* world, int x, int y)
 	}
 
 	mesh = new Mesh();
-	CreateMesh();
+	//CreateMesh();
 }
 
 Chunk::~Chunk()
@@ -92,6 +92,8 @@ void Chunk::UpdateActive()
 	if (bounds.size.x <= 0 || bounds.size.y <= 0)
 		return;
 
+	//mesh->Clear();
+
 	for (int y = 0; y < bounds.size.y; y++)
 	{
 		for (int x = 0; x < bounds.size.x; x++)
@@ -114,7 +116,6 @@ void Chunk::UpdateActive()
 				if (it != LUT[id][neighbourId].end())
 				{
 					int* res = it->second;
-					std::cout << res[0] << res[1] << std::endl;
 
 					SetCell(cellPosition, CellTable[res[0]], WorldSpace);
 					world->GetChunkFromWorldPos(neighbourPosition)->SetCell(neighbourPosition, CellTable[res[1]], WorldSpace);
@@ -122,28 +123,6 @@ void Chunk::UpdateActive()
 					shouldBreak = true;
 					break;
 				}
-
-				/*auto it1 = LUT3.find(id);
-				if (it1 != LUT3.end()) {
-
-					auto it2 = it1->second.find(neighbourId);
-					if (it2 != it1->second.end()) {
-
-						auto it3 = it2->second.find(j);
-						if (it3 != it2->second.end()) {
-
-							int* res = it3->second;
-							std::cout << res[0] << res[1] << std::endl;
-
-							SetCell(cellPosition, CellTable[res[0]], WorldSpace);
-							world->GetChunkFromWorldPos(neighbourPosition)->SetCell(neighbourPosition, CellTable[res[1]], WorldSpace);
-
-							shouldBreak = true;
-							break;
-
-						}
-					}
-				}*/
 
 				if (shouldBreak)
 					break;

@@ -92,11 +92,9 @@ int main(void)
     ctpl::thread_pool* threadPool = new ctpl::thread_pool(4);
     Renderer* renderer = new Renderer(windowWidth, windowHeight);
     World* world = new World(threadPool);
-    world->Render(renderer->GetShader());
+    //world->Render(renderer->GetShader());
     
-
     Input::SetupKeyInputs(glwindow);
-
 
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -114,11 +112,9 @@ int main(void)
 
         glClear(GL_COLOR_BUFFER_BIT);
 
-        world->Update();
-        world->Render(renderer->GetShader());
+        world->Update(renderer->GetShader());
+        //world->Render(renderer->GetShader());
         world->DrawChunkBorders(renderer->GetShader());
-
-        
 
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();

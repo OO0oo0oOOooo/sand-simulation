@@ -16,7 +16,7 @@ public:
 	void Render(Shader* shader);
 	void DrawChunkBorders(Shader* shader);
 
-    void Update();
+    void Update(Shader* shader);
 	void UpdateChunks();
 	void UpdateCells(Chunk* chunk);
 

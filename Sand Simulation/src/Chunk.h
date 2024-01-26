@@ -35,12 +35,13 @@ public:
 	void CreateMesh();
 	void DrawMesh(Shader* shader);
 
-	void UpdateMesh()
+	void UploadMeshData()
 	{
 		mesh->UploadVBOData();
+		mesh->UploadIBOData();
 	}
 
-	void DrawChunkBounds(Shader* shader)
+	void DrawDirtyQuad(Shader* shader)
 	{
 		if (bounds.size.x <= 0 || bounds.size.y <= 0)
 			return;
@@ -153,6 +154,10 @@ private:
 
 		ChunkData[index] = cell;
 		ChunkData[index].position = position + localPos;
+
+		if (cell.Id == AIR.Id)
+			return;
+
 		ChunkData[index].active = true;
 
 		// Update bounds
@@ -167,13 +172,23 @@ private:
 		// Maybe remove this
 		ActiveCells.push_back(localPos);
 
+		int baseVertexIndex = index * 4;
+		//int baseIndexIndex = index * 6;
+
 		Vertex v[4];
 		for (int i = 0; i < 4; i++)
 		{
 			v[i].position = (glm::vec3(position + localPos, 0) + vertexPositions[i]) * (float)cellSize;
 			v[i].color = cell.color;
 
-			mesh->vertices[index * 4 + i] = v[i];
+			//mesh->vertices[baseVertexIndex + i] = v[i];
+			mesh->vertices.push_back(v[i]);
+		}
+
+		for (int i = 0; i < 6; i++)
+		{
+			//mesh->indices[baseIndexIndex + i] = meshTriangles[i] + baseVertexIndex;
+			mesh->indices.push_back(meshTriangles[i] + baseVertexIndex);
 		}
 
 		/*int baseVertexIndex = index * 4;
@@ -202,6 +217,10 @@ private:
 
 		ChunkData[index] = cell;
 		ChunkData[index].position = worldPosition;
+
+		if (cell.Id == AIR.Id)
+			return;
+
 		ChunkData[index].active = true;
 
 		/*bounds.min.x = std::min(bounds.min.x, localPos.x);
@@ -214,13 +233,23 @@ private:
 
 		ActiveCells.push_back(localPos);
 
+		int baseVertexIndex = index * 4;
+		//int baseIndexIndex = index * 6;
+
 		Vertex v[4];
 		for (int i = 0; i < 4; i++)
 		{
 			v[i].position = (glm::vec3(worldPosition, 0) + vertexPositions[i]) * (float)cellSize;
 			v[i].color = cell.color;
 
-			mesh->vertices[index * 4 + i] = v[i];
+			//mesh->vertices[baseVertexIndex + i] = v[i];
+			mesh->vertices.push_back(v[i]);
+		}
+
+		for (int i = 0; i < 6; i++)
+		{
+			//mesh->indices[baseIndexIndex + i] = meshTriangles[i] + baseVertexIndex;
+			mesh->indices.push_back(meshTriangles[i] + baseVertexIndex);
 		}
 
 		/*int baseVertexIndex = index * 4;
