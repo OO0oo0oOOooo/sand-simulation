@@ -130,9 +130,9 @@ public:
 	void UpdateActive();
 
 	World* world;
+	Mesh* mesh;
 
 private:
-	Mesh* mesh;
 
 	inline Cell GetCellLocal(glm::ivec2 localPos)
 	{

@@ -9,6 +9,8 @@ int WaterLava[] = { 0, 1 };
 
 int LavaAir[] = { 0, 5 };
 
+int STEAMAIR[] = { 0, 6 };
+
 std::map<int, std::map<int, std::map<int, int*>>> LUT = {
 	{3, {
 		{0, {
@@ -47,6 +49,14 @@ std::map<int, std::map<int, std::map<int, int*>>> LUT = {
 			{0, LavaAir},
 			{3, LavaAir},
 			{4, LavaAir},
+		}},
+	}},
+
+	{6, {
+		{0, {
+			{5, STEAMAIR},
+			{6, STEAMAIR},
+			{7, STEAMAIR},
 		}},
 	}},
 };

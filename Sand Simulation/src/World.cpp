@@ -100,6 +100,7 @@ void World::Update()
 		for (auto& f : futures)
 		{
 			f.first.get();
+			//f.second->mesh->Clear();
 			f.second->UpdateMesh();
 		}
 	}

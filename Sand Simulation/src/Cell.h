@@ -36,7 +36,7 @@ const Cell LAVA =		{ 5, { 0.9f, 0.2f, 0.2f, 1.0f } };
 
 //const Cell FIRE =		{ , { 0.9f, 0.2f, 0.2f, 1.0f } };
 //const Cell SMOKE =	{ , { 0.2f, 0.2f, 0.2f, 1.0f } };
-//const Cell STEAM =	{ , { 0.2f, 0.2f, 0.2f, 1.0f } };
+const Cell STEAM =		{ 6, { 0.2f, 0.2f, 0.2f, 1.0f } };
 //
 //const Cell LOG =		{ , { 0.4f, 0.2f, 0.1f, 1.0f } };
 //const Cell LEAVES =	{ , { 0.1f, 0.5f, 0.1f, 1.0f } };
@@ -49,6 +49,7 @@ const Cell CellTable[] = {
 	SAND,
 	WATER,
 	LAVA,
+	STEAM,
 };
 
 const glm::ivec2 NeighbourTable[8] = {
@@ -57,8 +58,8 @@ const glm::ivec2 NeighbourTable[8] = {
 	glm::ivec2( 1, -1), // Bot Right
 	glm::ivec2(-1,  0), // Left
 	glm::ivec2( 1,  0), // Right
-	glm::ivec2(-1,  1), // Top Left
 	glm::ivec2( 0,  1), // Top
+	glm::ivec2(-1,  1), // Top Left
 	glm::ivec2( 1,  1), // Top Right
 };
 

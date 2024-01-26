@@ -50,5 +50,10 @@ namespace Brush
 		{
 			selectedParticle = LAVA;
 		}
+
+		if (Input::IsKeyPressed(GLFW_KEY_6))
+		{
+			selectedParticle = STEAM;
+		}
 	}
 }
