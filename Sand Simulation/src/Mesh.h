@@ -37,9 +37,15 @@ public:
     {
         indices.clear();
         vertices.clear();
+	}
 
-        vb->UpdateData(vertices);
+    void ClearBuffers() noexcept
+    {
+        indices.clear();
+        vertices.clear();
+
         ib->UpdateData(indices);
+        vb->UpdateData(vertices);
 	}
 
     void UploadIBOData() noexcept

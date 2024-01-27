@@ -5,6 +5,9 @@ Renderer::Renderer(int windowWidth, int windowHeight)
     mesh = new Mesh();
     shader = new Shader();
 
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
     glm::mat4 proj = glm::ortho(0.0f, (float)windowWidth, 0.0f, (float)windowHeight, -1.0f, 1.0f);
     glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f));
     glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f));

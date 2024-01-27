@@ -17,7 +17,7 @@ Chunk::Chunk(World* world, int x, int y)
 	}
 
 	mesh = new Mesh();
-	//CreateMesh();
+	CreateMesh();
 }
 
 Chunk::~Chunk()

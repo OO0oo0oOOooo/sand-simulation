@@ -62,6 +62,7 @@ void World::Update(Shader* shader)
 
 					if (chunk != nullptr /*&& chunk->dirty*/)
 					{
+						//chunk->mesh->Clear();
 						futures.push_back(std::make_pair(threadPool->push(CellularAutomata, chunk), chunk));
 					}
 				}

@@ -173,26 +173,16 @@ private:
 		ActiveCells.push_back(localPos);
 
 		int baseVertexIndex = index * 4;
-		//int baseIndexIndex = index * 6;
 
-		Vertex v[4];
 		for (int i = 0; i < 4; i++)
 		{
-			v[i].position = (glm::vec3(position + localPos, 0) + vertexPositions[i]) * (float)cellSize;
-			v[i].color = cell.color;
+			Vertex v;
 
-			//mesh->vertices[baseVertexIndex + i] = v[i];
-			mesh->vertices.push_back(v[i]);
+			v.position = (glm::vec3(localPos, 0) + vertexPositions[i]) * (float)cellSize;
+			v.color = cell.color;
+
+			mesh->vertices[baseVertexIndex + i] = v;
 		}
-
-		for (int i = 0; i < 6; i++)
-		{
-			//mesh->indices[baseIndexIndex + i] = meshTriangles[i] + baseVertexIndex;
-			mesh->indices.push_back(meshTriangles[i] + baseVertexIndex);
-		}
-
-		/*int baseVertexIndex = index * 4;
-		mesh->UploadVBOSubData(v, 4 * sizeof(Vertex), baseVertexIndex * sizeof(Vertex));*/
 	}
 
 	inline Cell GetCellFromWorldPos(glm::ivec2 worldPosition)
@@ -218,41 +208,22 @@ private:
 		ChunkData[index] = cell;
 		ChunkData[index].position = worldPosition;
 
-		if (cell.Id == AIR.Id)
-			return;
-
-		ChunkData[index].active = true;
-
-		/*bounds.min.x = std::min(bounds.min.x, localPos.x);
-		bounds.min.y = std::min(bounds.min.y, localPos.y);
-		bounds.max.x = std::max(bounds.max.x, localPos.x);
-		bounds.max.y = std::max(bounds.max.y, localPos.y);
-
-		bounds.size = (bounds.max - bounds.min) + 1;
-		bounds.position = bounds.min;*/
-
-		ActiveCells.push_back(localPos);
+		if (cell.Id != AIR.Id)
+		{
+			ChunkData[index].active = true;
+			ActiveCells.push_back(localPos);
+		}
 
 		int baseVertexIndex = index * 4;
-		//int baseIndexIndex = index * 6;
 
-		Vertex v[4];
 		for (int i = 0; i < 4; i++)
 		{
-			v[i].position = (glm::vec3(worldPosition, 0) + vertexPositions[i]) * (float)cellSize;
-			v[i].color = cell.color;
+			Vertex v;
 
-			//mesh->vertices[baseVertexIndex + i] = v[i];
-			mesh->vertices.push_back(v[i]);
+			v.position = (glm::vec3(worldPosition, 0) + vertexPositions[i]) * (float)cellSize;
+			v.color = cell.color;
+
+			mesh->vertices[baseVertexIndex + i] = v;
 		}
-
-		for (int i = 0; i < 6; i++)
-		{
-			//mesh->indices[baseIndexIndex + i] = meshTriangles[i] + baseVertexIndex;
-			mesh->indices.push_back(meshTriangles[i] + baseVertexIndex);
-		}
-
-		/*int baseVertexIndex = index * 4;
-		mesh->UploadVBOSubData(v, 4 * sizeof(Vertex), baseVertexIndex * sizeof(Vertex));*/
 	}
 };
