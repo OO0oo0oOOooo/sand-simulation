@@ -42,7 +42,8 @@ World::~World()
 void CellularAutomata(int id, Chunk* chunk)
 {
 	//std::cout << "Thread: " << id << " || Chunk XY: " << chunk->position.x << ", " << chunk->position.y << std::endl;
-	chunk->UpdateActive();
+	//chunk->UpdateActive();
+	chunk->ComputeNextChunk();
 }
 
 void World::Update(Shader* shader)

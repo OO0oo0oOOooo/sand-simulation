@@ -82,8 +82,137 @@ void Chunk::RecalculateBounds()
 	bounds.position = bounds.min;
 }
 
+//void Chunk::ComputeNextChunk()
+//{
+//	std::vector<Cell> newChunkData = ChunkData;
+//
+//	for (int y = 0; y < chunkSizeInCells; y++)
+//	{
+//		for (int x = 0; x < chunkSizeInCells; x++)
+//		{
+//			int index = GetCellIndex(x, y);
+//			int belowIndex = GetCellIndex(x, y - 1);
+//
+//			if(index == -1 || belowIndex == -1)
+//				continue;
+//
+//			Cell cell = ChunkData[index];
+//			Cell belowCell = ChunkData[belowIndex];
+//
+//			if(cell.Id == AIR.Id)
+//				continue;
+//
+//			if (cell.Id == SAND.Id)
+//			{
+//				if (belowCell.Id == AIR.Id)
+//				{
+//					newChunkData[index] = belowCell;
+//					newChunkData[belowIndex] = cell;
+//
+//					int baseVertexIndex = index * 4;
+//					int baseVertexIndex2 = belowIndex * 4;
+//
+//					for (int i = 0; i < 4; i++)
+//					{
+//						Vertex v;
+//
+//						v.position = (glm::vec3(x + position.x, y + position.y , 0) + vertexPositions[i]) * (float)cellSize;
+//						v.color = cell.color;
+//
+//						mesh->vertices[baseVertexIndex + i] = v;
+//					}
+//
+//					for (int i = 0; i < 4; i++)
+//					{
+//						Vertex v;
+//
+//						v.position = (glm::vec3(x + position.x, (y - 1) + position.y, 0) + vertexPositions[i]) * (float)cellSize;
+//						v.color = cell.color;
+//
+//						mesh->vertices[baseVertexIndex2 + i] = v;
+//					}
+//				}
+//			}
+//		}
+//	}
+//
+//	ChunkData = newChunkData;
+//}
+
+// Requirements
+// Update cells within the bounds
+// Update across borders
+// Dont Update the same cell twice or Double buffer
+
+void Chunk::ComputeNextChunk()
+{
+	std::vector<Cell> newChunkData = ChunkData;
+
+	for (int y = 0; y < chunkSizeInCells; y++)
+	{
+		for (int x = 0; x < chunkSizeInCells; x++)
+		{
+			int index = GetCellIndex(x, y);
+			int belowIndex = GetCellIndex(x, y - 1);
+
+			if (index == -1 || belowIndex == -1)
+				continue;
+
+			Cell cell = ChunkData[index];
+			Cell belowCell = ChunkData[belowIndex];
+
+			if (cell.Id == AIR.Id)
+				continue;
+
+			if (cell.Id == SAND.Id)
+			{
+				if (belowCell.Id == AIR.Id)
+				{
+					newChunkData[index] = belowCell;
+					newChunkData[belowIndex] = cell;
+
+					int baseVertexIndex = index * 4;
+					int baseVertexIndex2 = belowIndex * 4;
+
+					for (int i = 0; i < 4; i++)
+					{
+						Vertex v;
+
+						v.position = (glm::vec3(x + position.x, y + position.y, 0) + vertexPositions[i]) * (float)cellSize;
+						v.color = cell.color;
+
+						mesh->vertices[baseVertexIndex + i] = v;
+					}
+
+					for (int i = 0; i < 4; i++)
+					{
+						Vertex v;
+
+						v.position = (glm::vec3(x + position.x, (y - 1) + position.y, 0) + vertexPositions[i]) * (float)cellSize;
+						v.color = cell.color;
+
+						mesh->vertices[baseVertexIndex2 + i] = v;
+					}
+				}
+			}
+		}
+	}
+
+	ChunkData = newChunkData;
+}
+
+
+// Improvements
+// 1. Create a list of cells that have moved
+// 
+// 2. Cross Chunk Update only when needed
+// 
+// 3. Move cells using velocity
+//
+
 void Chunk::UpdateActive()
 {
+
 	if (ActiveCells.size() <= 0)
 		return;
 
@@ -92,16 +221,22 @@ void Chunk::UpdateActive()
 	if (bounds.size.x <= 0 || bounds.size.y <= 0)
 		return;
 
-	//mesh->Clear();
+	// Create something to keep track of the cells that have moved
+	//std::map<glm::ivec2, bool> hasMoved;
 
 	for (int y = 0; y < bounds.size.y; y++)
 	{
 		for (int x = 0; x < bounds.size.x; x++)
 		{
 			glm::ivec2 boundsPosition = bounds.position + glm::ivec2(x, y);
+
 			Cell cell = GetCell(boundsPosition, LocalSpace);
+			int index = GetCellIndex(boundsPosition);
 			glm::ivec2 cellPosition = cell.position;
+
 			bool shouldBreak = false;
+
+			// If the cell has already moved then dont move it again
 
 			for (int j = 0; j < 8; j++)
 			{
@@ -117,9 +252,12 @@ void Chunk::UpdateActive()
 				{
 					int* res = it->second;
 
+
 					SetCell(cellPosition, CellTable[res[0]], WorldSpace);
 					world->GetChunkFromWorldPos(neighbourPosition)->SetCell(neighbourPosition, CellTable[res[1]], WorldSpace);
 				
+					// add local cell to hasMoved
+
 					shouldBreak = true;
 					break;
 				}

@@ -71,11 +71,17 @@ public:
 
 	inline int GetCellIndex(int x, int y)
 	{
+		if(x < 0 || x > 64 || y < 0 || y > 64)
+			return -1;
+
 		return y * chunkSizeInCells + x;
 	}
 
 	inline int GetCellIndex(glm::ivec2 index)
 	{
+		if (index.x < 0 || index.x > 63 || index.y < 0 || index.y > 63)
+			return -1;
+
 		return index.y * chunkSizeInCells + index.x;
 	}
 
@@ -129,6 +135,7 @@ public:
 
 	void RecalculateBounds();
 	void UpdateActive();
+	void ComputeNextChunk();
 
 	World* world;
 	Mesh* mesh;
@@ -145,46 +152,6 @@ private:
 		return ChunkData[index];
 	}
 
-	inline void SetCellLocal(glm::ivec2 localPos, Cell cell)
-	{
-		if (localPos.x < 0 || localPos.x > chunkSizeInCells - 1 || localPos.y < 0 || localPos.y > chunkSizeInCells - 1)
-			return;
-
-		int index = GetCellIndex(localPos.x, localPos.y);
-
-		ChunkData[index] = cell;
-		ChunkData[index].position = position + localPos;
-
-		if (cell.Id == AIR.Id)
-			return;
-
-		ChunkData[index].active = true;
-
-		// Update bounds
-		/*bounds.min.x = std::min(bounds.min.x, localPos.x);
-		bounds.min.y = std::min(bounds.min.y, localPos.y);
-		bounds.max.x = std::max(bounds.max.x, localPos.x);
-		bounds.max.y = std::max(bounds.max.y, localPos.y);
-
-		bounds.size = (bounds.max - bounds.min) + 1;
-		bounds.position = bounds.min;*/
-
-		// Maybe remove this
-		ActiveCells.push_back(localPos);
-
-		int baseVertexIndex = index * 4;
-
-		for (int i = 0; i < 4; i++)
-		{
-			Vertex v;
-
-			v.position = (glm::vec3(localPos, 0) + vertexPositions[i]) * (float)cellSize;
-			v.color = cell.color;
-
-			mesh->vertices[baseVertexIndex + i] = v;
-		}
-	}
-
 	inline Cell GetCellFromWorldPos(glm::ivec2 worldPosition)
 	{
 		if (worldPosition.x < 0 || worldPosition.x > worldSizeInCells.x - 1 || worldPosition.y < 0 || worldPosition.y > worldSizeInCells.y - 1)
@@ -196,33 +163,62 @@ private:
 		return ChunkData[index];
 	}
 
+	inline void SetCellLocal(glm::ivec2 localPos, Cell cell)
+	{
+		if (localPos.x < 0 || localPos.x > chunkSizeInCells - 1 || localPos.y < 0 || localPos.y > chunkSizeInCells - 1)
+			return;
+	
+		int index = GetCellIndex(localPos.x, localPos.y);
+	
+		ChunkData[index] = cell;
+		ChunkData[index].position = position + localPos;
+	
+		if (cell.Id == AIR.Id)
+			return;
+	
+		// Maybe remove this
+		ActiveCells.push_back(localPos);
+	
+		int baseVertexIndex = index * 4;
+	
+		for (int i = 0; i < 4; i++)
+		{
+			Vertex v;
+	
+			v.position = (glm::vec3(localPos, 0) + vertexPositions[i]) * (float)cellSize;
+			v.color = cell.color;
+	
+			mesh->vertices[baseVertexIndex + i] = v;
+		}
+	}
+
 	inline void SetCellWorld(glm::ivec2 worldPosition, Cell cell)
 	{
 		if (worldPosition.x < 0 || worldPosition.x > worldSizeInCells.x - 1 || worldPosition.y < 0 || worldPosition.y > worldSizeInCells.y - 1)
 			return;
-
+	
 		glm::ivec2 localPos = worldPosition - position;
-
+	
 		int index = GetCellIndex(localPos.x, localPos.y);
-
+	
 		ChunkData[index] = cell;
 		ChunkData[index].position = worldPosition;
-
+	
 		if (cell.Id != AIR.Id)
 		{
-			ChunkData[index].active = true;
+			//ChunkData[index].active = true;
 			ActiveCells.push_back(localPos);
 		}
-
+	
 		int baseVertexIndex = index * 4;
-
+	
 		for (int i = 0; i < 4; i++)
 		{
 			Vertex v;
-
+	
 			v.position = (glm::vec3(worldPosition, 0) + vertexPositions[i]) * (float)cellSize;
 			v.color = cell.color;
-
+	
 			mesh->vertices[baseVertexIndex + i] = v;
 		}
 	}
