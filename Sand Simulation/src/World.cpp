@@ -20,30 +20,10 @@ World::~World()
 	}
 }
 
-//void World::Render(Shader* shader)
-//{
-//	for (int x = 0; x < numChunksWidth; x++)
-//	{
-//		for (int y = 0; y < numChunksHeight; y++)
-//		{
-//			Chunk* chunk = chunks[glm::vec2(x, y)];
-//
-//			if(chunk != nullptr)
-//			{
-//				//chunk->UpdateMesh();
-//				chunk->DrawMesh(shader);
-//			}
-//		}
-//	}
-//
-//	
-//}
-
 void CellularAutomata(int id, Chunk* chunk)
 {
 	//std::cout << "Thread: " << id << " || Chunk XY: " << chunk->position.x << ", " << chunk->position.y << std::endl;
 	chunk->UpdateActive();
-	//chunk->ComputeNextChunk();
 }
 
 void World::Update(Shader* shader)

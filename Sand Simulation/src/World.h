@@ -7,6 +7,18 @@
 
 #include "ctpl/ctpl_stl.h"
 
+struct KeyHash {
+	std::size_t operator()(const glm::ivec2& k) const {
+		return std::hash<int>()(k.x) ^ std::hash<int>()(k.y);
+	}
+};
+
+struct KeyEqual {
+	bool operator()(const glm::ivec2& lhs, const glm::ivec2& rhs) const {
+		return lhs.x == rhs.x && lhs.y == rhs.y;
+	}
+};
+
 class World
 {
 public:
@@ -29,15 +41,19 @@ public:
 		return glm::ivec2(x, y);
 	}
 
-	inline glm::ivec2 GetCellFromPixelPos(glm::vec2 position)
+	//inline glm::ivec2 GetCellFromPixelPos(glm::vec2 position)
+	//{
+	//	//glm::vec2 adjustedCellSize = glm::vec2(cellSize * aspectRatio.x, cellSize * aspectRatio.y);
+
+	//	int x = static_cast<int>(floor(position.x / cellSize)) % chunkSizeInCells;
+	//	int y = static_cast<int>(floor(position.y / cellSize)) % chunkSizeInCells;
+	//	return glm::ivec2(x, y);
+	//}
+
+	inline glm::ivec2 PixelToCellPos(glm::vec2 position)
 	{
-		//glm::vec2 adjustedCellSize = glm::vec2(cellSize * aspectRatio.x, cellSize * aspectRatio.y);
-
-		int x = static_cast<int>(floor(position.x / cellSize)) % chunkSizeInCells;
-		int y = static_cast<int>(floor(position.y / cellSize)) % chunkSizeInCells;
-		return glm::ivec2(x, y);
+		return glm::ivec2(position / glm::vec2(5, 5));
 	}
-
 
 	inline Chunk* GetChunkFromWorldPos(glm::ivec2 position)
 	{
@@ -58,7 +74,7 @@ public:
 		if(position.x < 0 || position.x > 1920 || position.y < 0 || position.y > 1080)
 			return;
 
-		glm::ivec2 cellPos = (position / glm::vec2(5, 5));
+		glm::ivec2 cellPos = PixelToCellPos(position);
 		Chunk* chunk = GetChunkFromWorldPos(cellPos);
 
 		chunk->SetCell(cellPos, cell, WorldSpace);
@@ -68,18 +84,7 @@ public:
 	ctpl::thread_pool* threadPool;
 
 private:
-	struct KeyHash {
-		std::size_t operator()(const glm::ivec2& k) const {
-			return std::hash<int>()(k.x) ^ std::hash<int>()(k.y);
-		}
-	};
-
-	struct KeyEqual {
-		bool operator()(const glm::ivec2& lhs, const glm::ivec2& rhs) const {
-			return lhs.x == rhs.x && lhs.y == rhs.y;
-		}
-	};
-
+	
 	std::unordered_map<glm::ivec2, Chunk*, KeyHash, KeyEqual> chunks;
 	//glm::vec2 aspectRatio = glm::vec2(1.0f, 1.0f);
 };
