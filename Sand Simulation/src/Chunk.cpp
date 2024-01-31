@@ -210,6 +210,14 @@ void Chunk::ComputeNextChunk()
 // 3. Move cells using velocity
 //
 
+struct KeyHash {
+	std::size_t operator()(const glm::ivec2& k) const {
+		return std::hash<int>()(k.x) ^ std::hash<int>()(k.y);
+	}
+};
+
+//std::unordered_map<glm::vec2, bool, KeyHash> hasMoved;
+
 void Chunk::UpdateActive()
 {
 
@@ -222,7 +230,8 @@ void Chunk::UpdateActive()
 		return;
 
 	// Create something to keep track of the cells that have moved
-	//std::map<glm::ivec2, bool> hasMoved;
+	std::unordered_map<glm::vec2, bool, KeyHash> hasMoved;
+	
 
 	for (int y = 0; y < bounds.size.y; y++)
 	{
@@ -237,6 +246,13 @@ void Chunk::UpdateActive()
 			bool shouldBreak = false;
 
 			// If the cell has already moved then dont move it again
+			//auto it1 = hasMoved.find(cellPosition);
+
+			//if(it1->second)
+			//	continue;
+
+			if (hasMoved[cellPosition])
+				continue;  
 
 			for (int j = 0; j < 8; j++)
 			{
@@ -252,11 +268,10 @@ void Chunk::UpdateActive()
 				{
 					int* res = it->second;
 
-
 					SetCell(cellPosition, CellTable[res[0]], WorldSpace);
 					world->GetChunkFromWorldPos(neighbourPosition)->SetCell(neighbourPosition, CellTable[res[1]], WorldSpace);
-				
-					// add local cell to hasMoved
+
+					hasMoved[neighbourPosition] = true;
 
 					shouldBreak = true;
 					break;
@@ -270,7 +285,11 @@ void Chunk::UpdateActive()
 			ActiveCells.erase(std::remove(ActiveCells.begin(), ActiveCells.end(), cellPosition - position), ActiveCells.end());
 		}
 	}
+
+	//hasMoved.clear();
 }
+
+
 
 //std::map<int, int> LUT = {
 //
