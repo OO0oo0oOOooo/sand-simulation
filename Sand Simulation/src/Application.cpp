@@ -19,11 +19,7 @@
 
 // TODO:
 // 
-// [ ] STPImage
-// 
-// [ ] Update loop
-// [ ] Delta Time
-// [ ] tick and late tick
+// [ ] ticks
 // 
 // Multitreading:
 // [x] Thread Pool
@@ -34,25 +30,25 @@
 //      Queue the chunk to the thread pool
 //      When the thread is done repeat for the second update
 //
-// UI:
+// GUI:
 // [ ] Particle Selection UI
 //
 // Optimizations:
-// [ ] Dirty Rect per chunk
+// [x] Dirty Rect per chunk
 // [x] Multithreading Chunks in checkered pattern
 // [ ] Instanced Rendering
 // [ ] Compute Shaders
 // [ ] Reduce size of buffer (Build Quads on gpu)
 // [ ] Dont draw air
+// [ ] Dirty Chunks
 // 
 // World:
 // 
 // Chunks:
+// [ ] Velocity
 // 
 // Dirty Rect:
-// [ ] Bounds
-// [ ] Update through every cell in the bounds
-// - If i want to add a cell to the dirty quad i just have to check if it is inside the bounds
+// Think of a more efficient way to grow and shrink the dirty rect
 //
 // Effects:
 // [ ] Lighting
@@ -64,7 +60,7 @@
 // 
 // Bugs:
 // [ ] Falling sand doesnt draw on chunkborders
-// [ ] Huge memory leak with chunk multithreading
+// [ ] memory leak for drawing debug chunk boarders and debug dirty quads
 // [ ] Water is weird and always flows left
 //
 // Refactoring:
