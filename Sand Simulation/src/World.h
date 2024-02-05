@@ -29,8 +29,6 @@ public:
 	void DrawChunkBorders(Shader* shader);
 
     void Update(Shader* shader);
-	void UpdateChunks();
-	void UpdateCells(Chunk* chunk);
 
 	inline glm::ivec2 GetChunkFromPixelPos(glm::vec2 position)
 	{

@@ -82,7 +82,67 @@ void Chunk::RecalculateBounds()
 	bounds.position = bounds.min;
 }
 
-void Chunk::UpdateActive()
+//void Chunk::UpdateActive()
+//{
+//	if (ActiveCells.size() <= 0)
+//		return;
+//
+//	RecalculateBounds();
+//
+//	if (bounds.size.x <= 0 || bounds.size.y <= 0)
+//		return;
+//
+//	std::unordered_map<glm::vec2, bool, KeyHash> hasMoved;
+//
+//	for (int y = 0; y < bounds.size.y; y++)
+//	{
+//		for (int x = 0; x < bounds.size.x; x++)
+//		{
+//			glm::ivec2 boundsPosition = bounds.position + glm::ivec2(x, y);
+//
+//			Cell cell = GetCell(boundsPosition, LocalSpace);
+//			int index = GetCellIndex(boundsPosition);
+//			glm::ivec2 cellPosition = cell.position;
+//
+//			bool shouldBreak = false;
+//
+//			if (hasMoved[cellPosition])
+//				continue;
+//
+//			for (int j = 0; j < 8; j++)
+//			{
+//				glm::ivec2 neighbourPosition = cellPosition + NeighbourTable[j];
+//				Cell neighbour = world->GetChunkFromWorldPos(neighbourPosition)->GetCell(neighbourPosition, WorldSpace);
+//
+//				int id = (int)cell.Id;
+//				int neighbourId = (int)neighbour.Id;
+//
+//				auto it = LUT[id][neighbourId].find(j);
+//				
+//				if (it != LUT[id][neighbourId].end())
+//				{
+//					int* res = it->second;
+//
+//					SetCell(cellPosition, CellTable[res[0]], WorldSpace);
+//					world->GetChunkFromWorldPos(neighbourPosition)->SetCell(neighbourPosition, CellTable[res[1]], WorldSpace);
+//
+//					hasMoved[neighbourPosition] = true;
+//
+//					shouldBreak = true;
+//					break;
+//				}
+//
+//				if (shouldBreak)
+//					break;
+//
+//			}
+//
+//			ActiveCells.erase(std::remove(ActiveCells.begin(), ActiveCells.end(), cellPosition - position), ActiveCells.end());
+//		}
+//	}
+//}
+
+void Chunk::UpdateActive(float deltaTime)
 {
 	if (ActiveCells.size() <= 0)
 		return;
@@ -103,12 +163,28 @@ void Chunk::UpdateActive()
 			Cell cell = GetCell(boundsPosition, LocalSpace);
 			int index = GetCellIndex(boundsPosition);
 			glm::ivec2 cellPosition = cell.position;
+			int id = (int)cell.Id;
 
 			bool shouldBreak = false;
 
 			if (hasMoved[cellPosition])
 				continue;
 
+			switch (id)
+			{
+				case 3:
+					SandUpdate(cell, deltaTime);
+					break;
+
+				case 4:
+					//WaterUpdate(cell);
+					break;
+
+				default:
+					break;
+			}
+
+			/*
 			for (int j = 0; j < 8; j++)
 			{
 				glm::ivec2 neighbourPosition = cellPosition + NeighbourTable[j];
@@ -118,7 +194,7 @@ void Chunk::UpdateActive()
 				int neighbourId = (int)neighbour.Id;
 
 				auto it = LUT[id][neighbourId].find(j);
-				
+
 				if (it != LUT[id][neighbourId].end())
 				{
 					int* res = it->second;
@@ -136,10 +212,71 @@ void Chunk::UpdateActive()
 					break;
 
 			}
+			*/
 
 			ActiveCells.erase(std::remove(ActiveCells.begin(), ActiveCells.end(), cellPosition - position), ActiveCells.end());
 		}
 	}
+}
+
+/*void Chunk::UpdateActive()
+{
+
+	std::unordered_map<glm::vec2, bool, KeyHash> hasMoved;
+
+	for (int y = 0; y < chunkSizeInCells; y++)
+	{
+		for (int x = 0; x < chunkSizeInCells; x++)
+		{
+			glm::ivec2 boundsPosition = bounds.position + glm::ivec2(x, y);
+
+			Cell cell = GetCell(boundsPosition, LocalSpace);
+			int index = GetCellIndex(boundsPosition);
+			glm::ivec2 cellPosition = cell.position;
+			int id = (int)cell.Id;
+
+			bool shouldBreak = false;
+
+			if (hasMoved[cellPosition])
+				continue;
+
+			switch (id)
+			{
+				case 3:
+					SandUpdate(cell);
+					break;
+
+				default:
+					break;
+			}
+		}
+	}
+}
+*/
+
+void Chunk::SandUpdate(Cell cell, float deltaTime)
+{	
+	glm::vec2 vel = cell.velocity;
+	vel.y += -0.01f * deltaTime;
+
+	glm::ivec2 newPos = cell.position + vel;
+
+	Cell neighbour = world->GetChunkFromWorldPos(newPos)->GetCell(newPos, WorldSpace);
+
+	if (neighbour.Id == AIR.Id)
+	{
+		cell.velocity = vel;
+		SetCell(cell.position, AIR, WorldSpace);
+		world->GetChunkFromWorldPos(newPos)->SetCell(newPos, cell, WorldSpace);
+
+		return;
+	}
+	else
+	{
+		vel.y = 0;
+	}
+
+	cell.velocity = vel;
 }
 
 // Water Move Map

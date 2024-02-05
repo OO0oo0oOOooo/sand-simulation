@@ -7,7 +7,6 @@
 
 class World;
 
-//#include <unordered_map>
 #include <vector>
 #include <iostream>
 
@@ -97,7 +96,7 @@ public:
 		return ChunkData[index];
 	}
 
-	inline Cell GetCell(glm::ivec2 position, Space space)
+	inline Cell GetCell(glm::vec2 position, Space space)
 	{
 		switch (space)
 		{
@@ -113,7 +112,7 @@ public:
 		}
 	}
 
-	inline void SetCell(glm::ivec2 position, Cell cell, Space space)
+	inline void SetCell(glm::vec2 position, Cell cell, Space space)
 	{
 		switch (space)
 		{
@@ -135,13 +134,16 @@ public:
 	Bounds bounds;
 
 	void RecalculateBounds();
-	void UpdateActive();
+	void UpdateActive(float deltaTime);
 	void ComputeNextChunk();
 
 	World* world;
 	Mesh* mesh;
 
 private:
+
+	void SandUpdate(Cell cell, float deltaTime);
+	void WaterUpdate();
 
 	inline Cell GetCellLocal(glm::ivec2 localPos)
 	{
@@ -164,7 +166,7 @@ private:
 		return ChunkData[index];
 	}
 
-	inline void SetCellLocal(glm::ivec2 localPos, Cell cell)
+	inline void SetCellLocal(glm::vec2 localPos, Cell cell)
 	{
 		if (localPos.x < 0 || localPos.x > chunkSizeInCells - 1 || localPos.y < 0 || localPos.y > chunkSizeInCells - 1)
 			return;
@@ -172,7 +174,7 @@ private:
 		int index = GetCellIndex(localPos.x, localPos.y);
 	
 		ChunkData[index] = cell;
-		ChunkData[index].position = position + localPos;
+		ChunkData[index].position = { position.x + localPos.x, position.y + localPos.y };
 	
 		if (cell.Id == AIR.Id)
 			return;
@@ -193,12 +195,12 @@ private:
 		}
 	}
 
-	inline void SetCellWorld(glm::ivec2 worldPosition, Cell cell)
+	inline void SetCellWorld(glm::vec2 worldPosition, Cell cell)
 	{
 		if (worldPosition.x < 0 || worldPosition.x > worldSizeInCells.x - 1 || worldPosition.y < 0 || worldPosition.y > worldSizeInCells.y - 1)
 			return;
 	
-		glm::ivec2 localPos = worldPosition - position;
+		glm::ivec2 localPos = { worldPosition.x - position.x, worldPosition.y - position.y};
 	
 		int index = GetCellIndex(localPos.x, localPos.y);
 	
