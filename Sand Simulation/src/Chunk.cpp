@@ -257,7 +257,8 @@ void Chunk::UpdateActive(float deltaTime)
 void Chunk::SandUpdate(Cell cell, float deltaTime)
 {	
 	glm::vec2 vel = cell.velocity;
-	vel.y += -9.81f * deltaTime;
+	//vel.y += -9.81f * deltaTime;
+	vel.y += -1 * deltaTime;
 
 	glm::ivec2 newPos = cell.position + vel;
 

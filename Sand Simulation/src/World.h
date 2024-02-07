@@ -25,9 +25,7 @@ public:
 	World(ctpl::thread_pool* pool);
 	~World();
 
-	void Render(Shader* shader);
 	void DrawChunkBorders(Shader* shader);
-
     void Update(Shader* shader);
 
 	inline glm::ivec2 GetChunkFromPixelPos(glm::vec2 position)
@@ -38,15 +36,6 @@ public:
 		int y = static_cast<int>(floor(position.y / cellSize));
 		return glm::ivec2(x, y);
 	}
-
-	//inline glm::ivec2 GetCellFromPixelPos(glm::vec2 position)
-	//{
-	//	//glm::vec2 adjustedCellSize = glm::vec2(cellSize * aspectRatio.x, cellSize * aspectRatio.y);
-
-	//	int x = static_cast<int>(floor(position.x / cellSize)) % chunkSizeInCells;
-	//	int y = static_cast<int>(floor(position.y / cellSize)) % chunkSizeInCells;
-	//	return glm::ivec2(x, y);
-	//}
 
 	inline glm::ivec2 PixelToCellPos(glm::vec2 position)
 	{
@@ -81,10 +70,7 @@ public:
 	std::vector<Cell> dirtyCells;
 	ctpl::thread_pool* threadPool;
 
-	std::vector<Chunk*> chunksToDraw;
-
 private:
 	
 	std::unordered_map<glm::ivec2, Chunk*, KeyHash, KeyEqual> chunks;
-	//glm::vec2 aspectRatio = glm::vec2(1.0f, 1.0f);
 };

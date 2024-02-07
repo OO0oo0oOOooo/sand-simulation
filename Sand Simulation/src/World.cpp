@@ -22,7 +22,6 @@ World::~World()
 
 void CellularAutomata(int id, Chunk* chunk, float deltaTime)
 {
-	//std::cout << "Thread: " << id << " || Chunk XY: " << chunk->position.x << ", " << chunk->position.y << std::endl;
 	chunk->UpdateActive(deltaTime);
 }
 
@@ -36,14 +35,12 @@ void World::Update(Shader* shader)
 		{
 			for (int x = 0; x < numChunksWidth; x++)
 			{
-
 				if ((x + y + pass) % 4 == 0)
 				{
 					Chunk* chunk = chunks[glm::vec2(x, y)];
 
 					if (chunk != nullptr /*&& chunk->dirty*/)
 					{
-						//chunk->mesh->Clear();
 						futures.push_back(std::make_pair(threadPool->push(CellularAutomata, chunk, Time::deltaTime), chunk));
 					}
 				}
@@ -56,12 +53,16 @@ void World::Update(Shader* shader)
 			f.first.get();
 			//f.second->UploadMeshData();
 			//f.second->DrawMesh(shader);
-		}
 
-		for (int i = 0; i < chunksToDraw.size(); i++)
-		{
-			chunksToDraw[i]->UploadMeshData();
-			chunksToDraw[i]->DrawMesh(shader);
+			for (int y = 0; y < numChunksHeight; y++)
+			{
+				for (int x = 0; x < numChunksWidth; x++)
+				{
+					Chunk* chunk = chunks[glm::vec2(x, y)];
+					chunk->UploadMeshData();
+					chunk->DrawMesh(shader);
+				}
+			}
 		}
 	}
 }
