@@ -54,8 +54,14 @@ void World::Update(Shader* shader)
 		for (auto& f : futures)
 		{
 			f.first.get();
-			f.second->UploadMeshData();
-			f.second->DrawMesh(shader);
+			//f.second->UploadMeshData();
+			//f.second->DrawMesh(shader);
+		}
+
+		for (int i = 0; i < chunksToDraw.size(); i++)
+		{
+			chunksToDraw[i]->UploadMeshData();
+			chunksToDraw[i]->DrawMesh(shader);
 		}
 	}
 }

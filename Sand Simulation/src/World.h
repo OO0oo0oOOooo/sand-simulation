@@ -81,6 +81,8 @@ public:
 	std::vector<Cell> dirtyCells;
 	ctpl::thread_pool* threadPool;
 
+	std::vector<Chunk*> chunksToDraw;
+
 private:
 	
 	std::unordered_map<glm::ivec2, Chunk*, KeyHash, KeyEqual> chunks;

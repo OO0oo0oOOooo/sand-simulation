@@ -206,6 +206,9 @@ private:
 	
 		ChunkData[index] = cell;
 		ChunkData[index].position = worldPosition;
+
+		//world->chunksToDraw.push_back({ position.x / 64, position.y / 64 });
+		this->world->chunksToDraw.push_back(this);
 	
 		if (cell.Id != AIR.Id)
 		{
