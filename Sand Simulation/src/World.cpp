@@ -54,7 +54,7 @@ void World::Update(Shader* shader)
 			//f.second->UploadMeshData();
 			//f.second->DrawMesh(shader);
 
-			for (int y = 0; y < numChunksHeight; y++)
+			/*for (int y = 0; y < numChunksHeight; y++)
 			{
 				for (int x = 0; x < numChunksWidth; x++)
 				{
@@ -62,6 +62,13 @@ void World::Update(Shader* shader)
 					chunk->UploadMeshData();
 					chunk->DrawMesh(shader);
 				}
+			}*/
+
+			for (int i = 0; i < chunksToUpdate.size(); i++)
+			{
+				chunksToUpdate[i]->UploadMeshData();
+				chunksToUpdate[i]->DrawMesh(shader);
+				chunksToUpdate.erase(chunksToUpdate.begin() + i);
 			}
 		}
 	}

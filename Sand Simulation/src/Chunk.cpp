@@ -280,6 +280,39 @@ void Chunk::SandUpdate(Cell cell, float deltaTime)
 	cell.velocity = vel;
 }
 
+void Chunk::SetCellWorld(glm::vec2 worldPosition, Cell cell)
+{
+	if (worldPosition.x < 0 || worldPosition.x > worldSizeInCells.x - 1 || worldPosition.y < 0 || worldPosition.y > worldSizeInCells.y - 1)
+		return;
+
+	glm::ivec2 localPos = { worldPosition.x - position.x, worldPosition.y - position.y };
+
+	int index = GetCellIndex(localPos.x, localPos.y);
+
+	ChunkData[index] = cell;
+	ChunkData[index].position = worldPosition;
+
+	if (cell.Id != AIR.Id)
+	{
+		//ChunkData[index].active = true;
+		ActiveCells.push_back(localPos);
+	}
+
+	int baseVertexIndex = index * 4;
+
+	for (int i = 0; i < 4; i++)
+	{
+		Vertex v;
+
+		v.position = (glm::vec3(worldPosition, 0) + vertexPositions[i]) * (float)cellSize;
+		v.color = cell.color;
+
+		mesh->vertices[baseVertexIndex + i] = v;
+	}
+
+	world->chunksToUpdate.push_back(this);
+}
+
 // Water Move Map
 // {0, 0, 0}
 // {1, *, 1}
