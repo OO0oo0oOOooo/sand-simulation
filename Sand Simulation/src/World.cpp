@@ -51,25 +51,8 @@ void World::Update(Shader* shader)
 		for (auto& f : futures)
 		{
 			f.first.get();
-			//f.second->UploadMeshData();
-			//f.second->DrawMesh(shader);
-
-			/*for (int y = 0; y < numChunksHeight; y++)
-			{
-				for (int x = 0; x < numChunksWidth; x++)
-				{
-					Chunk* chunk = chunks[glm::vec2(x, y)];
-					chunk->UploadMeshData();
-					chunk->DrawMesh(shader);
-				}
-			}*/
-
-			for (int i = 0; i < chunksToUpdate.size(); i++)
-			{
-				chunksToUpdate[i]->UploadMeshData();
-				chunksToUpdate[i]->DrawMesh(shader);
-				chunksToUpdate.erase(chunksToUpdate.begin() + i);
-			}
+			f.second->UploadMeshData();
+			f.second->DrawMesh(shader);
 		}
 	}
 }

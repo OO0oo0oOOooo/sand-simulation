@@ -128,14 +128,12 @@ public:
 	
 	glm::ivec2 position;
 	std::vector<Cell> ChunkData;
-	bool dirty;
 
 	std::vector<glm::ivec2> ActiveCells;
 	Bounds bounds;
 
 	void RecalculateBounds();
 	void UpdateActive(float deltaTime);
-	void ComputeNextChunk();
 
 	World* world;
 	Mesh* mesh;
@@ -143,7 +141,6 @@ public:
 private:
 
 	void SandUpdate(Cell cell, float deltaTime);
-	void WaterUpdate();
 
 	inline Cell GetCellLocal(glm::ivec2 localPos)
 	{
@@ -179,7 +176,6 @@ private:
 		if (cell.Id == AIR.Id)
 			return;
 	
-		// Maybe remove this
 		ActiveCells.push_back(localPos);
 	
 		int baseVertexIndex = index * 4;
@@ -195,37 +191,34 @@ private:
 		}
 	}
 
-	void SetCellWorld(glm::vec2 worldPosition, Cell cell);
-
-
-	//inline void SetCellWorld(glm::vec2 worldPosition, Cell cell)
-	//{
-	//	if (worldPosition.x < 0 || worldPosition.x > worldSizeInCells.x - 1 || worldPosition.y < 0 || worldPosition.y > worldSizeInCells.y - 1)
-	//		return;
-	//
-	//	glm::ivec2 localPos = { worldPosition.x - position.x, worldPosition.y - position.y};
-	//
-	//	int index = GetCellIndex(localPos.x, localPos.y);
-	//
-	//	ChunkData[index] = cell;
-	//	ChunkData[index].position = worldPosition;
-	//
-	//	if (cell.Id != AIR.Id)
-	//	{
-	//		//ChunkData[index].active = true;
-	//		ActiveCells.push_back(localPos);
-	//	}
-	//
-	//	int baseVertexIndex = index * 4;
-	//
-	//	for (int i = 0; i < 4; i++)
-	//	{
-	//		Vertex v;
-	//
-	//		v.position = (glm::vec3(worldPosition, 0) + vertexPositions[i]) * (float)cellSize;
-	//		v.color = cell.color;
-	//
-	//		mesh->vertices[baseVertexIndex + i] = v;
-	//	}
-	//}
+	inline void SetCellWorld(glm::vec2 worldPosition, Cell cell)
+	{
+		if (worldPosition.x < 0 || worldPosition.x > worldSizeInCells.x - 1 || worldPosition.y < 0 || worldPosition.y > worldSizeInCells.y - 1)
+			return;
+	
+		glm::ivec2 localPos = { worldPosition.x - position.x, worldPosition.y - position.y};
+	
+		int index = GetCellIndex(localPos.x, localPos.y);
+	
+		ChunkData[index] = cell;
+		ChunkData[index].position = worldPosition;
+	
+		if (cell.Id != AIR.Id)
+		{
+			//ChunkData[index].active = true;
+			ActiveCells.push_back(localPos);
+		}
+	
+		int baseVertexIndex = index * 4;
+	
+		for (int i = 0; i < 4; i++)
+		{
+			Vertex v;
+	
+			v.position = (glm::vec3(worldPosition, 0) + vertexPositions[i]) * (float)cellSize;
+			v.color = cell.color;
+	
+			mesh->vertices[baseVertexIndex + i] = v;
+		}
+	}
 };

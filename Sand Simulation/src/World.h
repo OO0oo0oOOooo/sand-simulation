@@ -4,6 +4,7 @@
 
 #include "Chunk.h"
 #include <unordered_map>
+#include <unordered_set>
 
 #include "ctpl/ctpl_stl.h"
 
@@ -27,6 +28,15 @@ public:
 
 	void DrawChunkBorders(Shader* shader);
     void Update(Shader* shader);
+
+	void Draw(Shader* shader)
+	{
+		for (auto& chunk : chunks)
+		{
+			chunk.second->UploadMeshData();
+			chunk.second->DrawMesh(shader);
+		}
+	}
 
 	inline glm::ivec2 GetChunkFromPixelPos(glm::vec2 position)
 	{
@@ -69,8 +79,6 @@ public:
 
 	std::vector<Cell> dirtyCells;
 	ctpl::thread_pool* threadPool;
-
-	std::vector<Chunk*> chunksToUpdate;
 
 private:
 	
