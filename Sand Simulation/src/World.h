@@ -80,6 +80,8 @@ public:
 	std::vector<Cell> dirtyCells;
 	ctpl::thread_pool* threadPool;
 
+	std::unordered_set<Chunk*> ChunksToUpdate;
+
 private:
 	
 	std::unordered_map<glm::ivec2, Chunk*, KeyHash, KeyEqual> chunks;

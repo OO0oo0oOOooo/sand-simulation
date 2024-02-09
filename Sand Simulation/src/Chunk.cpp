@@ -259,11 +259,16 @@ void Chunk::SandUpdate(Cell cell, float deltaTime)
 {	
 	glm::vec2 vel = cell.velocity;
 	//vel.y += -9.81f * deltaTime;
-	vel.y += -1 * deltaTime;
+	vel.y += -3 * deltaTime;
 
 	glm::ivec2 newPos = cell.position + vel;
 
-	Cell neighbour = world->GetChunkFromWorldPos(newPos)->GetCell(newPos, WorldSpace);
+	Chunk* neighbourChunk = world->GetChunkFromWorldPos(newPos);
+
+	Cell neighbour = neighbourChunk->GetCell(newPos, WorldSpace);
+	
+	world->ChunksToUpdate.insert(this);
+	world->ChunksToUpdate.insert(neighbourChunk);
 
 	if (neighbour.Id == AIR.Id)
 	{
