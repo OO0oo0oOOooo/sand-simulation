@@ -205,7 +205,6 @@ private:
 	
 		if (cell.Id != AIR.Id)
 		{
-			//ChunkData[index].active = true;
 			ActiveCells.push_back(localPos);
 		}
 	

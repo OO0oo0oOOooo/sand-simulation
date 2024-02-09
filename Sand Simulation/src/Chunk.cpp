@@ -3,7 +3,6 @@
 
 #include "CellInteractions.h"
 
-
 Chunk::Chunk(World* world, int x, int y)
 	: position(x, y), world(world)
 {
@@ -83,6 +82,86 @@ void Chunk::RecalculateBounds()
 	bounds.position = bounds.min;
 }
 
+void Chunk::UpdateActive(float deltaTime)
+{
+	if (ActiveCells.size() <= 0)
+		return;
+
+	RecalculateBounds();
+
+	if (bounds.size.x <= 0 || bounds.size.y <= 0)
+		return;
+
+	std::unordered_map<glm::vec2, bool, KeyHash> hasMoved;
+
+	for (int y = 0; y < bounds.size.y; y++)
+	{
+		for (int x = 0; x < bounds.size.x; x++)
+		{
+			glm::ivec2 boundsPosition = bounds.position + glm::ivec2(x, y);
+
+			Cell cell = GetCell(boundsPosition, LocalSpace);
+			int index = GetCellIndex(boundsPosition);
+			glm::ivec2 cellPosition = cell.position;
+			int id = (int)cell.Id;
+
+			bool shouldBreak = false;
+
+			if (hasMoved[cellPosition])
+				continue;
+
+			switch (id)
+			{
+				case 3:
+					SandUpdate(cell, deltaTime);
+					break;
+
+				case 4:
+					//WaterUpdate(cell);
+					break;
+
+				default:
+					break;
+			}
+
+			ActiveCells.erase(std::remove(ActiveCells.begin(), ActiveCells.end(), cellPosition - position), ActiveCells.end());
+		}
+	}
+}
+
+void Chunk::SandUpdate(Cell cell, float deltaTime)
+{	
+	glm::vec2 vel = cell.velocity;
+	//vel.y += -9.81f * deltaTime;
+	vel.y += -3 * deltaTime;
+
+	glm::ivec2 newPos = cell.position + vel;
+
+	Chunk* neighbourChunk = world->GetChunkFromWorldPos(newPos);
+
+	Cell neighbour = neighbourChunk->GetCell(newPos, WorldSpace);
+	
+	world->ChunksToUpdate.insert(this);
+	world->ChunksToUpdate.insert(neighbourChunk);
+
+	if (neighbour.Id == AIR.Id)
+	{
+		cell.velocity = vel;
+		SetCell(cell.position, AIR, WorldSpace);
+
+		Chunk* chunk = world->GetChunkFromWorldPos(newPos);
+		chunk->SetCell(newPos, cell, WorldSpace);
+
+		return;
+	}
+	else
+	{
+		vel.y = 0;
+	}
+
+	cell.velocity = vel;
+}
+
 //void Chunk::UpdateActive()
 //{
 //	if (ActiveCells.size() <= 0)
@@ -142,213 +221,3 @@ void Chunk::RecalculateBounds()
 //		}
 //	}
 //}
-
-void Chunk::UpdateActive(float deltaTime)
-{
-	if (ActiveCells.size() <= 0)
-		return;
-
-	RecalculateBounds();
-
-	if (bounds.size.x <= 0 || bounds.size.y <= 0)
-		return;
-
-	std::unordered_map<glm::vec2, bool, KeyHash> hasMoved;
-
-	for (int y = 0; y < bounds.size.y; y++)
-	{
-		for (int x = 0; x < bounds.size.x; x++)
-		{
-			glm::ivec2 boundsPosition = bounds.position + glm::ivec2(x, y);
-
-			Cell cell = GetCell(boundsPosition, LocalSpace);
-			int index = GetCellIndex(boundsPosition);
-			glm::ivec2 cellPosition = cell.position;
-			int id = (int)cell.Id;
-
-			bool shouldBreak = false;
-
-			if (hasMoved[cellPosition])
-				continue;
-
-			switch (id)
-			{
-				case 3:
-					SandUpdate(cell, deltaTime);
-					break;
-
-				case 4:
-					//WaterUpdate(cell);
-					break;
-
-				default:
-					break;
-			}
-
-			/*
-			for (int j = 0; j < 8; j++)
-			{
-				glm::ivec2 neighbourPosition = cellPosition + NeighbourTable[j];
-				Cell neighbour = world->GetChunkFromWorldPos(neighbourPosition)->GetCell(neighbourPosition, WorldSpace);
-
-				int id = (int)cell.Id;
-				int neighbourId = (int)neighbour.Id;
-
-				auto it = LUT[id][neighbourId].find(j);
-
-				if (it != LUT[id][neighbourId].end())
-				{
-					int* res = it->second;
-
-					SetCell(cellPosition, CellTable[res[0]], WorldSpace);
-					world->GetChunkFromWorldPos(neighbourPosition)->SetCell(neighbourPosition, CellTable[res[1]], WorldSpace);
-
-					hasMoved[neighbourPosition] = true;
-
-					shouldBreak = true;
-					break;
-				}
-
-				if (shouldBreak)
-					break;
-
-			}
-			*/
-
-			ActiveCells.erase(std::remove(ActiveCells.begin(), ActiveCells.end(), cellPosition - position), ActiveCells.end());
-		}
-	}
-}
-
-/*void Chunk::UpdateActive()
-{
-
-	std::unordered_map<glm::vec2, bool, KeyHash> hasMoved;
-
-	for (int y = 0; y < chunkSizeInCells; y++)
-	{
-		for (int x = 0; x < chunkSizeInCells; x++)
-		{
-			glm::ivec2 boundsPosition = bounds.position + glm::ivec2(x, y);
-
-			Cell cell = GetCell(boundsPosition, LocalSpace);
-			int index = GetCellIndex(boundsPosition);
-			glm::ivec2 cellPosition = cell.position;
-			int id = (int)cell.Id;
-
-			bool shouldBreak = false;
-
-			if (hasMoved[cellPosition])
-				continue;
-
-			switch (id)
-			{
-				case 3:
-					SandUpdate(cell);
-					break;
-
-				default:
-					break;
-			}
-		}
-	}
-}
-*/
-
-void Chunk::SandUpdate(Cell cell, float deltaTime)
-{	
-	glm::vec2 vel = cell.velocity;
-	//vel.y += -9.81f * deltaTime;
-	vel.y += -3 * deltaTime;
-
-	glm::ivec2 newPos = cell.position + vel;
-
-	Chunk* neighbourChunk = world->GetChunkFromWorldPos(newPos);
-
-	Cell neighbour = neighbourChunk->GetCell(newPos, WorldSpace);
-	
-	world->ChunksToUpdate.insert(this);
-	world->ChunksToUpdate.insert(neighbourChunk);
-
-	if (neighbour.Id == AIR.Id)
-	{
-		cell.velocity = vel;
-		SetCell(cell.position, AIR, WorldSpace);
-
-		Chunk* chunk = world->GetChunkFromWorldPos(newPos);
-		chunk->SetCell(newPos, cell, WorldSpace);
-
-		return;
-	}
-	else
-	{
-		vel.y = 0;
-	}
-
-	cell.velocity = vel;
-}
-
-//void Chunk::SetCellWorld(glm::vec2 worldPosition, Cell cell)
-//{
-//	if (worldPosition.x < 0 || worldPosition.x > worldSizeInCells.x - 1 || worldPosition.y < 0 || worldPosition.y > worldSizeInCells.y - 1)
-//		return;
-//
-//	glm::ivec2 localPos = { worldPosition.x - position.x, worldPosition.y - position.y };
-//
-//	int index = GetCellIndex(localPos.x, localPos.y);
-//
-//	ChunkData[index] = cell;
-//	ChunkData[index].position = worldPosition;
-//
-//	if (cell.Id != AIR.Id)
-//	{
-//		//ChunkData[index].active = true;
-//		ActiveCells.push_back(localPos);
-//	}
-//
-//	int baseVertexIndex = index * 4;
-//
-//	for (int i = 0; i < 4; i++)
-//	{
-//		Vertex v;
-//
-//		v.position = (glm::vec3(worldPosition, 0) + vertexPositions[i]) * (float)cellSize;
-//		v.color = cell.color;
-//
-//		mesh->vertices[baseVertexIndex + i] = v;
-//	}
-//
-//	if(world->chunksToUpdate.)
-//		world->chunksToUpdate.push_back(this);
-//}
-
-// Water Move Map
-// {0, 0, 0}
-// {1, *, 1}
-// {2, 3, 2}
-// 
-// Water should find the lowest point and flow down.
-// Iterate through the neighbours and move toward the highest score available.
-// 
-// Can Move through
-// AIR
-//
-// Water Interaction Map
-// {WATER + FIRE, STEAM}
-// {WATER + LAVA, ROCK}
-
-/*unsigned char key[] = {
-	{0},{0},{0},
-
-	{0},{0},{0},
-
-	{0},{0},{0},
-};
-
-for (int j = 0; j < 9; j++)
-{
-	glm::ivec2 neighbourPosition = cellPosition + NeighbourTable2[j];
-	Cell neighbour = world->GetChunkFromWorldPos(neighbourPosition)->GetCell(neighbourPosition, WorldSpace);
-
-	key[j] = neighbour.Id;
-}*/

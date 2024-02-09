@@ -29,7 +29,7 @@ public:
 	void DrawChunkBorders(Shader* shader);
     void Update(Shader* shader);
 
-	void Draw(Shader* shader)
+	inline void Draw(Shader* shader)
 	{
 		for (auto& chunk : chunks)
 		{

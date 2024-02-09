@@ -39,7 +39,7 @@ void World::Update(Shader* shader)
 				{
 					Chunk* chunk = chunks[glm::vec2(x, y)];
 
-					if (chunk != nullptr /*&& chunk->dirty*/)
+					if (chunk != nullptr)
 					{
 						futures.push_back(std::make_pair(threadPool->push(CellularAutomata, chunk, Time::deltaTime), chunk));
 					}
@@ -57,9 +57,6 @@ void World::Update(Shader* shader)
 				chunk->UploadMeshData();
 				chunk->DrawMesh(shader);
 			}
-
-			//f.second->UploadMeshData();
-			//f.second->DrawMesh(shader);
 		}
 	}
 }

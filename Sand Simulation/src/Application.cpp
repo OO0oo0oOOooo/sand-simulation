@@ -20,6 +20,7 @@
 // TODO:
 // 
 // [ ] ticks
+// [ ] some kind of fixed update for "physics"
 // 
 // Multitreading:
 // [x] Thread Pool
@@ -43,9 +44,13 @@
 // [ ] Dirty Chunks
 // 
 // World:
+// [ ] Multithreading doesnt update the mesh of chunks that cross into the next chunk properly.
+// - Temporary unordered set of chunks that get updated when each thread is done
 // 
 // Chunks:
-// [ ] Velocity
+// [ ] Velocity is wacky right now. I need a fixed timestep and to fix preformance issues
+// [ ] Check cells in between the start and end position
+// [ ] Try recreating the entire mesh after each thread is done that way i only need to manipulate the chunk data inside of the threads
 // 
 // Dirty Rect:
 // Think of a more efficient way to grow and shrink the dirty rect
