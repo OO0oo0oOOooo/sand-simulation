@@ -129,37 +129,98 @@ void Chunk::UpdateActive(float deltaTime)
 	}
 }
 
+//void Chunk::SandUpdate(Cell cell, float deltaTime)
+//{	
+//	glm::vec2 vel = cell.velocity;
+//	//vel.y += -9.81f * deltaTime;
+//	vel.y += -3 * deltaTime;
+//
+//	glm::ivec2 newPos = cell.position + vel;
+//
+//	Chunk* neighbourChunk = world->GetChunkFromWorldPos(newPos);
+//
+//	Cell neighbour = neighbourChunk->GetCell(newPos, WorldSpace);
+//	
+//	world->ChunksToUpdate.insert(this);
+//	world->ChunksToUpdate.insert(neighbourChunk);
+//
+//	if (neighbour.Id == AIR.Id)
+//	{
+//		cell.velocity = vel;
+//		SetCell(cell.position, AIR, WorldSpace);
+//
+//		Chunk* chunk = world->GetChunkFromWorldPos(newPos);
+//		chunk->SetCell(newPos, cell, WorldSpace);
+//
+//		return;
+//	}
+//	else
+//	{
+//		vel.y = 0;
+//	}
+//
+//	cell.velocity = vel;
+//}
+
 void Chunk::SandUpdate(Cell cell, float deltaTime)
-{	
+{
+	// Recursively move the sand down one until it hits ground or the destination for this frame
+
+	bool canBreak = false;
+
 	glm::vec2 vel = cell.velocity;
 	//vel.y += -9.81f * deltaTime;
 	vel.y += -3 * deltaTime;
-
-	glm::ivec2 newPos = cell.position + vel;
-
-	Chunk* neighbourChunk = world->GetChunkFromWorldPos(newPos);
-
-	Cell neighbour = neighbourChunk->GetCell(newPos, WorldSpace);
 	
-	world->ChunksToUpdate.insert(this);
-	world->ChunksToUpdate.insert(neighbourChunk);
+	glm::ivec2 currentPosition = cell.position;
+	glm::ivec2 targetPosition = cell.position + vel;
+	
+	
+	int i = 0;
+	while (currentPosition != targetPosition)
+	{
+		glm::ivec2 nextPosition = currentPosition + glm::ivec2(0, -i);
 
-	if (neighbour.Id == AIR.Id)
+		Chunk* neighbourChunk = world->GetChunkFromWorldPos(nextPosition);
+		Cell nextCell = neighbourChunk->GetCell(nextPosition, WorldSpace);
+
+		if (nextCell.Id == AIR.Id)
+		{
+			cell.velocity = vel;
+		}
+
+		// Not air then preform cellular automata and break loop
+
+
+		i++;
+	}
+
+	
+	/*Chunk* neighbourChunk = world->GetChunkFromWorldPos(targetPosition);
+	Cell belowNeighbour = neighbourChunk->GetCell(targetPosition, WorldSpace);
+
+	if (belowNeighbour.Id == AIR.Id)
 	{
 		cell.velocity = vel;
 		SetCell(cell.position, AIR, WorldSpace);
 
-		Chunk* chunk = world->GetChunkFromWorldPos(newPos);
-		chunk->SetCell(newPos, cell, WorldSpace);
+		Chunk* chunk = world->GetChunkFromWorldPos(targetPosition);
+		chunk->SetCell(targetPosition, cell, WorldSpace);
 
-		return;
+		world->ChunksToUpdate.insert(this);
+		world->ChunksToUpdate.insert(neighbourChunk);
+
 	}
 	else
 	{
 		vel.y = 0;
-	}
+	}*/
+	
+	//
+	//cell.velocity = vel;
 
-	cell.velocity = vel;
+	//if (canBreak)
+	//	return;
 }
 
 //void Chunk::UpdateActive()
