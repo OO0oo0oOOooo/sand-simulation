@@ -133,14 +133,14 @@ public:
 	Bounds bounds;
 
 	void RecalculateBounds();
-	void UpdateActive(float deltaTime);
+	void UpdateActive();
 
 	World* world;
 	Mesh* mesh;
 
 private:
 
-	void SandUpdate(Cell cell, float deltaTime);
+	void SandUpdate(Cell cell);
 
 	inline Cell GetCellLocal(glm::ivec2 localPos)
 	{

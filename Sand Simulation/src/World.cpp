@@ -20,9 +20,9 @@ World::~World()
 	}
 }
 
-void CellularAutomata(int id, Chunk* chunk, float deltaTime)
+void CellularAutomata(int id, Chunk* chunk)
 {
-	chunk->UpdateActive(deltaTime);
+	chunk->UpdateActive();
 }
 
 void World::Update(Shader* shader)
@@ -41,7 +41,7 @@ void World::Update(Shader* shader)
 
 					if (chunk != nullptr)
 					{
-						futures.push_back(std::make_pair(threadPool->push(CellularAutomata, chunk, Time::deltaTime), chunk));
+						futures.push_back(std::make_pair(threadPool->push(CellularAutomata, chunk), chunk));
 					}
 				}
 
