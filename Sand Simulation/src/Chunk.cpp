@@ -131,26 +131,20 @@ void Chunk::UpdateActive(float deltaTime)
 
 //void Chunk::SandUpdate(Cell cell, float deltaTime)
 //{	
-//	glm::vec2 vel = cell.velocity;
-//	//vel.y += -9.81f * deltaTime;
-//	vel.y += -3 * deltaTime;
-//
-//	glm::ivec2 newPos = cell.position + vel;
-//
-//	Chunk* neighbourChunk = world->GetChunkFromWorldPos(newPos);
-//
-//	Cell neighbour = neighbourChunk->GetCell(newPos, WorldSpace);
+//	cell.velocity.y += -9.81f * deltaTime;
+//	glm::vec2 newPos = cell.position + cell.velocity;
 //	
+//	Chunk* chunk = world->GetChunkFromWorldPos(newPos);
+//
+//	SetCell(cell.position, AIR, WorldSpace);
+//	chunk->SetCell(newPos, cell, WorldSpace);
+//
 //	world->ChunksToUpdate.insert(this);
-//	world->ChunksToUpdate.insert(neighbourChunk);
+//	world->ChunksToUpdate.insert(chunk);
 //
-//	if (neighbour.Id == AIR.Id)
+//	/*if (neighbour.Id == AIR.Id)
 //	{
-//		cell.velocity = vel;
-//		SetCell(cell.position, AIR, WorldSpace);
-//
-//		Chunk* chunk = world->GetChunkFromWorldPos(newPos);
-//		chunk->SetCell(newPos, cell, WorldSpace);
+//		
 //
 //		return;
 //	}
@@ -159,69 +153,127 @@ void Chunk::UpdateActive(float deltaTime)
 //		vel.y = 0;
 //	}
 //
-//	cell.velocity = vel;
+//	cell.velocity = vel;*/
+//
 //}
 
 void Chunk::SandUpdate(Cell cell, float deltaTime)
 {
-	// Recursively move the sand down one until it hits ground or the destination for this frame
-
-	bool canBreak = false;
-
 	glm::vec2 vel = cell.velocity;
-	//vel.y += -9.81f * deltaTime;
-	vel.y += -3 * deltaTime;
-	
-	glm::ivec2 currentPosition = cell.position;
-	glm::ivec2 targetPosition = cell.position + vel;
-	
-	
-	int i = 0;
-	while (currentPosition != targetPosition)
-	{
-		glm::ivec2 nextPosition = currentPosition + glm::ivec2(0, -i);
+	vel.y += -9.81f * deltaTime;
 
-		Chunk* neighbourChunk = world->GetChunkFromWorldPos(nextPosition);
-		Cell nextCell = neighbourChunk->GetCell(nextPosition, WorldSpace);
+	glm::vec2 currentPosition = cell.position;
+	glm::vec2 targetPosition = currentPosition + vel;
 
-		if (nextCell.Id == AIR.Id)
-		{
-			cell.velocity = vel;
+	int x1 = currentPosition.x;
+	int y1 = currentPosition.y;
+
+	int x2 = targetPosition.x;
+	int y2 = targetPosition.y;
+
+	int xDiff = x2 - x1;
+	int yDiff = y2 - y1;
+
+	bool xDiffIsLarger = glm::abs(xDiff) > glm::abs(yDiff);
+
+	int xModifier = xDiff > 0 ? 1 : -1;
+	int yModifier = yDiff > 0 ? 1 : -1;
+
+	int longerSideLength = std::max(glm::abs(xDiff), glm::abs(yDiff));
+	int shorterSideLength = std::min(glm::abs(xDiff), glm::abs(yDiff));
+
+	float slope = (shorterSideLength == 0 || longerSideLength == 0) ? 0 : ((float)(shorterSideLength) / (longerSideLength));
+
+	int shorterSideIncrease;
+
+	for (int i = 1; i <= longerSideLength; i++) {
+		shorterSideIncrease = glm::round(i * slope);
+		int yIncrease, xIncrease;
+		if (xDiffIsLarger) {
+			xIncrease = i;
+			yIncrease = shorterSideIncrease;
 		}
+		else {
+			yIncrease = i;
+			xIncrease = shorterSideIncrease;
+		}
+		int currentY = y1 + (yIncrease * yModifier);
+		int currentX = x1 + (xIncrease * xModifier);
 
-		// Not air then preform cellular automata and break loop
+		glm::vec2 step = { currentX, currentY };
+		Chunk* stepChunk = world->GetChunkFromWorldPos(step);
+		Cell stepCell = stepChunk->GetCell(step, WorldSpace);
 
+		if (stepCell.Id == AIR.Id)
+		{
+			SetCell({ x1, y1 }, AIR, WorldSpace);
+			stepChunk->SetCell(step, cell, WorldSpace);
+		}
+		else
+		{
+			cell.velocity = { 0, 0 };
 
-		i++;
+		}
 	}
 
-	
-	/*Chunk* neighbourChunk = world->GetChunkFromWorldPos(targetPosition);
-	Cell belowNeighbour = neighbourChunk->GetCell(targetPosition, WorldSpace);
-
-	if (belowNeighbour.Id == AIR.Id)
-	{
-		cell.velocity = vel;
-		SetCell(cell.position, AIR, WorldSpace);
-
-		Chunk* chunk = world->GetChunkFromWorldPos(targetPosition);
-		chunk->SetCell(targetPosition, cell, WorldSpace);
-
-		world->ChunksToUpdate.insert(this);
-		world->ChunksToUpdate.insert(neighbourChunk);
-
-	}
-	else
-	{
-		vel.y = 0;
-	}*/
-	
-	//
-	//cell.velocity = vel;
-
-	//if (canBreak)
-	//	return;
+	cell.velocity = vel;
 }
+
+//void Chunk::SandUpdate(Cell cell, float deltaTime)
+//{
+//	glm::vec2 vel = cell.velocity;
+//	vel.y += -9.81f * deltaTime;
+//
+//	glm::vec2 currentPosition = cell.position;
+//	glm::vec2 targetPosition = cell.position + vel;
+//
+//	//	int i = 0;
+//	//	while (currentPosition != targetPosition)
+//	//	{
+//	//		glm::vec2 distance = targetPosition - currentPosition;
+//	//		//std::cout << distance.x << " " << distance.y << std::endl;
+//	//
+//	//		if(distance.y )
+//	//
+//	//		/*
+//	//		glm::ivec2 newPosition = ;
+//	//
+//	//		Chunk* neighbourChunk = world->GetChunkFromWorldPos(newPosition);
+//	//		Cell nextCell = neighbourChunk->GetCell(newPosition, WorldSpace);
+//	//
+//	//		if (nextCell.Id == AIR.Id)
+//	//		{
+//	//			cell.velocity = vel;
+//	//		}
+//	//		*/
+//	//
+//	//		break;
+//	//		i++;
+//	//	}
+//	//}
+//
+//	//Chunk* neighbourChunk = world->GetChunkFromWorldPos(targetPosition);
+//	//Cell belowNeighbour = neighbourChunk->GetCell(targetPosition, WorldSpace);
+//
+//	//if (belowNeighbour.Id == AIR.Id)
+//	//{
+//	//	cell.velocity = vel;
+//	//	SetCell(currentPosition, AIR, WorldSpace);
+//
+//	//	Chunk* chunk = world->GetChunkFromWorldPos(targetPosition);
+//	//	chunk->SetCell(targetPosition, cell, WorldSpace);
+//
+//	//	world->ChunksToUpdate.insert(this);
+//	//	world->ChunksToUpdate.insert(neighbourChunk);
+//
+//	//}
+//	//else
+//	//{
+//	//	vel.y = 0;
+//	//}
+//	//
+//	//cell.velocity = vel;
+//}
 
 //void Chunk::UpdateActive()
 //{

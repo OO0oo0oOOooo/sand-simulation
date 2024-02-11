@@ -51,12 +51,14 @@ void World::Update(Shader* shader)
 		for (auto& f : futures)
 		{
 			f.first.get();
+			f.second->UploadMeshData();
+			f.second->DrawMesh(shader);
 
-			for (Chunk* chunk : ChunksToUpdate)
+			/*for (Chunk* chunk : ChunksToUpdate)
 			{
 				chunk->UploadMeshData();
 				chunk->DrawMesh(shader);
-			}
+			}*/
 		}
 	}
 }
