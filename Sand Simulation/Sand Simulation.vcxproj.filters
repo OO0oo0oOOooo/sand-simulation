@@ -1001,6 +1001,9 @@
     <ClInclude Include="src\CellInteractions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Element.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\vendor\glm\detail\func_common.inl">

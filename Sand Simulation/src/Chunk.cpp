@@ -151,8 +151,8 @@ void Chunk::SandUpdate(Cell cell)
 
 	bool xDiffIsLarger = glm::abs(xDiff) > glm::abs(yDiff);
 
-	int xModifier = xDiff > 0 ? 1 : -1;
-	int yModifier = yDiff > 0 ? 1 : -1;
+	int xMod = xDiff > 0 ? 1 : -1;
+	int yMod = yDiff > 0 ? 1 : -1;
 
 	int longerSideLength = std::max(glm::abs(xDiff), glm::abs(yDiff));
 	int shorterSideLength = std::min(glm::abs(xDiff), glm::abs(yDiff));
@@ -172,12 +172,15 @@ void Chunk::SandUpdate(Cell cell)
 			yIncrease = i;
 			xIncrease = shorterSideIncrease;
 		}
-		int currentY = y1 + (yIncrease * yModifier);
-		int currentX = x1 + (xIncrease * xModifier);
+		int currentY = y1 + (yIncrease * yMod);
+		int currentX = x1 + (xIncrease * xMod);
 
 		glm::vec2 step = { currentX, currentY };
 		Chunk* stepChunk = world->GetChunkFromWorldPos(step);
 		Cell stepCell = stepChunk->GetCell(step, WorldSpace);
+
+		//world->ChunksToUpdate.insert(lastStepChunk);
+		//world->ChunksToUpdate.insert(stepChunk);
 
 		if (stepCell.Id == AIR.Id)
 		{
