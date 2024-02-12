@@ -179,6 +179,7 @@ void Chunk::SandUpdate(Cell cell)
 		Chunk* stepChunk = world->GetChunkFromWorldPos(step);
 		Cell stepCell = stepChunk->GetCell(step, WorldSpace);
 
+		// This fixes the boarder drawing issue but is slow
 		//world->ChunksToUpdate.insert(lastStepChunk);
 		//world->ChunksToUpdate.insert(stepChunk);
 
@@ -199,99 +200,6 @@ void Chunk::SandUpdate(Cell cell)
 		}
 	}
 }
-
-//void Chunk::SandUpdate(Cell cell)
-//{
-//	glm::vec2 vel = cell.velocity;
-//	vel.y += -9.81f * Time::deltaTime;
-//
-//	glm::vec2 currentPosition = cell.position;
-//	glm::vec2 targetPosition = currentPosition + vel;
-//
-//	int x1 = currentPosition.x;
-//	int y1 = currentPosition.y;
-//
-//	int x2 = targetPosition.x;
-//	int y2 = targetPosition.y;
-//
-//	int xDiff = x2 - x1;
-//	int yDiff = y2 - y1;
-//
-//	bool xDiffIsLarger = glm::abs(xDiff) > glm::abs(yDiff);
-//
-//	int xModifier = xDiff > 0 ? 1 : -1;
-//	int yModifier = yDiff > 0 ? 1 : -1;
-//
-//	int longerSideLength = std::max(glm::abs(xDiff), glm::abs(yDiff));
-//	int shorterSideLength = std::min(glm::abs(xDiff), glm::abs(yDiff));
-//
-//	float slope = (shorterSideLength == 0 || longerSideLength == 0) ? 0 : ((float)(shorterSideLength) / (longerSideLength));
-//
-//	int shorterSideIncrease;
-//
-//	for (int i = 1; i <= longerSideLength; i++) {
-//		shorterSideIncrease = glm::round(i * slope);
-//		int yIncrease, xIncrease;
-//		if (xDiffIsLarger) {
-//			xIncrease = i;
-//			yIncrease = shorterSideIncrease;
-//		}
-//		else {
-//			yIncrease = i;
-//			xIncrease = shorterSideIncrease;
-//		}
-//		int currentY = y1 + (yIncrease * yModifier);
-//		int currentX = x1 + (xIncrease * xModifier);
-//
-//		glm::vec2 step = { currentX, currentY };
-//		Chunk* stepChunk = world->GetChunkFromWorldPos(step);
-//		Cell stepCell = stepChunk->GetCell(step, WorldSpace);
-//
-//		if (stepCell.Id == AIR.Id)
-//		{
-//			cell.velocity = vel;
-//			SetCell({ x1, y1 }, AIR, WorldSpace);
-//			stepChunk->SetCell(step, cell, WorldSpace);
-//		}
-//		else
-//		{
-//			cell.velocity = { 0, 0 };
-//			break;
-//
-//		}
-//	}
-//}
-
-//void Chunk::SandUpdate(Cell cell, float deltaTime)
-//{
-//	glm::vec2 vel = cell.velocity;
-//	vel.y += -9.81f * deltaTime;
-//
-//	glm::vec2 currentPosition = cell.position;
-//	glm::vec2 targetPosition = cell.position + vel;
-//
-//	//Chunk* neighbourChunk = world->GetChunkFromWorldPos(targetPosition);
-//	//Cell belowNeighbour = neighbourChunk->GetCell(targetPosition, WorldSpace);
-//
-//	//if (belowNeighbour.Id == AIR.Id)
-//	//{
-//	//	cell.velocity = vel;
-//	//	SetCell(currentPosition, AIR, WorldSpace);
-//
-//	//	Chunk* chunk = world->GetChunkFromWorldPos(targetPosition);
-//	//	chunk->SetCell(targetPosition, cell, WorldSpace);
-//
-//	//	world->ChunksToUpdate.insert(this);
-//	//	world->ChunksToUpdate.insert(neighbourChunk);
-//
-//	//}
-//	//else
-//	//{
-//	//	vel.y = 0;
-//	//}
-//	//
-//	//cell.velocity = vel;
-//}
 
 //void Chunk::UpdateActive()
 //{

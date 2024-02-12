@@ -42,6 +42,7 @@
 // [ ] Reduce size of buffer (Build Quads on gpu)
 // [ ] Dont draw air
 // [ ] Dirty Chunks
+// [ ] Create a quad with a texture for the entire screen then draw each cell as a pixel on the quad
 // 
 // World:
 // [ ] Multithreading doesnt update the mesh of chunks that cross into the next chunk properly.
