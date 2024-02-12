@@ -28,14 +28,13 @@ public:
 		return false;
 	}
 
+	int id = 0;
+
+	glm::vec2 position = { 0, 0 };
+	glm::vec2 velocity = { 0, 0 };
+	glm::vec4 color = { 0, 0, 0, 0 };
+
 private:
-	
-	int id;
-
-	glm::vec2 position;
-	glm::vec2 velocity;
-	glm::vec4 color;
-
 
 };
 
@@ -45,13 +44,7 @@ class Liquid : public Element
 {
 public:
 	Liquid() {}
-
 	~Liquid() {}
-	
-	bool  DarkenColor() override
-	{
-		return false;
-	}
 
 private:
 
@@ -77,11 +70,6 @@ class Gas : public Element
 public:
 	Gas() {}
 	~Gas() {}
-
-	bool DarkenColor() override
-	{
-		return false;
-	}
 
 private:
 

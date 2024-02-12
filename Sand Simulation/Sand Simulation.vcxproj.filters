@@ -1001,10 +1001,22 @@
     <ClInclude Include="src\CellInteractions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Element.h">
+    <ClInclude Include="src\ElementTypes\Element.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\ElementType.h">
+    <ClInclude Include="src\ElementTypes\ElementType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ElementTypes\Sand.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ElementTypes\Water.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ElementTypes\Steam.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ElementTypes\Air.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
