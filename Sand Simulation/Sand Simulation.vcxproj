@@ -181,8 +181,8 @@
     <ClInclude Include="src\ChunkData.h" />
     <ClInclude Include="src\ElementTypes\Air.h" />
     <ClInclude Include="src\ElementTypes\Element.h" />
-    <ClInclude Include="src\ElementTypes\ElementType.h" />
     <ClInclude Include="src\ElementTypes\Steam.h" />
+    <ClInclude Include="src\ElementTypes\Empty.h" />
     <ClInclude Include="src\ElementTypes\Water.h" />
     <ClInclude Include="src\IndexBuffer.h" />
     <ClInclude Include="src\Input.h" />

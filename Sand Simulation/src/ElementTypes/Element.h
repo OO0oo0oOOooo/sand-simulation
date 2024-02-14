@@ -2,6 +2,18 @@
 
 #include <glm/glm.hpp>
 
+#include "Empty.h"
+#include "Air.h"
+#include "Sand.h"
+
+namespace Elements {
+
+	Empty empty;
+	Air air;
+	Sand sand;
+
+}
+
 class Element
 {
 public:

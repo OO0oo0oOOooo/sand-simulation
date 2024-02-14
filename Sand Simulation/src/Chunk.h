@@ -1,11 +1,10 @@
 #pragma once
 
 #include "ElementTypes/Element.h"
-#include "ElementTypes/Air.h"
-
 #include "Mesh.h"
 #include "ChunkData.h"
 #include "Time.h"
+
 
 class World;
 
@@ -63,17 +62,34 @@ public:
 	inline Element GetElementAtLocalPosition(glm::ivec2 pos)
 	{
 		if (pos.x < 0 || pos.x > chunkSizeInCells - 1 || pos.y < 0 || pos.y > chunkSizeInCells - 1)
-			return ;
+			return Elements::empty;
 
 		return _chunkData[GetIndex(pos)];
 	}
+
+
 
 	inline void SetElementAtLocalPosition(glm::ivec2 pos, Element element)
 	{
 		if (pos.x < 0 || pos.x > chunkSizeInCells - 1 || pos.y < 0 || pos.y > chunkSizeInCells - 1)
 			return;
 
-		_chunkData[GetIndex(pos)] = element;
+		int index = GetIndex(pos);
+
+		_chunkData[index] = element;
+		_chunkData[index].Position = pos + Position;
+
+		int baseVertexIndex = index * 4;
+
+		for (int i = 0; i < 4; i++)
+		{
+			Vertex v;
+
+			v.position = (glm::vec3(pos + Position, 0) + vertexPositions[i]) * (float)cellSize;
+			v.color = element.Color;
+
+			_mesh->vertices[baseVertexIndex + i] = v;
+		}
 	}
 
 	inline void SetElementAtWorldPosition(glm::ivec2 worldPosition, Element element)

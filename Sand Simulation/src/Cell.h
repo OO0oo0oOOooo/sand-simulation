@@ -65,17 +65,17 @@ const glm::ivec2 NeighbourTable[8] = {
 	glm::ivec2( 1,  1), // Top Right
 };
 
-const glm::vec3 vertexPositions[] = {
-	glm::vec3( 0.0f, 0.0f, 0.0f ),
-	glm::vec3( 0.0f, 1.0f, 0.0f ),
-	glm::vec3( 1.0f, 0.0f, 0.0f ),
-	glm::vec3( 1.0f, 1.0f, 0.0f ),
-};
-
-const unsigned int meshTriangles[] = {
-	0, 1, 2,
-	2, 1, 3,
-};
+//const glm::vec3 vertexPositions[] = {
+//	glm::vec3( 0.0f, 0.0f, 0.0f ),
+//	glm::vec3( 0.0f, 1.0f, 0.0f ),
+//	glm::vec3( 1.0f, 0.0f, 0.0f ),
+//	glm::vec3( 1.0f, 1.0f, 0.0f ),
+//};
+//
+//const unsigned int meshTriangles[] = {
+//	0, 1, 2,
+//	2, 1, 3,
+//};
 
 // Main Particles
 

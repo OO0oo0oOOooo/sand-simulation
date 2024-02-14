@@ -2,7 +2,6 @@
 #include "World.h"
 
 
-
 Chunk::Chunk(World* world, int cx, int cy) : Position(cx, cy), _world(world)
 {
 	_chunkData = std::vector<Element>(chunkSizeInCells * chunkSizeInCells);
@@ -12,8 +11,7 @@ Chunk::Chunk(World* world, int cx, int cy) : Position(cx, cy), _world(world)
 	{
 		for (int y = 0; y < chunkSizeInCells; y++)
 		{
-			Air empty = { {x, y} };
-			_chunkData[GetIndex({ x, y })] = empty;
+			_chunkData[GetIndex({ x, y })] = Elements::air;
 		}
 	}
 
@@ -40,7 +38,7 @@ void Chunk::CreateMesh()
 
 			int baseVertexIndex = (cellIndex) * 4;
 			int baseIndexIndex = (cellIndex) * 6;
-			Element& element = _chunkData[cellIndex];
+			Element element = _chunkData[cellIndex];
 
 			int newX = x + (int)Position.x;
 			int newY = y + (int)Position.y;
@@ -150,9 +148,8 @@ void Chunk::SandUpdate(Element element)
 		if (stepCell.ID == 0)
 		{
 			element.Velocity = vel;
-			Air air = { step };
 
-			lastStepChunk->SetElementAtWorldPosition(lastStep, air);
+			lastStepChunk->SetElementAtWorldPosition(lastStep, Elements::air);
 			stepChunk->SetElementAtWorldPosition(step, element);
 
 			lastStep = step;
