@@ -2,19 +2,19 @@
 
 namespace Brush
 {
-	Cell selectedParticle = SAND;
+	int selected = 3;
 	int brushSize = 1;
 
 	void MouseInput(Window window, World* world)
 	{
 		if (Input::IsKeyPressed(GLFW_MOUSE_BUTTON_LEFT))
 		{
-			world->EditCell(Input::mousePosition, selectedParticle);
+			world->EditCell(Input::mousePosition, selected);
 		}
 
 		if (Input::IsKeyPressed(GLFW_MOUSE_BUTTON_RIGHT))
 		{
-			world->EditCell(Input::mousePosition, AIR);
+			world->EditCell(Input::mousePosition, 0);
 
 		}
 	}
@@ -28,32 +28,32 @@ namespace Brush
 
 		if (Input::IsKeyPressed(GLFW_KEY_1))
 		{
-			selectedParticle = STONE;
+			selected = 1;
 		}
 
 		if (Input::IsKeyPressed(GLFW_KEY_2))
 		{
-			selectedParticle = DIRT;
+			selected = 2;
 		}
 
 		if (Input::IsKeyPressed(GLFW_KEY_3))
 		{
-			selectedParticle = SAND;
+			selected = 3;
 		}
 
 		if (Input::IsKeyPressed(GLFW_KEY_4))
 		{
-			selectedParticle = WATER;
+			selected = 4;
 		}
 
 		if (Input::IsKeyPressed(GLFW_KEY_5))
 		{
-			selectedParticle = LAVA;
+			selected = 5;
 		}
 
 		if (Input::IsKeyPressed(GLFW_KEY_6))
 		{
-			selectedParticle = STEAM;
+			selected = 6;
 		}
 	}
 }

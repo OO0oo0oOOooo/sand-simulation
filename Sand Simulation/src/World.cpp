@@ -1,20 +1,20 @@
 #include "World.h"
 
 World::World(ctpl::thread_pool* pool)
-	: threadPool(pool)
+	: _threadPool(pool)
 {
 	for (int x = 0; x < numChunksWidth; x++)
 	{
 		for (int y = 0; y < numChunksHeight; y++)
 		{
-			chunks[glm::vec2(x, y)] = new Chunk(this, x * 64, y * 64);
+			_chunks[glm::vec2(x, y)] = new Chunk(this, x * 64, y * 64);
 		}
 	}
 }
 
 World::~World()
 {
-	for (auto& chunk : chunks)
+	for (auto& chunk : _chunks)
 	{
 		delete chunk.second;
 	}
@@ -22,7 +22,7 @@ World::~World()
 
 void CellularAutomata(int id, Chunk* chunk)
 {
-	chunk->UpdateActive();
+	chunk->Update();
 }
 
 void World::Update(Shader* shader)
@@ -37,11 +37,11 @@ void World::Update(Shader* shader)
 			{
 				if ((x + y + pass) % 4 == 0)
 				{
-					Chunk* chunk = chunks[glm::vec2(x, y)];
+					Chunk* chunk = _chunks[glm::vec2(x, y)];
 
 					if (chunk != nullptr)
 					{
-						futures.push_back(std::make_pair(threadPool->push(CellularAutomata, chunk), chunk));
+						futures.push_back(std::make_pair(_threadPool->push(CellularAutomata, chunk), chunk));
 					}
 				}
 
@@ -63,38 +63,38 @@ void World::Update(Shader* shader)
 	}
 }
 
-void World::DrawChunkBorders(Shader* shader)
-{
-	for (int x = 0; x < numChunksWidth; x++)
-	{
-		for (int y = 0; y < numChunksHeight; y++)
-		{
-			int cx = (x * 64) * cellSize;
-			int cy = (y * 64) * cellSize;
-
-			std::vector<Vertex> vertices = {
-				{{cx, cy, 0.1f}, {0.1, 1.0, 0.1, 1}},
-				{{cx + (64 * cellSize), cy, 0.1f}, {0.1, 1.0, 0.1, 1}},
-				{{cx + (64 * cellSize), cy + (64 * cellSize), 0.1f}, {0.1, 1.0, 0.1, 1}},
-				{{cx, cy + (64 * cellSize), 0.1f}, {0.1, 1.0, 0.1, 1}},
-			};
-
-			std::vector<unsigned int> indices = {
-				0, 1, // Bottom edge
-				1, 2, // Right edge
-				2, 3, // Top edge
-				3, 0  // Left edge
-			};
-
-			Mesh squareOutline;
-			squareOutline.vertices = vertices;
-			squareOutline.indices = indices;
-			squareOutline.UploadVBOData();
-			squareOutline.UploadIBOData();
-
-			squareOutline.DrawLine(shader);
-
-			chunks[glm::vec2(x, y)]->DrawDirtyQuad(shader);
-		}
-	}
-}
+//void World::DrawChunkBorders(Shader* shader)
+//{
+//	for (int x = 0; x < numChunksWidth; x++)
+//	{
+//		for (int y = 0; y < numChunksHeight; y++)
+//		{
+//			int cx = (x * 64) * cellSize;
+//			int cy = (y * 64) * cellSize;
+//
+//			std::vector<Vertex> vertices = {
+//				{{cx, cy, 0.1f}, {0.1, 1.0, 0.1, 1}},
+//				{{cx + (64 * cellSize), cy, 0.1f}, {0.1, 1.0, 0.1, 1}},
+//				{{cx + (64 * cellSize), cy + (64 * cellSize), 0.1f}, {0.1, 1.0, 0.1, 1}},
+//				{{cx, cy + (64 * cellSize), 0.1f}, {0.1, 1.0, 0.1, 1}},
+//			};
+//
+//			std::vector<unsigned int> indices = {
+//				0, 1, // Bottom edge
+//				1, 2, // Right edge
+//				2, 3, // Top edge
+//				3, 0  // Left edge
+//			};
+//
+//			Mesh squareOutline;
+//			squareOutline.vertices = vertices;
+//			squareOutline.indices = indices;
+//			squareOutline.UploadVBOData();
+//			squareOutline.UploadIBOData();
+//
+//			squareOutline.DrawLine(shader);
+//
+//			_chunks[glm::vec2(x, y)]->DrawDirtyQuad(shader);
+//		}
+//	}
+//}

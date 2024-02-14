@@ -8,6 +8,8 @@
 
 #include "ctpl/ctpl_stl.h"
 
+#include "ElementTypes/Sand.h"
+
 struct KeyHash {
 	std::size_t operator()(const glm::ivec2& k) const {
 		return std::hash<int>()(k.x) ^ std::hash<int>()(k.y);
@@ -26,12 +28,13 @@ public:
 	World(ctpl::thread_pool* pool);
 	~World();
 
-	void DrawChunkBorders(Shader* shader);
+	//void DrawChunkBorders(Shader* shader);
+
     void Update(Shader* shader);
 
 	inline void Draw(Shader* shader)
 	{
-		for (auto& chunk : chunks)
+		for (auto& chunk : _chunks)
 		{
 			chunk.second->UploadMeshData();
 			chunk.second->DrawMesh(shader);
@@ -55,18 +58,18 @@ public:
 	inline Chunk* GetChunkFromWorldPos(glm::ivec2 position)
 	{
 		glm::ivec2 chunkPos = { ((int)position.x / chunkSizeInCells), ((int)position.y / chunkSizeInCells) };
-		return chunks[chunkPos];
+		return _chunks[chunkPos];
 	}
 
-	inline Cell GetCellFromWorldPos(glm::ivec2 position)
+	inline Element GetCellFromWorldPos(glm::ivec2 position)
 	{
 		Chunk* chunk = GetChunkFromWorldPos(position);
-		glm::vec2 localPos = glm::vec2(position - chunk->position);
+		glm::vec2 localPos = glm::vec2(position - chunk->Position);
 
-		return chunk->GetCell(localPos, LocalSpace);
+		return chunk->GetElementAtLocalPosition(localPos);
 	}
 
-	inline void EditCell(glm::vec2 position, Cell cell)
+	inline void EditCell(glm::vec2 position, int elementID)
 	{
 		if(position.x < 0 || position.x > 1920 || position.y < 0 || position.y > 1080)
 			return;
@@ -74,15 +77,17 @@ public:
 		glm::ivec2 cellPos = PixelToCellPos(position);
 		Chunk* chunk = GetChunkFromWorldPos(cellPos);
 
-		chunk->SetCell(cellPos, cell, WorldSpace);
+		Sand sand = { cellPos };
+
+		chunk->SetElementAtWorldPosition(cellPos, sand);
 	}
 
-	std::vector<Cell> dirtyCells;
-	ctpl::thread_pool* threadPool;
+	
 
 	std::unordered_set<Chunk*> ChunksToUpdate;
 
 private:
 	
-	std::unordered_map<glm::ivec2, Chunk*, KeyHash, KeyEqual> chunks;
+	ctpl::thread_pool* _threadPool;
+	std::unordered_map<glm::ivec2, Chunk*, KeyHash, KeyEqual> _chunks;
 };

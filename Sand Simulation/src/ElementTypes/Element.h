@@ -28,11 +28,10 @@ public:
 		return false;
 	}
 
-	int id = 0;
-
-	glm::vec2 position = { 0, 0 };
-	glm::vec2 velocity = { 0, 0 };
-	glm::vec4 color = { 0, 0, 0, 0 };
+	int ID = 0;
+	glm::vec2 Position = { 0, 0 };
+	glm::vec2 Velocity = { 0, 0 };
+	glm::vec4 Color = { 0, 0, 0, 0 };
 
 private:
 

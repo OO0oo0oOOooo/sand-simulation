@@ -5,7 +5,14 @@
 class Sand : public Solid
 {
 public:
-	Sand() {}
+	Sand(glm::vec2 pos) 
+	{
+		ID = 3;
+		Position = pos;
+		Velocity = { 0, 0 };
+		Color = { 0.9f, 0.7f, 0.2f, 1.0f };
+	}
+
 	~Sand() {}
 
 	void Step() override

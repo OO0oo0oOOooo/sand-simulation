@@ -1,5 +1,119 @@
 #pragma once
 
+#include "ElementTypes/Element.h"
+#include "ElementTypes/Air.h"
+
+#include "Mesh.h"
+#include "ChunkData.h"
+#include "Time.h"
+
+class World;
+
+#include <vector>
+#include <iostream>
+
+struct Bounds
+{
+	glm::ivec2 min;
+	glm::ivec2 max;
+
+	glm::ivec2 position;
+	glm::ivec2 size;
+};
+
+const glm::vec3 vertexPositions[] = {
+	glm::vec3(0.0f, 0.0f, 0.0f),
+	glm::vec3(0.0f, 1.0f, 0.0f),
+	glm::vec3(1.0f, 0.0f, 0.0f),
+	glm::vec3(1.0f, 1.0f, 0.0f),
+};
+
+const unsigned int meshTriangles[] = {
+	0, 1, 2,
+	2, 1, 3,
+};
+
+class Chunk
+{
+public:
+	Chunk(World* world, int x, int y);
+	~Chunk();
+
+	void Update();
+
+	void CreateMesh();
+	void DrawMesh(Shader* shader)
+	{
+		_mesh->Draw(shader);
+	}
+	void UploadMeshData()
+	{
+		_mesh->UploadVBOData();
+		_mesh->UploadIBOData();
+	}
+
+	inline int GetIndex(glm::ivec2 index)
+	{
+		if (index.x < 0 || index.x > 63 || index.y < 0 || index.y > 63)
+			return -1;
+
+		return index.y * chunkSizeInCells + index.x;
+	}
+
+	inline Element GetElementAtLocalPosition(glm::ivec2 pos)
+	{
+		if (pos.x < 0 || pos.x > chunkSizeInCells - 1 || pos.y < 0 || pos.y > chunkSizeInCells - 1)
+			return ;
+
+		return _chunkData[GetIndex(pos)];
+	}
+
+	inline void SetElementAtLocalPosition(glm::ivec2 pos, Element element)
+	{
+		if (pos.x < 0 || pos.x > chunkSizeInCells - 1 || pos.y < 0 || pos.y > chunkSizeInCells - 1)
+			return;
+
+		_chunkData[GetIndex(pos)] = element;
+	}
+
+	inline void SetElementAtWorldPosition(glm::ivec2 worldPosition, Element element)
+	{
+		if (worldPosition.x < 0 || worldPosition.x > worldSizeInCells.x - 1 || worldPosition.y < 0 || worldPosition.y > worldSizeInCells.y - 1)
+			return;
+
+		glm::ivec2 localPos = worldPosition - Position.x;
+
+		int index = GetIndex(localPos);
+
+		_chunkData[index] = element;
+		_chunkData[index].Position = worldPosition;
+
+		int baseVertexIndex = index * 4;
+
+		for (int i = 0; i < 4; i++)
+		{
+			Vertex v;
+
+			v.position = (glm::vec3(worldPosition, 0) + vertexPositions[i]) * (float)cellSize;
+			v.color = element.Color;
+
+			_mesh->vertices[baseVertexIndex + i] = v;
+		}
+	}
+
+	glm::ivec2 Position;
+
+private:
+	std::vector<Element> _chunkData;
+	World* _world;
+	Mesh* _mesh;
+
+	void SandUpdate(Element cell);
+};
+
+/*
+* Old Chunk class
+
 #include "Cell.h"
 #include "Mesh.h"
 #include "ChunkData.h"
@@ -17,7 +131,6 @@ struct Bounds
 
 	glm::ivec2 position;
 	glm::ivec2 size;
-
 };
 
 enum Space
@@ -221,3 +334,5 @@ private:
 		}
 	}
 };
+
+*/
