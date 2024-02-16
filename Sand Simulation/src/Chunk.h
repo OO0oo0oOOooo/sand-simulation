@@ -5,7 +5,6 @@
 #include "ChunkData.h"
 #include "Time.h"
 
-
 class World;
 
 #include <vector>
@@ -62,12 +61,13 @@ public:
 	inline Element GetElementAtLocalPosition(glm::ivec2 pos)
 	{
 		if (pos.x < 0 || pos.x > chunkSizeInCells - 1 || pos.y < 0 || pos.y > chunkSizeInCells - 1)
-			return Elements::empty;
+		{
+			Empty empty;
+			return empty;
+		}
 
 		return _chunkData[GetIndex(pos)];
 	}
-
-
 
 	inline void SetElementAtLocalPosition(glm::ivec2 pos, Element element)
 	{

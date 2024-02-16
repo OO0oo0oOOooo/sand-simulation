@@ -63,12 +63,18 @@ public:
 	inline Element GetElementAtWorldPos(glm::ivec2 position)
 	{
 		if (position.x < 0 || position.x > worldSizeInCells.x - 1 || position.y < 0 || position.y > worldSizeInCells.y - 1)
-			return Elements::empty;
+		{
+			Empty empty;
+			return empty;
+		}
 
 		Chunk* chunk = GetChunkFromWorldPos(position);
 
 		if (chunk == nullptr)
-			return Elements::empty;
+		{
+			Empty empty;
+			return empty;
+		}
 
 		glm::vec2 localPos = glm::vec2(position - chunk->Position);
 
@@ -96,7 +102,8 @@ public:
 		glm::ivec2 cellPos = PixelToCellPos(position);
 		Chunk* chunk = GetChunkFromWorldPos(cellPos);
 
-		chunk->SetElementAtWorldPosition(cellPos, Elements::sand);
+		Sand sand;
+		chunk->SetElementAtWorldPosition(cellPos, sand);
 	}
 
 	//std::unordered_set<Chunk*> ChunksToUpdate;

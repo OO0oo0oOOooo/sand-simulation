@@ -2,17 +2,20 @@
 
 #include <glm/glm.hpp>
 
-#include "Empty.h"
+
+
+//namespace Elements {
+//
+//	Empty empty;
+//	Air air;
+//	Sand sand;
+//
+//}
+
 #include "Air.h"
 #include "Sand.h"
-
-namespace Elements {
-
-	Empty empty;
-	Air air;
-	Sand sand;
-
-}
+#include "Water.h"
+#include "Empty.h"
 
 class Element
 {

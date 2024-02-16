@@ -15,9 +15,9 @@ public:
 
 	~Air() {}
 
-	void Step() override
+	/*void Step() override
 	{
 		return;
-	}
+	}*/
 
 };

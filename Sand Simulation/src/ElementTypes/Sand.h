@@ -33,20 +33,20 @@ public:
 
 	}
 
-	bool ActOnOther() override
-	{
-		return false;
-	}
+	//bool ActOnOther() override
+	//{
+	//	return false;
+	//}
 
-	bool ReceiveHeat() override
-	{
-		return true;
-	}
+	//bool ReceiveHeat() override
+	//{
+	//	return true;
+	//}
 
-	bool DarkenColor() override
-	{
-		return true;
-	}	
+	//bool DarkenColor() override
+	//{
+	//	return true;
+	//}	
 
 private:
 
