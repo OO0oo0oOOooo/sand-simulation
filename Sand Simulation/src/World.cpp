@@ -27,6 +27,8 @@ void CellularAutomata(int id, Chunk* chunk)
 
 void World::Update(Shader* shader)
 {
+	//std::vector<Chunk*> chunksToUpdate;
+
 	for (int pass = 0; pass < 4; ++pass)
 	{
 		std::vector<std::pair<std::future<void>, Chunk*>> futures;
@@ -54,13 +56,15 @@ void World::Update(Shader* shader)
 			f.second->UploadMeshData();
 			f.second->DrawMesh(shader);
 
-			/*for (Chunk* chunk : ChunksToUpdate)
-			{
-				chunk->UploadMeshData();
-				chunk->DrawMesh(shader);
-			}*/
 		}
 	}
+
+
+	/*for (Chunk* chunk : ChunksToUpdate)
+	{
+		chunk->UploadMeshData();
+		chunk->DrawMesh(shader);
+	}*/
 }
 
 //void World::DrawChunkBorders(Shader* shader)

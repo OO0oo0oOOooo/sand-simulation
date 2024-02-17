@@ -5,15 +5,7 @@
 class Sand : public Solid
 {
 public:
-	Sand()
-	{
-		ID = 3;
-		Position = { 0, 0 };
-		Velocity = { 0, 0 };
-		Color = { 0.9f, 0.7f, 0.2f, 1.0f };
-	}
-
-	Sand(glm::vec2 pos) 
+	Sand(glm::vec2 pos = glm::vec2(0, 0)) 
 	{
 		ID = 3;
 		Position = pos;

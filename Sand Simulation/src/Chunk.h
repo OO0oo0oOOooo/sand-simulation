@@ -1,6 +1,10 @@
 #pragma once
 
 #include "ElementTypes/Element.h"
+#include "ElementTypes/Empty.h"
+#include "ElementTypes/Sand.h"
+#include "ElementTypes/Air.h"
+
 #include "Mesh.h"
 #include "ChunkData.h"
 #include "Time.h"
@@ -52,8 +56,8 @@ public:
 
 	inline int GetIndex(glm::ivec2 index)
 	{
-		if (index.x < 0 || index.x > 63 || index.y < 0 || index.y > 63)
-			return -1;
+		/*if (index.x < 0 || index.x > 63 || index.y < 0 || index.y > 63)
+			return -1;*/
 
 		return index.y * chunkSizeInCells + index.x;
 	}
@@ -61,10 +65,7 @@ public:
 	inline Element GetElementAtLocalPosition(glm::ivec2 pos)
 	{
 		if (pos.x < 0 || pos.x > chunkSizeInCells - 1 || pos.y < 0 || pos.y > chunkSizeInCells - 1)
-		{
-			Empty empty;
-			return empty;
-		}
+			return Empty();
 
 		return _chunkData[GetIndex(pos)];
 	}
@@ -97,12 +98,12 @@ public:
 		if (worldPosition.x < 0 || worldPosition.x > worldSizeInCells.x - 1 || worldPosition.y < 0 || worldPosition.y > worldSizeInCells.y - 1)
 			return;
 
-		glm::ivec2 localPos = worldPosition - Position.x;
+		glm::ivec2 localPos = { worldPosition.x - Position.x, worldPosition.y - Position.y };
 
 		int index = GetIndex(localPos);
 
 		_chunkData[index] = element;
-		_chunkData[index].Position = worldPosition;
+		//_chunkData[index].Position = worldPosition;
 
 		int baseVertexIndex = index * 4;
 

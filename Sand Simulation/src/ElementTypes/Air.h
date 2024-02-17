@@ -5,10 +5,10 @@
 class Air : public Gas
 {
 public:
-	Air() 
+	Air(glm::vec2 pos = glm::vec2(0, 0))
 	{
 		ID = 0;
-		Position = { 0, 0 };
+		Position = pos;
 		Velocity = { 0, 0 };
 		Color = { 0, 0, 0, 0 };
 	}

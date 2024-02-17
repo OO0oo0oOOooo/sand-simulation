@@ -37,16 +37,9 @@ public:
 		}
 	}
 
-	//inline glm::ivec2 PixelToChunkPos(glm::vec2 position)
-	//{
-	//	int x = static_cast<int>(floor(position.x / cellSize));
-	//	int y = static_cast<int>(floor(position.y / cellSize));
-	//	return glm::ivec2(x, y);
-	//}
-
 	inline glm::ivec2 PixelToCellPos(glm::vec2 position)
 	{
-		return glm::ivec2(position / glm::vec2(5, 5));
+		return glm::ivec2(position / glm::vec2(cellSize, cellSize));
 	}
 
 	// Use map.find() to check if the chunk exists
@@ -59,22 +52,15 @@ public:
 		return _chunks[chunkPos];
 	}
 
-
 	inline Element GetElementAtWorldPos(glm::ivec2 position)
 	{
 		if (position.x < 0 || position.x > worldSizeInCells.x - 1 || position.y < 0 || position.y > worldSizeInCells.y - 1)
-		{
-			Empty empty;
-			return empty;
-		}
+			return Empty();
 
 		Chunk* chunk = GetChunkFromWorldPos(position);
 
 		if (chunk == nullptr)
-		{
-			Empty empty;
-			return empty;
-		}
+			return Empty();
 
 		glm::vec2 localPos = glm::vec2(position - chunk->Position);
 
@@ -89,11 +75,6 @@ public:
 		chunk->SetElementAtLocalPosition(localPos, element);
 	}
 
-
-
-
-
-
 	inline void EditElementAtPixel(glm::vec2 position, int element)
 	{
 		if(position.x < 0 || position.x > 1920 || position.y < 0 || position.y > 1080)
@@ -102,11 +83,11 @@ public:
 		glm::ivec2 cellPos = PixelToCellPos(position);
 		Chunk* chunk = GetChunkFromWorldPos(cellPos);
 
-		Sand sand;
-		chunk->SetElementAtWorldPosition(cellPos, sand);
-	}
+		if (chunk == nullptr)
+			return;
 
-	//std::unordered_set<Chunk*> ChunksToUpdate;
+		chunk->SetElementAtWorldPosition(cellPos, Sand({ cellPos.x, cellPos.y }));
+	}
 
 private:
 	

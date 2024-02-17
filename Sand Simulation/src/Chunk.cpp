@@ -10,8 +10,7 @@ Chunk::Chunk(World* world, int cx, int cy) : Position(cx, cy), _world(world)
 	{
 		for (int y = 0; y < chunkSizeInCells; y++)
 		{
-			Air air;
-			_chunkData[GetIndex({ x, y })] = air;
+			_chunkData[GetIndex({ x, y })] = Air({ x, y });
 		}
 	}
 
@@ -102,7 +101,6 @@ void Chunk::SandUpdate(Element element)
 	glm::vec2 targetPosition = currentPosition + vel;
 
 	glm::vec2 lastStep = currentPosition;
-	Chunk* lastStepChunk = this;
 
 	int x1 = currentPosition.x;
 	int y1 = currentPosition.y;
@@ -142,18 +140,16 @@ void Chunk::SandUpdate(Element element)
 		glm::vec2 step = { currentX, currentY };
 		glm::ivec2 stepInt = { currentX, currentY };
 
-		Chunk* stepChunk = _world->GetChunkFromWorldPos(step);
-		Element stepCell = stepChunk->GetElementAtLocalPosition( stepInt - stepChunk->Position);
+		Element stepCell = _world->GetElementAtWorldPos(stepInt);
 
 		if (stepCell.ID == 0)
 		{
 			element.Velocity = vel;
 
-			lastStepChunk->SetElementAtWorldPosition(lastStep, stepCell);
-			stepChunk->SetElementAtWorldPosition(step, element);
+			_world->SetElementAtWorldPos(lastStep, stepCell);
+			_world->SetElementAtWorldPos(step, element);
 
 			lastStep = step;
-			lastStepChunk = stepChunk;
 		}
 		else
 		{
@@ -162,6 +158,76 @@ void Chunk::SandUpdate(Element element)
 		}
 	}
 }
+
+//void Chunk::SandUpdate(Element element)
+//{
+//	glm::vec2 vel = element.Velocity;
+//	vel.y += -9.81f * Time::deltaTime;
+//
+//	glm::vec2 currentPosition = element.Position;
+//	glm::vec2 targetPosition = currentPosition + vel;
+//
+//	glm::vec2 lastStep = currentPosition;
+//	Chunk* lastStepChunk = this;
+//
+//	int x1 = currentPosition.x;
+//	int y1 = currentPosition.y;
+//
+//	int x2 = targetPosition.x;
+//	int y2 = targetPosition.y;
+//
+//	int xDiff = x2 - x1;
+//	int yDiff = y2 - y1;
+//
+//	bool xDiffIsLarger = glm::abs(xDiff) > glm::abs(yDiff);
+//
+//	int xMod = xDiff > 0 ? 1 : -1;
+//	int yMod = yDiff > 0 ? 1 : -1;
+//
+//	int longerSideLength = std::max(glm::abs(xDiff), glm::abs(yDiff));
+//	int shorterSideLength = std::min(glm::abs(xDiff), glm::abs(yDiff));
+//
+//	float slope = (shorterSideLength == 0 || longerSideLength == 0) ? 0 : ((float)(shorterSideLength) / (longerSideLength));
+//
+//	int shorterSideIncrease;
+//
+//	for (int i = 1; i <= longerSideLength; i++) {
+//		shorterSideIncrease = glm::round(i * slope);
+//		int yIncrease, xIncrease;
+//		if (xDiffIsLarger) {
+//			xIncrease = i;
+//			yIncrease = shorterSideIncrease;
+//		}
+//		else {
+//			yIncrease = i;
+//			xIncrease = shorterSideIncrease;
+//		}
+//		int currentY = y1 + (yIncrease * yMod);
+//		int currentX = x1 + (xIncrease * xMod);
+//
+//		glm::vec2 step = { currentX, currentY };
+//		glm::ivec2 stepInt = { currentX, currentY };
+//
+//		Chunk* stepChunk = _world->GetChunkFromWorldPos(step);
+//		Element stepCell = stepChunk->GetElementAtLocalPosition( stepInt - stepChunk->Position);
+//
+//		if (stepCell.ID == 0)
+//		{
+//			element.Velocity = vel;
+//
+//			lastStepChunk->SetElementAtWorldPosition(lastStep, stepCell);
+//			stepChunk->SetElementAtWorldPosition(step, element);
+//
+//			lastStep = step;
+//			lastStepChunk = stepChunk;
+//		}
+//		else
+//		{
+//			element.Velocity = { 0, 0 };
+//			break;
+//		}
+//	}
+//}
 
 
 /*
