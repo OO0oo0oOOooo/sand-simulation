@@ -1,25 +1,5 @@
 #include "World.h"
 
-World::World(ctpl::thread_pool* pool)
-	: _threadPool(pool)
-{
-	for (int x = 0; x < numChunksWidth; x++)
-	{
-		for (int y = 0; y < numChunksHeight; y++)
-		{
-			_chunks[glm::vec2(x, y)] = new Chunk(this, x * 64, y * 64);
-		}
-	}
-}
-
-World::~World()
-{
-	for (auto& chunk : _chunks)
-	{
-		delete chunk.second;
-	}
-}
-
 void CellularAutomata(int id, Chunk* chunk)
 {
 	chunk->Update();
@@ -55,7 +35,6 @@ void World::Update(Shader* shader)
 			f.first.get();
 			f.second->UploadMeshData();
 			f.second->DrawMesh(shader);
-
 		}
 	}
 

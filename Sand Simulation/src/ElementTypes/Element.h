@@ -1,21 +1,18 @@
 #pragma once
 
 #include <glm/glm.hpp>
+#include "world.h"
 
-
-
-//namespace Elements {
-//
-//	Empty empty;
-//	Air air;
-//	Sand sand;
-//
-//}
-
-//#include "Air.h"
-//#include "Sand.h"
-//#include "Water.h"
-//#include "Empty.h"
+enum class ElementType
+{
+	Air,
+	Stone,
+	Dirt,
+	Sand,
+	Water,
+	Lava,
+	Empty,
+};
 
 class Element
 {
@@ -23,7 +20,7 @@ public:
 	Element() {}
 	~Element() {}
 
-	virtual void Step()
+	virtual void Step(World* world)
 	{
 		return;
 	}
@@ -33,7 +30,7 @@ public:
 		return false;
 	}
 
-	virtual bool ReceiveHeat() 
+	virtual bool ReceiveHeat()
 	{
 		return false;
 	}
@@ -72,6 +69,11 @@ class Solid : public Element
 public:
 	Solid() {}
 	~Solid() {}
+
+	//virtual void Step(World* world)
+	//{
+	//	return;
+	//}
 
 private:
 

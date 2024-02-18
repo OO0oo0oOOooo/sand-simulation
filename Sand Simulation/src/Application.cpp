@@ -15,64 +15,6 @@
 
 #include "Time.h"
 
-//#include <iostream>
-
-// TODO:
-// 
-// [ ] ticks
-// [ ] some kind of fixed update for "physics"
-// 
-// Multitreading:
-// [x] Thread Pool
-// [x] Multithreading Chunks in checkered pattern
-//      4 Updates per frame
-//      First I check if the chunk is dirty
-//      Then I find which update the chunk is on
-//      Queue the chunk to the thread pool
-//      When the thread is done repeat for the second update
-//
-// GUI:
-// [ ] Particle Selection UI
-//
-// Optimizations:
-// [x] Dirty Rect per chunk
-// [x] Multithreading Chunks in checkered pattern
-// [ ] Instanced Rendering
-// [ ] Compute Shaders
-// [ ] Reduce size of buffer (Build Quads on gpu)
-// [ ] Dont draw air
-// [ ] Dirty Chunks
-// [ ] Create a quad with a texture for the entire screen then draw each cell as a pixel on the quad
-// 
-// World:
-// [ ] Multithreading doesnt update the mesh of chunks that cross into the next chunk properly.
-// - Temporary unordered set of chunks that get updated when each thread is done
-// 
-// Chunks:
-// [ ] Velocity is wacky right now. I need a fixed timestep and to fix preformance issues
-// [ ] Check cells in between the start and end position
-// [ ] Try recreating the entire mesh after each thread is done that way i only need to manipulate the chunk data inside of the threads
-// 
-// Dirty Rect:
-// Think of a more efficient way to grow and shrink the dirty rect
-//
-// Effects:
-// [ ] Lighting
-//      Flood Fill
-//
-// [ ] Texturing Groups
-// [ ] Tiled textures across the world
-//      Cells will get the texture for there block ID
-// 
-// Bugs:
-// [ ] Falling sand doesnt draw on chunkborders
-// [ ] memory leak for drawing debug chunk boarders and debug dirty quads
-// [ ] Water is weird and always flows left
-//
-// Refactoring:
-// [ ] Cell.cpp doesnt do anything
-// [ ] Cell.h has a lot of comments
-
 unsigned int windowWidth = 1920;
 unsigned int windowHeight = 1080;
 unsigned int gridResolution = 256;

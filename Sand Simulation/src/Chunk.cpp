@@ -75,19 +75,21 @@ void Chunk::Update()
 			if (hasMoved[elementPosition])
 				continue;
 
-			switch (id)
-			{
-			case 3:
-				SandUpdate(element);
-				break;
+			element.Step(_world);
 
-			case 4:
-				//WaterUpdate(element);
-				break;
+			//switch (id)
+			//{
+			//case 3:
+			//	//SandUpdate(element);
+			//	break;
 
-			default:
-				break;
-			}
+			//case 4:
+			//	//WaterUpdate(element);
+			//	break;
+
+			//default:
+			//	break;
+			//}
 		}
 	}
 }
