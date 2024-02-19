@@ -62,23 +62,24 @@ public:
 		return index.y * chunkSizeInCells + index.x;
 	}
 
-	inline Element GetElementAtLocalPosition(glm::ivec2 pos)
+	inline Element* GetElementAtLocalPosition(glm::ivec2 pos)
 	{
 		if (pos.x < 0 || pos.x > chunkSizeInCells - 1 || pos.y < 0 || pos.y > chunkSizeInCells - 1)
-			return Empty();
+			return nullptr;
 
 		return _chunkData[GetIndex(pos)];
 	}
 
-	inline void SetElementAtLocalPosition(glm::ivec2 pos, Element element)
+	inline void SetElementAtLocalPosition(glm::ivec2 pos, Element* element)
 	{
 		if (pos.x < 0 || pos.x > chunkSizeInCells - 1 || pos.y < 0 || pos.y > chunkSizeInCells - 1)
 			return;
 
 		int index = GetIndex(pos);
 
+		delete _chunkData[index];
 		_chunkData[index] = element;
-		_chunkData[index].Position = pos + Position;
+		_chunkData[index]->Position = pos + Position;
 
 		int baseVertexIndex = index * 4;
 
@@ -87,13 +88,13 @@ public:
 			Vertex v;
 
 			v.position = (glm::vec3(pos + Position, 0) + vertexPositions[i]) * (float)cellSize;
-			v.color = element.Color;
+			v.color = element->Color;
 
 			_mesh->vertices[baseVertexIndex + i] = v;
 		}
 	}
 
-	inline void SetElementAtWorldPosition(glm::ivec2 worldPosition, Element element)
+	inline void SetElementAtWorldPosition(glm::ivec2 worldPosition, Element* element)
 	{
 		if (worldPosition.x < 0 || worldPosition.x > worldSizeInCells.x - 1 || worldPosition.y < 0 || worldPosition.y > worldSizeInCells.y - 1)
 			return;
@@ -102,8 +103,9 @@ public:
 
 		int index = GetIndex(localPos);
 
+		delete _chunkData[index];
 		_chunkData[index] = element;
-		//_chunkData[index].Position = worldPosition;
+		_chunkData[index]->Position = worldPosition;
 
 		int baseVertexIndex = index * 4;
 
@@ -112,7 +114,7 @@ public:
 			Vertex v;
 
 			v.position = (glm::vec3(worldPosition, 0) + vertexPositions[i]) * (float)cellSize;
-			v.color = element.Color;
+			v.color = element->Color;
 
 			_mesh->vertices[baseVertexIndex + i] = v;
 		}
@@ -121,11 +123,11 @@ public:
 	glm::ivec2 Position;
 
 private:
-	std::vector<Element> _chunkData;
+	std::vector<Element*> _chunkData;
 	World* _world;
 	Mesh* _mesh;
 
-	void SandUpdate(Element cell);
+	//void SandUpdate(Element element);
 };
 
 /*

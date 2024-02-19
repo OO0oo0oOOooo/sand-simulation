@@ -67,22 +67,22 @@ public:
 		return _chunks[chunkPos];
 	}
 
-	inline Element GetElementAtWorldPos(glm::ivec2 position)
+	inline Element* GetElementAtWorldPos(glm::ivec2 position)
 	{
 		if (position.x < 0 || position.x > worldSizeInCells.x - 1 || position.y < 0 || position.y > worldSizeInCells.y - 1)
-			return Empty();
+			return nullptr;
 
 		Chunk* chunk = GetChunkFromWorldPos(position);
 
 		if (chunk == nullptr)
-			return Empty();
+			return nullptr;
 
 		glm::vec2 localPos = glm::vec2(position - chunk->Position);
 
 		return chunk->GetElementAtLocalPosition(localPos);
 	}
 
-	inline void SetElementAtWorldPos(glm::ivec2 position, Element element)
+	inline void SetElementAtWorldPos(glm::ivec2 position, Element* element)
 	{
 		Chunk* chunk = GetChunkFromWorldPos(position);
 		glm::vec2 localPos = glm::vec2(position - chunk->Position);
@@ -101,19 +101,41 @@ public:
 		if (chunk == nullptr)
 			return;
 
-		Element e;
 		switch (element)
 		{
 			case 0:
-				e = Air({ cellPos.x, cellPos.y });
+				chunk->SetElementAtWorldPosition(cellPos, new Air({ cellPos.x, cellPos.y }));
 				break;
 
 			case 3:
-				e = Sand({ cellPos.x, cellPos.y });
+				chunk->SetElementAtWorldPosition(cellPos, new Sand({ cellPos.x, cellPos.y }));
 				break;
 		}
 
-		chunk->SetElementAtWorldPosition(cellPos, e);
+		
+	}
+
+	inline void MoveElement(glm::ivec2 from, glm::ivec2 to)
+	{
+		Element* element = GetElementAtWorldPos(from);
+
+		if (element == nullptr)
+			return;
+
+		SetElementAtWorldPos(from, new Air(from));
+		SetElementAtWorldPos(to, element);
+	}
+
+	inline void SwapElements(glm::ivec2 pos1, glm::ivec2 pos2)
+	{
+		Element* element1 = GetElementAtWorldPos(pos1);
+		Element* element2 = GetElementAtWorldPos(pos2);
+
+		if (element1 == nullptr || element2 == nullptr)
+			return;
+
+		SetElementAtWorldPos(pos1, element2);
+		SetElementAtWorldPos(pos2, element1);
 	}
 
 private:

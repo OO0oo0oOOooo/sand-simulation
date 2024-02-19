@@ -15,9 +15,10 @@ public:
 
 	~Air() {}
 
-	/*void Step() override
+	void Step() override
 	{
+		//std::cout << "Step Air" << std::endl;
 		return;
-	}*/
+	}
 
 };

@@ -1,7 +1,10 @@
 #pragma once
 
 #include <glm/glm.hpp>
-#include "world.h"
+
+//#include "World.h"
+
+#include <iostream>
 
 enum class ElementType
 {
@@ -20,7 +23,7 @@ public:
 	Element() {}
 	~Element() {}
 
-	virtual void Step(World* world)
+	virtual void Step(/*World* world*/)
 	{
 		return;
 	}
@@ -69,11 +72,6 @@ class Solid : public Element
 public:
 	Solid() {}
 	~Solid() {}
-
-	//virtual void Step(World* world)
-	//{
-	//	return;
-	//}
 
 private:
 

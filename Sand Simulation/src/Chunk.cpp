@@ -3,14 +3,14 @@
 
 Chunk::Chunk(World* world, int cx, int cy) : Position(cx, cy), _world(world)
 {
-	_chunkData = std::vector<Element>(chunkSizeInCells * chunkSizeInCells);
+	_chunkData = std::vector<Element*>(chunkSizeInCells * chunkSizeInCells);
 	_mesh = new Mesh();
 
 	for (int x = 0; x < chunkSizeInCells; x++)
 	{
 		for (int y = 0; y < chunkSizeInCells; y++)
 		{
-			_chunkData[GetIndex({ x, y })] = Air({ x, y });
+			_chunkData[GetIndex({ x, y })] = new Air({ x, y });
 		}
 	}
 
@@ -37,7 +37,7 @@ void Chunk::CreateMesh()
 
 			int baseVertexIndex = (cellIndex) * 4;
 			int baseIndexIndex = (cellIndex) * 6;
-			Element element = _chunkData[cellIndex];
+			Element* element = _chunkData[cellIndex];
 
 			int newX = x + (int)Position.x;
 			int newY = y + (int)Position.y;
@@ -45,7 +45,7 @@ void Chunk::CreateMesh()
 			for (int i = 0; i < 4; i++)
 			{
 				_mesh->vertices[baseVertexIndex + i].position = (glm::vec3(newX, newY, 0) + vertexPositions[i]) * (float)cellSize;
-				_mesh->vertices[baseVertexIndex + i].color = element.Color;
+				_mesh->vertices[baseVertexIndex + i].color = element->Color;
 			}
 
 			for (int i = 0; i < 6; i++)
@@ -68,14 +68,23 @@ void Chunk::Update()
 		{
 			glm::ivec2 position = glm::ivec2(x, y);
 
-			Element element = GetElementAtLocalPosition(position);
-			int id = (int)element.ID;
+			Element* element = GetElementAtLocalPosition(position);
 
-			glm::ivec2 elementPosition = element.Position;
+			if(element == nullptr)
+				continue;
+
+			glm::ivec2 elementPosition = element->Position;
 			if (hasMoved[elementPosition])
 				continue;
 
-			element.Step(_world);
+			//element->Step(_world);
+			
+			/*
+			int id = (int)element->ID;
+
+			if(id != 0)
+				continue;
+			*/
 
 			//switch (id)
 			//{
@@ -94,72 +103,73 @@ void Chunk::Update()
 	}
 }
 
-void Chunk::SandUpdate(Element element)
-{
-	glm::vec2 vel = element.Velocity;
-	vel.y += -9.81f * Time::deltaTime;
-
-	glm::vec2 currentPosition = element.Position;
-	glm::vec2 targetPosition = currentPosition + vel;
-
-	glm::vec2 lastStep = currentPosition;
-
-	int x1 = currentPosition.x;
-	int y1 = currentPosition.y;
-
-	int x2 = targetPosition.x;
-	int y2 = targetPosition.y;
-
-	int xDiff = x2 - x1;
-	int yDiff = y2 - y1;
-
-	bool xDiffIsLarger = glm::abs(xDiff) > glm::abs(yDiff);
-
-	int xMod = xDiff > 0 ? 1 : -1;
-	int yMod = yDiff > 0 ? 1 : -1;
-
-	int longerSideLength = std::max(glm::abs(xDiff), glm::abs(yDiff));
-	int shorterSideLength = std::min(glm::abs(xDiff), glm::abs(yDiff));
-
-	float slope = (shorterSideLength == 0 || longerSideLength == 0) ? 0 : ((float)(shorterSideLength) / (longerSideLength));
-
-	int shorterSideIncrease;
-
-	for (int i = 1; i <= longerSideLength; i++) {
-		shorterSideIncrease = glm::round(i * slope);
-		int yIncrease, xIncrease;
-		if (xDiffIsLarger) {
-			xIncrease = i;
-			yIncrease = shorterSideIncrease;
-		}
-		else {
-			yIncrease = i;
-			xIncrease = shorterSideIncrease;
-		}
-		int currentY = y1 + (yIncrease * yMod);
-		int currentX = x1 + (xIncrease * xMod);
-
-		glm::vec2 step = { currentX, currentY };
-		glm::ivec2 stepInt = { currentX, currentY };
-
-		Element stepCell = _world->GetElementAtWorldPos(stepInt);
-
-		if (stepCell.ID == 0)
-		{
-			element.Velocity = vel;
-
-			_world->SetElementAtWorldPos(lastStep, stepCell);
-			_world->SetElementAtWorldPos(step, element);
-
-			lastStep = step;
-		}
-		else
-		{
-			element.Velocity = { 0, 0 };
-			break;
-		}
-	}
-}
+// This is the lastest version of the SandUpdate function
+//void Chunk::SandUpdate(Element element)
+//{
+//	glm::vec2 vel = element.Velocity;
+//	vel.y += -9.81f * Time::deltaTime;
+//
+//	glm::vec2 currentPosition = element.Position;
+//	glm::vec2 targetPosition = currentPosition + vel;
+//
+//	glm::vec2 lastStep = currentPosition;
+//
+//	int x1 = currentPosition.x;
+//	int y1 = currentPosition.y;
+//
+//	int x2 = targetPosition.x;
+//	int y2 = targetPosition.y;
+//
+//	int xDiff = x2 - x1;
+//	int yDiff = y2 - y1;
+//
+//	bool xDiffIsLarger = glm::abs(xDiff) > glm::abs(yDiff);
+//
+//	int xMod = xDiff > 0 ? 1 : -1;
+//	int yMod = yDiff > 0 ? 1 : -1;
+//
+//	int longerSideLength = std::max(glm::abs(xDiff), glm::abs(yDiff));
+//	int shorterSideLength = std::min(glm::abs(xDiff), glm::abs(yDiff));
+//
+//	float slope = (shorterSideLength == 0 || longerSideLength == 0) ? 0 : ((float)(shorterSideLength) / (longerSideLength));
+//
+//	int shorterSideIncrease;
+//
+//	for (int i = 1; i <= longerSideLength; i++) {
+//		shorterSideIncrease = glm::round(i * slope);
+//		int yIncrease, xIncrease;
+//		if (xDiffIsLarger) {
+//			xIncrease = i;
+//			yIncrease = shorterSideIncrease;
+//		}
+//		else {
+//			yIncrease = i;
+//			xIncrease = shorterSideIncrease;
+//		}
+//		int currentY = y1 + (yIncrease * yMod);
+//		int currentX = x1 + (xIncrease * xMod);
+//
+//		glm::vec2 step = { currentX, currentY };
+//		glm::ivec2 stepInt = { currentX, currentY };
+//
+//		Element stepCell = _world->GetElementAtWorldPos(stepInt);
+//
+//		if (stepCell.ID == 0)
+//		{
+//			element.Velocity = vel;
+//
+//			_world->SetElementAtWorldPos(lastStep, stepCell);
+//			_world->SetElementAtWorldPos(step, element);
+//
+//			lastStep = step;
+//		}
+//		else
+//		{
+//			element.Velocity = { 0, 0 };
+//			break;
+//		}
+//	}
+//}
 
 //void Chunk::SandUpdate(Element element)
 //{
