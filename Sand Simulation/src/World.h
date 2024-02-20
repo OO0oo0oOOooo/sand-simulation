@@ -1,55 +1,64 @@
 #pragma once
 
-#include "glm/glm.hpp"
-
-#include "Chunk.h"
-#include <unordered_map>
-
 #include "ctpl/ctpl_stl.h"
-
-struct KeyHash {
-	std::size_t operator()(const glm::ivec2& k) const {
-		return std::hash<int>()(k.x) ^ std::hash<int>()(k.y);
-	}
-};
-
-struct KeyEqual {
-	bool operator()(const glm::ivec2& lhs, const glm::ivec2& rhs) const {
-		return lhs.x == rhs.x && lhs.y == rhs.y;
-	}
-};
+#include "Chunk.h"
 
 class World
 {
 public:
 	World(ctpl::thread_pool* pool) : _threadPool(pool)
 	{
+		//for (int x = 0; x < numChunksWidth; x++)
+		//{
+		//	for (int y = 0; y < numChunksHeight; y++)
+		//	{
+		//		_chunks[glm::vec2(x, y)] = new Chunk(/*this, */x * 64, y * 64);
+		//	}
+		//}
+	
 		for (int x = 0; x < numChunksWidth; x++)
 		{
 			for (int y = 0; y < numChunksHeight; y++)
 			{
-				_chunks[glm::vec2(x, y)] = new Chunk(this, x * 64, y * 64);
+				// set chunk x size to numChunksWidth and y size to numChunksHeight
+
+
+				_chunks[x][y] = new Chunk(x * 64, y * 64);
 			}
 		}
 	}
 
 	~World()
 	{
-		for (auto& chunk : _chunks)
+		/*for (auto& chunk : _chunks)
 		{
 			delete chunk.second;
-		}
+		}*/
 	}
 
     void Update(Shader* shader);
 
 	inline void Draw(Shader* shader)
 	{
-		for (auto& chunk : _chunks)
+		for (int x = 0; x < numChunksWidth; x++)
 		{
-			chunk.second->UploadMeshData();
-			chunk.second->DrawMesh(shader);
+			for (int y = 0; y < numChunksHeight; y++)
+			{
+				Chunk* chunk = _chunks[glm::vec2(x, y)];
+
+				if (chunk != nullptr)
+				{
+					chunk->UploadMeshData();
+					chunk->DrawMesh(shader);
+				}
+			}
 		}
+
+		//for (auto& chunk : _chunks)
+		//{
+		//	chunk.second->UploadMeshData();
+		//	chunk.second->DrawMesh(shader);
+		//}
 	}
 
 	inline glm::ivec2 PixelToCellPos(glm::vec2 position)
@@ -141,5 +150,8 @@ public:
 private:
 	
 	ctpl::thread_pool* _threadPool;
-	std::unordered_map<glm::ivec2, Chunk*, KeyHash, KeyEqual> _chunks;
+
+	std::vector<std::vector<Chunk*>> _chunks;
+
+	//std::unordered_map<glm::ivec2, Chunk*, KeyHash, KeyEqual> _chunks;
 };

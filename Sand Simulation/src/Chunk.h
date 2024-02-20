@@ -1,18 +1,22 @@
 #pragma once
 
-#include "ElementTypes/Element.h"
-#include "ElementTypes/Empty.h"
-#include "ElementTypes/Sand.h"
-#include "ElementTypes/Air.h"
+//#include "glm/glm.hpp"
+#include "v2kh.h"
+
 
 #include "Mesh.h"
-#include "ChunkData.h"
 #include "Time.h"
+#include "ChunkData.h"
 
-class World;
+#include "Elements/Element.h"
+#include "Elements/Empty.h"
+#include "Elements/Water.h"
+#include "Elements/Sand.h"
+#include "Elements/Air.h"
 
-#include <vector>
+#include <unordered_map>
 #include <iostream>
+#include <vector>
 
 struct Bounds
 {
@@ -38,16 +42,35 @@ const unsigned int meshTriangles[] = {
 class Chunk
 {
 public:
-	Chunk(World* world, int x, int y);
-	~Chunk();
+	Chunk(int x, int y) : Position({ x, y })
+	{
+		_chunkData = std::vector<Element*>(chunkSizeInCells * chunkSizeInCells);
+		_mesh = new Mesh();
+
+		for (int x = 0; x < chunkSizeInCells; x++)
+		{
+			for (int y = 0; y < chunkSizeInCells; y++)
+			{
+				_chunkData[GetIndex({ x, y })] = new Air({ x, y });
+			}
+		}
+
+		CreateMesh();
+	}
+
+	~Chunk()
+	{
+		delete _mesh;
+	}
 
 	void Update();
-
 	void CreateMesh();
+
 	void DrawMesh(Shader* shader)
 	{
 		_mesh->Draw(shader);
 	}
+
 	void UploadMeshData()
 	{
 		_mesh->UploadVBOData();
@@ -124,10 +147,7 @@ public:
 
 private:
 	std::vector<Element*> _chunkData;
-	World* _world;
 	Mesh* _mesh;
-
-	//void SandUpdate(Element element);
 };
 
 /*

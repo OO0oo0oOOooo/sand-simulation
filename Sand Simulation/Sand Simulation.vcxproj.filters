@@ -1001,22 +1001,25 @@
     <ClInclude Include="src\CellInteractions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\ElementTypes\Element.h">
+    <ClInclude Include="src\Elements\Element.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\ElementTypes\Sand.h">
+    <ClInclude Include="src\Elements\Sand.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\ElementTypes\Water.h">
+    <ClInclude Include="src\Elements\Water.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\ElementTypes\Steam.h">
+    <ClInclude Include="src\Elements\Steam.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\ElementTypes\Air.h">
+    <ClInclude Include="src\Elements\Air.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\ElementTypes\Empty.h">
+    <ClInclude Include="src\Elements\Empty.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\v2kh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

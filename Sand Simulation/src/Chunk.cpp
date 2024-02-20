@@ -1,26 +1,25 @@
 #include "Chunk.h"
-#include "World.h"
 
-Chunk::Chunk(World* world, int cx, int cy) : Position(cx, cy), _world(world)
-{
-	_chunkData = std::vector<Element*>(chunkSizeInCells * chunkSizeInCells);
-	_mesh = new Mesh();
-
-	for (int x = 0; x < chunkSizeInCells; x++)
-	{
-		for (int y = 0; y < chunkSizeInCells; y++)
-		{
-			_chunkData[GetIndex({ x, y })] = new Air({ x, y });
-		}
-	}
-
-	CreateMesh();
-}
-
-Chunk::~Chunk()
-{
-	delete _mesh;
-}
+//Chunk::Chunk(/*World* world, */int cx, int cy) : Position(cx, cy)/*, _world(world)*/
+//{
+//	_chunkData = std::vector<Element*>(chunkSizeInCells * chunkSizeInCells);
+//	_mesh = new Mesh();
+//
+//	for (int x = 0; x < chunkSizeInCells; x++)
+//	{
+//		for (int y = 0; y < chunkSizeInCells; y++)
+//		{
+//			_chunkData[GetIndex({ x, y })] = new Air({ x, y });
+//		}
+//	}
+//
+//	CreateMesh();
+//}
+//
+//Chunk::~Chunk()
+//{
+//	delete _mesh;
+//}
 
 void Chunk::CreateMesh()
 {

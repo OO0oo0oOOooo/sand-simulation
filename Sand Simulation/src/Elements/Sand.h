@@ -20,8 +20,6 @@ public:
 	//	// world->MoveElement(pos)
 	//	// world->SwapElements(pos1, pos2)
 
-
-
 	//	glm::ivec2 pos = Position;
 	//
 	//	Element* elementB = world->GetElementAtWorldPos(pos + glm::ivec2(0, -1));
@@ -43,8 +41,6 @@ public:
 	//		world->SetElementAtWorldPos(pos, elementBL);
 	//		world->SetElementAtWorldPos(pos + glm::ivec2(-1, -1), this);
 	//	}
-
-	//	//std::cout << "Step Sand" << std::endl;
 	//}
 
 	//bool ActOnOther() override

@@ -1,10 +1,12 @@
 #pragma once
 
-#include <glm/glm.hpp>
+//#include "../World.h"
+//#include <glm/glm.hpp>
+
+//#include <iostream>
+//#include <unordered_map>
 
 //#include "World.h"
-
-#include <iostream>
 
 enum class ElementType
 {
@@ -100,3 +102,5 @@ public:
 private:
 
 };
+
+//
