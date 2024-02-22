@@ -1,12 +1,6 @@
 #pragma once
 
-//#include "../World.h"
-//#include <glm/glm.hpp>
-
-//#include <iostream>
-//#include <unordered_map>
-
-//#include "World.h"
+#include "../World.h"
 
 enum class ElementType
 {
@@ -25,7 +19,7 @@ public:
 	Element() {}
 	~Element() {}
 
-	virtual void Step(/*World* world*/)
+	virtual void Step(World* world)
 	{
 		return;
 	}

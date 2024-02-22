@@ -3,20 +3,17 @@
 //#include "glm/glm.hpp"
 #include "v2kh.h"
 
+class Element;
 
 #include "Mesh.h"
 #include "Time.h"
 #include "ChunkData.h"
 
-#include "Elements/Element.h"
-#include "Elements/Empty.h"
-#include "Elements/Water.h"
-#include "Elements/Sand.h"
-#include "Elements/Air.h"
-
 #include <unordered_map>
 #include <iostream>
 #include <vector>
+
+class World;
 
 struct Bounds
 {
@@ -42,21 +39,7 @@ const unsigned int meshTriangles[] = {
 class Chunk
 {
 public:
-	Chunk(int x, int y) : Position({ x, y })
-	{
-		_chunkData = std::vector<Element*>(chunkSizeInCells * chunkSizeInCells);
-		_mesh = new Mesh();
-
-		for (int x = 0; x < chunkSizeInCells; x++)
-		{
-			for (int y = 0; y < chunkSizeInCells; y++)
-			{
-				_chunkData[GetIndex({ x, y })] = new Air({ x, y });
-			}
-		}
-
-		CreateMesh();
-	}
+	Chunk(World* world, int x, int y);
 
 	~Chunk()
 	{
@@ -64,6 +47,7 @@ public:
 	}
 
 	void Update();
+
 	void CreateMesh();
 
 	void DrawMesh(Shader* shader)
@@ -93,60 +77,15 @@ public:
 		return _chunkData[GetIndex(pos)];
 	}
 
-	inline void SetElementAtLocalPosition(glm::ivec2 pos, Element* element)
-	{
-		if (pos.x < 0 || pos.x > chunkSizeInCells - 1 || pos.y < 0 || pos.y > chunkSizeInCells - 1)
-			return;
+	void SetElementAtLocalPosition(glm::ivec2 pos, Element* element);
 
-		int index = GetIndex(pos);
-
-		delete _chunkData[index];
-		_chunkData[index] = element;
-		_chunkData[index]->Position = pos + Position;
-
-		int baseVertexIndex = index * 4;
-
-		for (int i = 0; i < 4; i++)
-		{
-			Vertex v;
-
-			v.position = (glm::vec3(pos + Position, 0) + vertexPositions[i]) * (float)cellSize;
-			v.color = element->Color;
-
-			_mesh->vertices[baseVertexIndex + i] = v;
-		}
-	}
-
-	inline void SetElementAtWorldPosition(glm::ivec2 worldPosition, Element* element)
-	{
-		if (worldPosition.x < 0 || worldPosition.x > worldSizeInCells.x - 1 || worldPosition.y < 0 || worldPosition.y > worldSizeInCells.y - 1)
-			return;
-
-		glm::ivec2 localPos = { worldPosition.x - Position.x, worldPosition.y - Position.y };
-
-		int index = GetIndex(localPos);
-
-		delete _chunkData[index];
-		_chunkData[index] = element;
-		_chunkData[index]->Position = worldPosition;
-
-		int baseVertexIndex = index * 4;
-
-		for (int i = 0; i < 4; i++)
-		{
-			Vertex v;
-
-			v.position = (glm::vec3(worldPosition, 0) + vertexPositions[i]) * (float)cellSize;
-			v.color = element->Color;
-
-			_mesh->vertices[baseVertexIndex + i] = v;
-		}
-	}
+	void SetElementAtWorldPosition(glm::ivec2 worldPosition, Element* element);
 
 	glm::ivec2 Position;
 
 private:
 	std::vector<Element*> _chunkData;
+	World* _world;
 	Mesh* _mesh;
 };
 

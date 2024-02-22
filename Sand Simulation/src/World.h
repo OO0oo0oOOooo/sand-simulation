@@ -3,62 +3,39 @@
 #include "ctpl/ctpl_stl.h"
 #include "Chunk.h"
 
+class Element;
+
 class World
 {
 public:
 	World(ctpl::thread_pool* pool) : _threadPool(pool)
 	{
-		//for (int x = 0; x < numChunksWidth; x++)
-		//{
-		//	for (int y = 0; y < numChunksHeight; y++)
-		//	{
-		//		_chunks[glm::vec2(x, y)] = new Chunk(/*this, */x * 64, y * 64);
-		//	}
-		//}
-	
 		for (int x = 0; x < numChunksWidth; x++)
 		{
 			for (int y = 0; y < numChunksHeight; y++)
 			{
-				// set chunk x size to numChunksWidth and y size to numChunksHeight
-
-
-				_chunks[x][y] = new Chunk(x * 64, y * 64);
+				_chunks[glm::vec2(x, y)] = new Chunk(this, x * 64, y * 64);
 			}
 		}
 	}
-
+	
 	~World()
 	{
-		/*for (auto& chunk : _chunks)
+		for (auto& chunk : _chunks)
 		{
 			delete chunk.second;
-		}*/
+		}
 	}
 
-    void Update(Shader* shader);
+	void Update(Shader* shader);
 
 	inline void Draw(Shader* shader)
 	{
-		for (int x = 0; x < numChunksWidth; x++)
+		for (auto& chunk : _chunks)
 		{
-			for (int y = 0; y < numChunksHeight; y++)
-			{
-				Chunk* chunk = _chunks[glm::vec2(x, y)];
-
-				if (chunk != nullptr)
-				{
-					chunk->UploadMeshData();
-					chunk->DrawMesh(shader);
-				}
-			}
+			chunk.second->UploadMeshData();
+			chunk.second->DrawMesh(shader);
 		}
-
-		//for (auto& chunk : _chunks)
-		//{
-		//	chunk.second->UploadMeshData();
-		//	chunk.second->DrawMesh(shader);
-		//}
 	}
 
 	inline glm::ivec2 PixelToCellPos(glm::vec2 position)
@@ -99,31 +76,9 @@ public:
 		chunk->SetElementAtLocalPosition(localPos, element);
 	}
 
-	inline void EditElementAtPixel(glm::vec2 position, int element)
-	{
-		if(position.x < 0 || position.x > 1920 || position.y < 0 || position.y > 1080)
-			return;
+	void EditElementAtPixel(glm::vec2 position, int element);
 
-		glm::ivec2 cellPos = PixelToCellPos(position);
-		Chunk* chunk = GetChunkFromWorldPos(cellPos);
-
-		if (chunk == nullptr)
-			return;
-
-		switch (element)
-		{
-			case 0:
-				chunk->SetElementAtWorldPosition(cellPos, new Air({ cellPos.x, cellPos.y }));
-				break;
-
-			case 3:
-				chunk->SetElementAtWorldPosition(cellPos, new Sand({ cellPos.x, cellPos.y }));
-				break;
-		}
-
-		
-	}
-
+	/*
 	inline void MoveElement(glm::ivec2 from, glm::ivec2 to)
 	{
 		Element* element = GetElementAtWorldPos(from);
@@ -146,12 +101,10 @@ public:
 		SetElementAtWorldPos(pos1, element2);
 		SetElementAtWorldPos(pos2, element1);
 	}
+	*/
 
 private:
-	
+
 	ctpl::thread_pool* _threadPool;
-
-	std::vector<std::vector<Chunk*>> _chunks;
-
-	//std::unordered_map<glm::ivec2, Chunk*, KeyHash, KeyEqual> _chunks;
+	std::unordered_map<glm::ivec2, Chunk*, KeyHash, KeyEqual> _chunks;
 };

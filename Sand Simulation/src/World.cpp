@@ -1,4 +1,9 @@
 #include "World.h"
+#include "Elements/Element.h"
+#include "Elements/Empty.h"
+#include "Elements/Water.h"
+#include "Elements/Sand.h"
+#include "Elements/Air.h"
 
 void CellularAutomata(int id, Chunk* chunk)
 {
@@ -7,7 +12,7 @@ void CellularAutomata(int id, Chunk* chunk)
 
 void World::Update(Shader* shader)
 {
-	//std::vector<Chunk*> chunksToUpdate;
+	std::vector<Chunk*> chunksToUpdate;
 
 	for (int pass = 0; pass < 4; ++pass)
 	{
@@ -19,7 +24,7 @@ void World::Update(Shader* shader)
 			{
 				if ((x + y + pass) % 4 == 0)
 				{
-					Chunk* chunk = _chunks[glm::vec2(x, y)];
+					Chunk* chunk = _chunks[{x, y}];
 
 					if (chunk != nullptr)
 					{
@@ -33,51 +38,38 @@ void World::Update(Shader* shader)
 		for (auto& f : futures)
 		{
 			f.first.get();
-			f.second->UploadMeshData();
-			f.second->DrawMesh(shader);
+			chunksToUpdate.push_back(f.second);
 		}
 	}
 
-
-	/*for (Chunk* chunk : ChunksToUpdate)
+	for (Chunk* chunk : chunksToUpdate)
 	{
 		chunk->UploadMeshData();
 		chunk->DrawMesh(shader);
-	}*/
+	}
 }
 
-//void World::DrawChunkBorders(Shader* shader)
-//{
-//	for (int x = 0; x < numChunksWidth; x++)
-//	{
-//		for (int y = 0; y < numChunksHeight; y++)
-//		{
-//			int cx = (x * 64) * cellSize;
-//			int cy = (y * 64) * cellSize;
-//
-//			std::vector<Vertex> vertices = {
-//				{{cx, cy, 0.1f}, {0.1, 1.0, 0.1, 1}},
-//				{{cx + (64 * cellSize), cy, 0.1f}, {0.1, 1.0, 0.1, 1}},
-//				{{cx + (64 * cellSize), cy + (64 * cellSize), 0.1f}, {0.1, 1.0, 0.1, 1}},
-//				{{cx, cy + (64 * cellSize), 0.1f}, {0.1, 1.0, 0.1, 1}},
-//			};
-//
-//			std::vector<unsigned int> indices = {
-//				0, 1, // Bottom edge
-//				1, 2, // Right edge
-//				2, 3, // Top edge
-//				3, 0  // Left edge
-//			};
-//
-//			Mesh squareOutline;
-//			squareOutline.vertices = vertices;
-//			squareOutline.indices = indices;
-//			squareOutline.UploadVBOData();
-//			squareOutline.UploadIBOData();
-//
-//			squareOutline.DrawLine(shader);
-//
-//			_chunks[glm::vec2(x, y)]->DrawDirtyQuad(shader);
-//		}
-//	}
-//}
+void World::EditElementAtPixel(glm::vec2 position, int element)
+{
+	if (position.x < 0 || position.x > 1920 || position.y < 0 || position.y > 1080)
+		return;
+
+	glm::ivec2 cellPos = PixelToCellPos(position);
+	Chunk* chunk = GetChunkFromWorldPos(cellPos);
+
+	if (chunk == nullptr)
+		return;
+
+	switch (element)
+	{
+	case 0:
+		chunk->SetElementAtWorldPosition(cellPos, new Air({ cellPos.x, cellPos.y }));
+		break;
+
+	case 3:
+		chunk->SetElementAtWorldPosition(cellPos, new Sand({ cellPos.x, cellPos.y }));
+		break;
+	}
+
+
+}
