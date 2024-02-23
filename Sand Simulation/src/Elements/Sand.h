@@ -17,9 +17,6 @@ public:
 
 	void Step(World* world) override
 	{
-		// world->MoveElement(pos)
-		// world->SwapElements(pos1, pos2)
-
 		glm::ivec2 pos = Position;
 	
 		Element* element = world->GetElementAtWorldPos(pos);
@@ -27,20 +24,24 @@ public:
 		Element* elementBR = world->GetElementAtWorldPos(pos + glm::ivec2(1, -1));
 		Element* elementBL = world->GetElementAtWorldPos(pos + glm::ivec2(-1, -1));
 
+		if(elementB == nullptr)
+			return;
+
 		if (elementB->ID == 0)
 		{
+			//world->SwapElements(pos, pos + glm::ivec2(0, -1));
 			world->SetElementAtWorldPos(pos, elementB);
 			world->SetElementAtWorldPos(pos + glm::ivec2(0, -1), element);
 		}
-		else if (elementBR->ID == 0)
-		{
-			world->SetElementAtWorldPos(pos, elementBR);
-			world->SetElementAtWorldPos(pos + glm::ivec2(1, -1), element);
-		}
-		else if (elementBL->ID == 0)
-		{
-			world->SetElementAtWorldPos(pos, elementBL);
-			world->SetElementAtWorldPos(pos + glm::ivec2(-1, -1), element);
-		}
+		//else if (elementBR->ID == 0)
+		//{
+		//	world->SetElementAtWorldPos(pos, elementBR);
+		//	world->SetElementAtWorldPos(pos + glm::ivec2(1, -1), element);
+		//}
+		//else if (elementBL->ID == 0)
+		//{
+		//	world->SetElementAtWorldPos(pos, elementBL);
+		//	world->SetElementAtWorldPos(pos + glm::ivec2(-1, -1), element);
+		//}
 	}
 };

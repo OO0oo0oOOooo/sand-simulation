@@ -73,3 +73,26 @@ void World::EditElementAtPixel(glm::vec2 position, int element)
 
 
 }
+
+void World::MoveElement(glm::ivec2 from, glm::ivec2 to)
+{
+	Element* element = GetElementAtWorldPos(from);
+
+	if (element == nullptr)
+		return;
+
+	SetElementAtWorldPos(from, new Air(from));
+	SetElementAtWorldPos(to, element);
+}
+
+void World::SwapElements(glm::ivec2 oldPos, glm::ivec2 newPos)
+{
+	Element* element1 = GetElementAtWorldPos(oldPos);
+	Element* element2 = GetElementAtWorldPos(newPos);
+
+	if (element1 == nullptr || element2 == nullptr)
+		return;
+
+	SetElementAtWorldPos(oldPos, element2);
+	SetElementAtWorldPos(newPos, element1);
+}

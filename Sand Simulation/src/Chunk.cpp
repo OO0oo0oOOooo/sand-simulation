@@ -49,7 +49,8 @@ void Chunk::SetElementAtLocalPosition(glm::ivec2 pos, Element* element)
 
 	int index = GetIndex(pos);
 
-	delete _chunkData[index];
+	// THIS WILL PROBABLY CAUSE A MEMORY LEAK IF DISABLED
+	//delete _chunkData[index];
 	_chunkData[index] = element;
 	_chunkData[index]->Position = pos + Position;
 

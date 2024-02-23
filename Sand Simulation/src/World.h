@@ -70,6 +70,9 @@ public:
 
 	inline void SetElementAtWorldPos(glm::ivec2 position, Element* element)
 	{
+		if (position.x < 0 || position.x > worldSizeInCells.x - 1 || position.y < 0 || position.y > worldSizeInCells.y - 1)
+			return;
+
 		Chunk* chunk = GetChunkFromWorldPos(position);
 		glm::vec2 localPos = glm::vec2(position - chunk->Position);
 
@@ -78,30 +81,9 @@ public:
 
 	void EditElementAtPixel(glm::vec2 position, int element);
 
-	/*
-	inline void MoveElement(glm::ivec2 from, glm::ivec2 to)
-	{
-		Element* element = GetElementAtWorldPos(from);
+	void MoveElement(glm::ivec2 from, glm::ivec2 to);
 
-		if (element == nullptr)
-			return;
-
-		SetElementAtWorldPos(from, new Air(from));
-		SetElementAtWorldPos(to, element);
-	}
-
-	inline void SwapElements(glm::ivec2 pos1, glm::ivec2 pos2)
-	{
-		Element* element1 = GetElementAtWorldPos(pos1);
-		Element* element2 = GetElementAtWorldPos(pos2);
-
-		if (element1 == nullptr || element2 == nullptr)
-			return;
-
-		SetElementAtWorldPos(pos1, element2);
-		SetElementAtWorldPos(pos2, element1);
-	}
-	*/
+	void SwapElements(glm::ivec2 pos1, glm::ivec2 pos2);
 
 private:
 
