@@ -12,8 +12,6 @@ void CellularAutomata(int id, Chunk* chunk)
 
 void World::Update(Shader* shader)
 {
-	std::vector<Chunk*> chunksToUpdate;
-
 	for (int pass = 0; pass < 4; ++pass)
 	{
 		std::vector<std::pair<std::future<void>, Chunk*>> futures;
@@ -38,14 +36,9 @@ void World::Update(Shader* shader)
 		for (auto& f : futures)
 		{
 			f.first.get();
-			chunksToUpdate.push_back(f.second);
+			f.second->UploadMeshData();
+			f.second->DrawMesh(shader);
 		}
-	}
-
-	for (Chunk* chunk : chunksToUpdate)
-	{
-		chunk->UploadMeshData();
-		chunk->DrawMesh(shader);
 	}
 }
 
@@ -70,8 +63,6 @@ void World::EditElementAtPixel(glm::vec2 position, int element)
 		chunk->SetElementAtWorldPosition(cellPos, new Sand({ cellPos.x, cellPos.y }));
 		break;
 	}
-
-
 }
 
 void World::MoveElement(glm::ivec2 from, glm::ivec2 to)

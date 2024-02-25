@@ -81,12 +81,28 @@ public:
 
 	void SetElementAtWorldPosition(glm::ivec2 worldPosition, Element* element);
 
+	inline void SetShouldUpdateNextFrame(bool b)
+	{
+		_shouldUpdateNextFrame = b;
+	}
+
 	glm::ivec2 Position;
 
 private:
 	std::vector<Element*> _chunkData;
 	World* _world;
 	Mesh* _mesh;
+
+	bool _shouldUpdate = false;
+	bool _shouldUpdateNextFrame = false;
+
+	bool SetUpdateState()
+	{
+		_shouldUpdate = _shouldUpdateNextFrame;
+		_shouldUpdateNextFrame = false;
+
+		return _shouldUpdate;
+	}
 };
 
 /*

@@ -38,6 +38,14 @@ public:
 		}
 	}
 
+	inline void DebugDraw(Shader* shader)
+	{
+		for (auto& chunk : _chunks)
+		{
+			
+		}
+	}
+
 	inline glm::ivec2 PixelToCellPos(glm::vec2 position)
 	{
 		return glm::ivec2(position / glm::vec2(cellSize, cellSize));

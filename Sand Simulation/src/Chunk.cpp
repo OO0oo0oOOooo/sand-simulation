@@ -53,6 +53,7 @@ void Chunk::SetElementAtLocalPosition(glm::ivec2 pos, Element* element)
 	//delete _chunkData[index];
 	_chunkData[index] = element;
 	_chunkData[index]->Position = pos + Position;
+	_shouldUpdateNextFrame = true;
 
 	int baseVertexIndex = index * 4;
 
@@ -79,6 +80,7 @@ void Chunk::SetElementAtWorldPosition(glm::ivec2 worldPosition, Element * elemen
 	delete _chunkData[index];
 	_chunkData[index] = element;
 	_chunkData[index]->Position = worldPosition;
+	_shouldUpdateNextFrame = true;
 
 	int baseVertexIndex = index * 4;
 
@@ -131,6 +133,9 @@ void Chunk::CreateMesh()
 
 void Chunk::Update()
 {
+	if (!SetUpdateState())
+		return;
+
 	std::unordered_map<glm::vec2, bool, KeyHash> hasMoved;
 
 	for (int y = 0; y < chunkSizeInCells; y++)
@@ -149,27 +154,6 @@ void Chunk::Update()
 				continue;
 
 			element->Step(_world);
-			
-			/*
-			int id = (int)element->ID;
-
-			if(id != 0)
-				continue;
-			*/
-
-			//switch (id)
-			//{
-			//case 3:
-			//	//SandUpdate(element);
-			//	break;
-
-			//case 4:
-			//	//WaterUpdate(element);
-			//	break;
-
-			//default:
-			//	break;
-			//}
 		}
 	}
 }
