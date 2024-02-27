@@ -36,6 +36,8 @@ int main(void)
     ctpl::thread_pool* threadPool = new ctpl::thread_pool(4);
     Renderer* renderer = new Renderer(windowWidth, windowHeight);
     World* world = new World(threadPool);
+
+    
     
     Input::SetupKeyInputs(glwindow);
 
@@ -56,6 +58,7 @@ int main(void)
         glClear(GL_COLOR_BUFFER_BIT);
 
         world->Update(renderer->GetShader());
+        world->DebugDraw(renderer->GetShader());
 
         // This causes a memory leak because it is poorly designed. It recreates the mesh every frame.
         // world->DrawChunkBorders(renderer->GetShader());

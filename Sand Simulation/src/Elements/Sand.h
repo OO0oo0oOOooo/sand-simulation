@@ -32,15 +32,15 @@ public:
 			world->SetElementAtWorldPos(pos, elementB);
 			world->SetElementAtWorldPos(pos + glm::ivec2(0, -1), element);
 		}
-		else if (elementBR->ID == 0)
-		{
-			world->SetElementAtWorldPos(pos, elementBR);
-			world->SetElementAtWorldPos(pos + glm::ivec2(1, -1), element);
-		}
-		else if (elementBL->ID == 0)
-		{
-			world->SetElementAtWorldPos(pos, elementBL);
-			world->SetElementAtWorldPos(pos + glm::ivec2(-1, -1), element);
-		}
+		//else if (elementBR->ID == 0)
+		//{
+		//	world->SetElementAtWorldPos(pos, elementBR);
+		//	world->SetElementAtWorldPos(pos + glm::ivec2(1, -1), element);
+		//}
+		//else if (elementBL->ID == 0)
+		//{
+		//	world->SetElementAtWorldPos(pos, elementBL);
+		//	world->SetElementAtWorldPos(pos + glm::ivec2(-1, -1), element);
+		//}
 	}
 };
