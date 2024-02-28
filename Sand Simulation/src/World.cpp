@@ -48,19 +48,15 @@ void World::EditElementAtPixel(glm::vec2 position, int element)
 		return;
 
 	glm::ivec2 cellPos = PixelToCellPos(position);
-	Chunk* chunk = GetChunkFromWorldPos(cellPos);
-
-	if (chunk == nullptr)
-		return;
 
 	switch (element)
 	{
 	case 0:
-		chunk->SetElementAtWorldPosition(cellPos, new Air({ cellPos.x, cellPos.y }));
+		SetElementAtWorldPos(cellPos, new Sand({ cellPos.x, cellPos.y }));
 		break;
 
 	case 3:
-		chunk->SetElementAtWorldPosition(cellPos, new Sand({ cellPos.x, cellPos.y }));
+		SetElementAtWorldPos(cellPos, new Sand({ cellPos.x, cellPos.y }));
 		break;
 	}
 }

@@ -46,19 +46,20 @@ public:
 
 	inline void DebugDrawInit()
 	{
+		_debugBordersMesh->Clear();
 		int padding = 1;
 
 		for (int x = 0; x < numChunksWidth; x++)
 		{
 			for (int y = 0; y < numChunksHeight; y++)
 			{
-				/*Chunk* chunk = _chunks[glm::vec2(x, y)];
-				glm::vec2 pos = chunk->Position;
+				Chunk* chunk = _chunks[glm::vec2(x, y)];
 
 				if (chunk == nullptr)
-					return;*/
+					return;
 
-				std::cout << x << ", " << y << std::endl;
+				if(!chunk->GetShouldUpdateNextFrame())
+					continue;
 
 				std::vector<Vertex> vertices = {
 					{ { (x * chunkSizeInCells * cellSize) + padding,			(y * chunkSizeInCells * cellSize) + padding,			0.2f },		{1.0, 1.0, 1.0, 0.25} },

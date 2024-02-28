@@ -58,6 +58,8 @@ int main(void)
         glClear(GL_COLOR_BUFFER_BIT);
 
         world->Update(renderer->GetShader());
+
+        world->DebugDrawInit();
         world->DebugDraw(renderer->GetShader());
 
         // This causes a memory leak because it is poorly designed. It recreates the mesh every frame.

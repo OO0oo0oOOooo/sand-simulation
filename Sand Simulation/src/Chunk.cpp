@@ -48,12 +48,45 @@ void Chunk::SetElementAtLocalPosition(glm::ivec2 pos, Element* element)
 		return;
 
 	int index = GetIndex(pos);
+	glm::ivec2 worldPos = pos + Position;
 
 	// THIS WILL PROBABLY CAUSE A MEMORY LEAK IF DISABLED
 	//delete _chunkData[index];
 	_chunkData[index] = element;
-	_chunkData[index]->Position = pos + Position;
+	_chunkData[index]->Position = worldPos;
 	_shouldUpdateNextFrame = true;
+
+	if (pos.x == 0)
+	{
+		Chunk* neighbourChunk = _world->GetChunkFromWorldPos(worldPos + glm::ivec2(-2, 0));
+
+		if (neighbourChunk != nullptr)
+			neighbourChunk->_shouldUpdateNextFrame = true;
+	}
+
+	if (pos.x == chunkSizeInCells - 1)
+	{
+		Chunk* neighbourChunk = _world->GetChunkFromWorldPos(worldPos + glm::ivec2(2, 0));
+
+		if (neighbourChunk != nullptr)
+			neighbourChunk->_shouldUpdateNextFrame = true;
+	}
+
+	if (pos.y == 0)
+	{
+		Chunk* neighbourChunk = _world->GetChunkFromWorldPos(worldPos + glm::ivec2(0, -2));
+
+		if (neighbourChunk != nullptr)
+			neighbourChunk->_shouldUpdateNextFrame = true;
+	}
+
+	if (pos.y == chunkSizeInCells - 1)
+	{
+		Chunk* neighbourChunk = _world->GetChunkFromWorldPos(worldPos + glm::ivec2(0, 2));
+
+		if (neighbourChunk != nullptr)
+			neighbourChunk->_shouldUpdateNextFrame = true;
+	}
 
 	int baseVertexIndex = index * 4;
 
@@ -70,29 +103,65 @@ void Chunk::SetElementAtLocalPosition(glm::ivec2 pos, Element* element)
 
 void Chunk::SetElementAtWorldPosition(glm::ivec2 worldPosition, Element * element)
 {
-	if (worldPosition.x < 0 || worldPosition.x > worldSizeInCells.x - 1 || worldPosition.y < 0 || worldPosition.y > worldSizeInCells.y - 1)
-		return;
+	std::cout << "Chunk - SetElementAtWorldPosition" << std::endl;
+	//if (worldPosition.x < 0 || worldPosition.x > worldSizeInCells.x - 1 || worldPosition.y < 0 || worldPosition.y > worldSizeInCells.y - 1)
+	//	return;
 
-	glm::ivec2 localPos = { worldPosition.x - Position.x, worldPosition.y - Position.y };
+	//glm::ivec2 localPos = { worldPosition.x - Position.x, worldPosition.y - Position.y };
 
-	int index = GetIndex(localPos);
+	//int index = GetIndex(localPos);
 
-	delete _chunkData[index];
-	_chunkData[index] = element;
-	_chunkData[index]->Position = worldPosition;
-	_shouldUpdateNextFrame = true;
+	////delete _chunkData[index];
+	//_chunkData[index] = element;
+	//_chunkData[index]->Position = worldPosition;
+	//_shouldUpdateNextFrame = true;
 
-	int baseVertexIndex = index * 4;
+	//Chunk* neighbourChunk;
 
-	for (int i = 0; i < 4; i++)
-	{
-		Vertex v;
+	//// Tell neighbours to update
+	////if (localPos.x == 2)
+	////{
+	//	/*Chunk* */neighbourChunk = _world->GetChunkFromWorldPos(worldPosition + glm::ivec2(-1, 0));
 
-		v.position = (glm::vec3(worldPosition, 0) + vertexPositions[i]) * (float)cellSize;
-		v.color = element->Color;
+	//	if (neighbourChunk != nullptr)
+	//		neighbourChunk->_shouldUpdateNextFrame = true;
+	////}
 
-		_mesh->vertices[baseVertexIndex + i] = v;
-	}
+	////if (localPos.x == chunkSizeInCells - 2)
+	////{
+	//	/*Chunk* */neighbourChunk = _world->GetChunkFromWorldPos(worldPosition + glm::ivec2(1, 0));
+
+	//	if (neighbourChunk != nullptr)
+	//		neighbourChunk->_shouldUpdateNextFrame = true;
+	////}
+
+	////if (localPos.y == 2)
+	////{
+	//	/*Chunk* */neighbourChunk = _world->GetChunkFromWorldPos(worldPosition + glm::ivec2(0, -1));
+
+	//	if (neighbourChunk != nullptr)
+	//		neighbourChunk->_shouldUpdateNextFrame = true;
+	////}
+
+	////if (localPos.y == chunkSizeInCells - 1)
+	////{
+	//	/*Chunk* */neighbourChunk = _world->GetChunkFromWorldPos(worldPosition + glm::ivec2(0, 1));
+
+	//	if (neighbourChunk != nullptr)
+	//		neighbourChunk->_shouldUpdateNextFrame = true;
+	////}
+
+	//int baseVertexIndex = index * 4;
+
+	//for (int i = 0; i < 4; i++)
+	//{
+	//	Vertex v;
+
+	//	v.position = (glm::vec3(worldPosition, 0) + vertexPositions[i]) * (float)cellSize;
+	//	v.color = element->Color;
+
+	//	_mesh->vertices[baseVertexIndex + i] = v;
+	//}
 }
 
 void Chunk::CreateMesh()

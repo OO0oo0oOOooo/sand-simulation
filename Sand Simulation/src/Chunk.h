@@ -86,6 +86,11 @@ public:
 		_shouldUpdateNextFrame = b;
 	}
 
+	inline bool GetShouldUpdateNextFrame()
+	{
+		return _shouldUpdateNextFrame;
+	}
+
 	glm::ivec2 Position;
 
 private:
