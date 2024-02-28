@@ -24,23 +24,20 @@ public:
 		Element* elementBR = world->GetElementAtWorldPos(pos + glm::ivec2(1, -1));
 		Element* elementBL = world->GetElementAtWorldPos(pos + glm::ivec2(-1, -1));
 
-		if(elementB == nullptr)
-			return;
-
-		if (elementB->ID == 0)
+		if (elementB != nullptr && elementB->ID == 0)
 		{
 			world->SetElementAtWorldPos(pos, elementB);
 			world->SetElementAtWorldPos(pos + glm::ivec2(0, -1), element);
 		}
-		//else if (elementBR->ID == 0)
-		//{
-		//	world->SetElementAtWorldPos(pos, elementBR);
-		//	world->SetElementAtWorldPos(pos + glm::ivec2(1, -1), element);
-		//}
-		//else if (elementBL->ID == 0)
-		//{
-		//	world->SetElementAtWorldPos(pos, elementBL);
-		//	world->SetElementAtWorldPos(pos + glm::ivec2(-1, -1), element);
-		//}
+		else if (elementBR != nullptr && elementBR->ID == 0)
+		{
+			world->SetElementAtWorldPos(pos, elementBR);
+			world->SetElementAtWorldPos(pos + glm::ivec2(1, -1), element);
+		}
+		else if (elementBL != nullptr && elementBL->ID == 0)
+		{
+			world->SetElementAtWorldPos(pos, elementBL);
+			world->SetElementAtWorldPos(pos + glm::ivec2(-1, -1), element);
+		}
 	}
 };
