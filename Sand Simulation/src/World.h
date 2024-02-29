@@ -109,7 +109,8 @@ public:
 			return nullptr;
 
 		// Use map.find() to check if the chunk exists
-		glm::ivec2 chunkPos = { ((int)position.x / chunkSizeInCells), ((int)position.y / chunkSizeInCells) };
+		glm::ivec2 chunkPos = { (position.x / chunkSizeInCells), (position.y / chunkSizeInCells) };
+
 		return _chunks[chunkPos];
 	}
 

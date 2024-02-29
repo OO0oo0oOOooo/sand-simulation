@@ -48,7 +48,9 @@ void Chunk::SetElementAtLocalPosition(glm::ivec2 pos, Element* element)
 		return;
 
 	int index = GetIndex(pos);
-	glm::ivec2 worldPos = pos + Position;
+	glm::ivec2 worldPos = Position + pos;
+
+	//std::cout << pos.x << " " << pos.y << std::endl;
 
 	// THIS WILL PROBABLY CAUSE A MEMORY LEAK IF DISABLED
 	//delete _chunkData[index];
@@ -58,15 +60,14 @@ void Chunk::SetElementAtLocalPosition(glm::ivec2 pos, Element* element)
 
 	if (pos.x == 0)
 	{
-		Chunk* neighbourChunk = _world->GetChunkFromWorldPos(worldPos + glm::ivec2(-2, 0));
+		Chunk* neighbourChunk = _world->GetChunkFromWorldPos(worldPos + glm::ivec2(-1, 0));
 
 		if (neighbourChunk != nullptr)
 			neighbourChunk->_shouldUpdateNextFrame = true;
 	}
-
-	if (pos.x == chunkSizeInCells - 1)
+	else if (pos.x == chunkSizeInCells - 1)
 	{
-		Chunk* neighbourChunk = _world->GetChunkFromWorldPos(worldPos + glm::ivec2(2, 0));
+		Chunk* neighbourChunk = _world->GetChunkFromWorldPos(worldPos + glm::ivec2(1, 0));
 
 		if (neighbourChunk != nullptr)
 			neighbourChunk->_shouldUpdateNextFrame = true;
@@ -74,15 +75,14 @@ void Chunk::SetElementAtLocalPosition(glm::ivec2 pos, Element* element)
 
 	if (pos.y == 0)
 	{
-		Chunk* neighbourChunk = _world->GetChunkFromWorldPos(worldPos + glm::ivec2(0, -2));
+		Chunk* neighbourChunk = _world->GetChunkFromWorldPos(worldPos + glm::ivec2(0, -1));
 
 		if (neighbourChunk != nullptr)
 			neighbourChunk->_shouldUpdateNextFrame = true;
 	}
-
-	if (pos.y == chunkSizeInCells - 1)
+	else if (pos.y == chunkSizeInCells - 1)
 	{
-		Chunk* neighbourChunk = _world->GetChunkFromWorldPos(worldPos + glm::ivec2(0, 2));
+		Chunk* neighbourChunk = _world->GetChunkFromWorldPos(worldPos + glm::ivec2(0, 1));
 
 		if (neighbourChunk != nullptr)
 			neighbourChunk->_shouldUpdateNextFrame = true;
