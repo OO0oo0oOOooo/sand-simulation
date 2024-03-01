@@ -88,6 +88,7 @@ int main(void)
     delete threadPool;
     delete renderer;
     delete world;
+
     glfwTerminate();
     return 0;
 }
