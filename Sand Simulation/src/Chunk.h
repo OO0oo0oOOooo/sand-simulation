@@ -101,7 +101,7 @@ private:
 	bool _shouldUpdate = false;
 	bool _shouldUpdateNextFrame = false;
 
-	bool SetUpdateState()
+	bool UpdateState()
 	{
 		_shouldUpdate = _shouldUpdateNextFrame;
 		_shouldUpdateNextFrame = false;

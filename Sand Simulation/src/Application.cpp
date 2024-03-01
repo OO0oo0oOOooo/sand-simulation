@@ -36,8 +36,7 @@ int main(void)
     ctpl::thread_pool* threadPool = new ctpl::thread_pool(4);
     Renderer* renderer = new Renderer(windowWidth, windowHeight);
     World* world = new World(threadPool);
-
-    
+    Brush* brush = new Brush();
     
     Input::SetupKeyInputs(glwindow);
 
@@ -52,8 +51,8 @@ int main(void)
     {
         Time::Update();
 
-        Brush::MouseInput(window, world);
-        Brush::SelectionInput(window);
+        brush->MouseInput(window, world);
+        brush->SelectionInput(window);
 
         glClear(GL_COLOR_BUFFER_BIT);
 
@@ -85,6 +84,8 @@ int main(void)
         glfwPollEvents();
     }
 
+    delete brush;
+    delete threadPool;
     delete renderer;
     delete world;
     glfwTerminate();

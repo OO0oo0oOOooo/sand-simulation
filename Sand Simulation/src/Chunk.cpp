@@ -202,7 +202,7 @@ void Chunk::CreateMesh()
 
 void Chunk::Update()
 {
-	if (!SetUpdateState())
+	if (!UpdateState())
 		return;
 
 	std::unordered_map<glm::vec2, bool, KeyHash> hasMoved;
