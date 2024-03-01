@@ -88,7 +88,7 @@ public:
 
 	inline bool GetShouldUpdateNextFrame()
 	{
-		return _shouldUpdateNextFrame;
+		return _shouldUpdate;
 	}
 
 	glm::ivec2 Position;
