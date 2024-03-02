@@ -51,6 +51,7 @@ int main(void)
     {
         Time::Update();
 
+        // Make this into an event
         brush->MouseInput(window, world);
         brush->SelectionInput(window);
 
