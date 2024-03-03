@@ -17,14 +17,19 @@ public:
 	{
 		_selected = 3;
 		_brushSize = 1;
+		_brushType = 0;
 	}
 
 	~Brush(){}
 
-	void MouseInput(Window window, World* world);
-	void SelectionInput(Window window);
+	void Paint(Window window, World* world);
+	void SelectElement(Window window);
+
+	void ChangeBrush();
+	void ChangeBrushSize();
 
 private:
 	int _selected;
 	int _brushSize;
+	int _brushType;
 };

@@ -52,8 +52,8 @@ int main(void)
         Time::Update();
 
         // Make this into an event
-        brush->MouseInput(window, world);
-        brush->SelectionInput(window);
+        brush->Paint(window, world);
+        brush->SelectElement(window);
 
         glClear(GL_COLOR_BUFFER_BIT);
 

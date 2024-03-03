@@ -1,8 +1,6 @@
 #include "Brush.h"
 
-
-// Paint
-void Brush::MouseInput(Window window, World* world)
+void Brush::Paint(Window window, World* world)
 {
 	if (Input::IsKeyPressed(GLFW_MOUSE_BUTTON_LEFT))
 	{
@@ -16,8 +14,7 @@ void Brush::MouseInput(Window window, World* world)
 	}
 }
 
-// SelectElement
-void Brush::SelectionInput(Window window)
+void Brush::SelectElement(Window window)
 {
 	if (Input::IsKeyPressed(GLFW_KEY_ESCAPE))
 	{
@@ -55,8 +52,56 @@ void Brush::SelectionInput(Window window)
 	//}
 }
 
+void Brush::ChangeBrush()
+{
+	if (Input::IsKeyPressed(GLFW_KEY_TAB))
+	{
+		_brushType++;
+	}
+
+	if (_brushType > 1)
+		_brushType = 0;
+	
+}
+
+void Brush::ChangeBrushSize()
+{
+	int mouseScroll = Input::mouseScroll.y;
+
+	if (Input::mouseScroll.y > mouseScroll)
+	{
+		_brushSize++;
+	}
+
+	if (Input::mouseScroll.y < mouseScroll)
+	{
+		_brushSize--;
+	}
+
+	if (_brushSize > 10)
+		_brushSize = 10;
+
+	if (_brushSize < 0)
+		_brushSize = 1;
+
+}
+
 
 // SelectBrush
 
 
 // IMGUI
+//void Brush::DrawGUI()
+//{
+//	{
+//		ImGui::Begin("Brush");
+//
+//		ImGui::Text("Brush Size");
+//		ImGui::SliderInt("Size", &_brushSize, 1, 10);
+//
+//		ImGui::Text("Selected Element");
+//		ImGui::SliderInt("Element", &_selected, 1, 5);
+//
+//		ImGui::End();
+//	}
+//}
