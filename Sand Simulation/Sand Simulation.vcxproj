@@ -184,6 +184,7 @@
     <ClInclude Include="src\Elements\Steam.h" />
     <ClInclude Include="src\Elements\Empty.h" />
     <ClInclude Include="src\Elements\Water.h" />
+    <ClInclude Include="src\Events\Event.h" />
     <ClInclude Include="src\IndexBuffer.h" />
     <ClInclude Include="src\Input.h" />
     <ClInclude Include="src\Cell.h" />

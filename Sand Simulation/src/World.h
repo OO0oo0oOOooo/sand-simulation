@@ -12,12 +12,14 @@ public:
 	{
 		for (int x = 0; x < numChunksWidth; x++)
 		{
+			_chunks.push_back(std::vector<Chunk*>());
+
 			for (int y = 0; y < numChunksHeight; y++)
 			{
-				_chunks[glm::vec2(x, y)] = new Chunk(this, x * 64, y * 64);
+				_chunks[x].push_back(new Chunk(this, x * 64, y * 64));
+				//_chunks[glm::vec2(x, y)] = new Chunk(this, x * 64, y * 64);
 			}
 		}
-
 
 		_debugBordersMesh = new Mesh();
 		DebugDrawInit();
@@ -25,9 +27,17 @@ public:
 	
 	~World()
 	{
-		for (auto& chunk : _chunks)
+		/*for (auto& chunk : _chunks)
 		{
 			delete chunk.second;
+		}*/
+
+		for (int x = 0; x < numChunksWidth; x++)
+		{
+			for (int y = 0; y < numChunksHeight; y++)
+			{
+				delete _chunks[x][y];
+			}
 		}
 
 		delete _debugBordersMesh;
@@ -37,11 +47,20 @@ public:
 
 	inline void Draw(Shader* shader)
 	{
-		for (auto& chunk : _chunks)
+		for (int x = 0; x < numChunksWidth; x++)
 		{
-			chunk.second->UploadMeshData();
-			chunk.second->DrawMesh(shader);
+			for (int y = 0; y < numChunksHeight; y++)
+			{
+				_chunks[x][y]->UploadMeshData();
+				_chunks[x][y]->DrawMesh(shader);
+			}
 		}
+
+		//for (auto& chunk : _chunks)
+		//{
+		//	chunk.second->UploadMeshData();
+		//	chunk.second->DrawMesh(shader);
+		//}
 	}
 
 	inline void DebugDrawInit()
@@ -53,7 +72,8 @@ public:
 		{
 			for (int y = 0; y < numChunksHeight; y++)
 			{
-				Chunk* chunk = _chunks[glm::vec2(x, y)];
+				//Chunk* chunk = _chunks[glm::vec2(x, y)];
+				Chunk* chunk = _chunks[x][y];
 
 				if (chunk == nullptr)
 					return;
@@ -111,7 +131,8 @@ public:
 		// Use map.find() to check if the chunk exists
 		glm::ivec2 chunkPos = { (position.x / chunkSizeInCells), (position.y / chunkSizeInCells) };
 
-		return _chunks[chunkPos];
+		//return _chunks[chunkPos];
+		return _chunks[chunkPos.x][chunkPos.y];
 	}
 
 	inline Element* GetElementAtWorldPos(glm::ivec2 position)
@@ -149,7 +170,8 @@ public:
 private:
 
 	ctpl::thread_pool* _threadPool;
-	std::unordered_map<glm::ivec2, Chunk*, KeyHash, KeyEqual> _chunks;
+	//std::unordered_map<glm::ivec2, Chunk*, KeyHash, KeyEqual> _chunks;
+	std::vector<std::vector<Chunk*>> _chunks;
 
 
 	Mesh* _debugBordersMesh;
