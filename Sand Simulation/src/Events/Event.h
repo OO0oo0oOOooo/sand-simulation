@@ -7,7 +7,7 @@ enum class EventType {
     WindowClose, WindowResize, WindowMoved, WindowFocus, WindowLostFocus,
     ApplicationTick, ApplicationUpdate, ApplicationRender,
     MouseMoved, MouseScrolled, MouseButtonPressed, MouseButtonReleased,
-    KeyPressed, KeyReleased,
+    KeyDown, KeyUp, KeyHold
 };
 
 enum class EventCategory { 
@@ -27,8 +27,8 @@ public:
     void SetHandled() { _handled = true; }
 
     virtual const EventType GetType() const = 0;
-    virtual const std::string GetName() const = 0;
-    virtual const EventCategory GetCategory() const = 0;
+    //virtual const std::string GetName() const = 0;
+    //virtual const EventCategory GetCategory() const = 0;
 
 private:
     bool _handled = false;
@@ -46,28 +46,28 @@ class WindowResize : public Event
 {
 public:
 	WindowResize() {};
-	~WindowResize() {};
+
 };
 
 class WindowMoved : public Event
 {
 public:
     WindowMoved() {};
-    ~WindowMoved() {};
+
 };
 
 class WindowFocus : public Event
 {
 public:
 	WindowFocus() {};
-	~WindowFocus() {};
+
 };
 
 class WindowLostFocus : public Event
 {
 public:
 	WindowLostFocus() {};
-	~WindowLostFocus() {};
+
 };
 
 
@@ -100,18 +100,35 @@ public:
 
 
 #pragma region Key Events
-class KeyPressed : public Event
+class KeyEvent : public Event
 {
 public:
-    KeyPressed() {};
-    ~KeyPressed() {};
+	int GetKeyCode() const { return _keyCode; }
+
+	virtual const EventCategory GetCategory() const override { return EventCategory::Keyboard; }
+
+protected:
+    KeyEvent(int keyCode) : _keyCode(keyCode) {}
+
+    int _keyCode;
 };
 
-class KeyReleased : public Event
+class KeyDown : public KeyEvent
 {
 public:
-    KeyReleased() {};
-    ~KeyReleased() {};
+    KeyDown(int keyCode) : KeyEvent(keyCode) {};
+};
+
+class KeyHold : public KeyEvent
+{
+public:
+    KeyHold(int keyCode) : KeyEvent(keyCode) {};
+};
+
+class KeyUp : public KeyEvent
+{
+public:
+    KeyUp(int keyCode) : KeyEvent(keyCode) {};
 };
 #pragma endregion
 
@@ -120,28 +137,54 @@ public:
 class MouseMoved : public Event
 {
 public:
-    MouseMoved() {};
-    ~MouseMoved() {};
+    MouseMoved(float x, float y) : _mouseX(x), _mouseY(y) {};
+
+    inline float GetX() const { return _mouseX; }
+    inline float GetY() const { return _mouseY; }
+
+private:
+    float _mouseX;
+    float _mouseY;
 };
 
 class MouseScrolled : public Event
 {
 public:
-    MouseScrolled() {};
-    ~MouseScrolled() {};
+    MouseScrolled(float x, float y) : _scrollX(x), _scrollY(y) {};
+
+    inline float GetX() const { return _scrollX; }
+	inline float GetY() const { return _scrollY; }
+
+private:
+    float _scrollX;
+    float _scrollY;
 };
 
-class MouseButtonPressed : public Event
+class MouseButtonEvent : public Event
 {
 public:
-    MouseButtonPressed() {};
-    ~MouseButtonPressed() {};
+    inline int GetMouseButton() const { return _button; }
+
+protected:
+    MouseButtonEvent(int button) : _button(button) {};
+	int _button;
 };
 
-class MouseButtonReleased : public Event
+class MouseButtonDown : public MouseButtonEvent
 {
 public:
-	MouseButtonReleased() {};
-	~MouseButtonReleased() {};
+    MouseButtonDown() {};
+};
+
+class MouseButtonHold : public MouseButtonEvent
+{
+public:
+    MouseButtonHold() {};
+};
+
+class MouseButtonUp : public MouseButtonEvent
+{
+public:
+	MouseButtonUp() {};
 };
 #pragma endregion
