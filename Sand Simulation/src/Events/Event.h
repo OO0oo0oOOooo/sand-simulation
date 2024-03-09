@@ -6,7 +6,7 @@ enum class EventType {
     None = 0,
     WindowClose, WindowResize, WindowMoved, WindowFocus, WindowLostFocus,
     ApplicationTick, ApplicationUpdate, ApplicationRender,
-    MouseMoved, MouseScrolled, MouseButtonPressed, MouseButtonReleased,
+    MouseMoved, MouseScrolled, MouseButtonDown, MouseButtonHold, MouseButtonUp,
     KeyDown, KeyUp, KeyHold
 };
 
@@ -34,19 +34,42 @@ private:
     bool _handled = false;
 };
 
+class EventDispatcher {
+public:
+	EventDispatcher(Event& event) : _event(event) {}
+
+	template<typename T, typename F>
+	bool Dispatch(const F& func) {
+		if (_event.GetType() == T::GetStaticType()) {
+			_event.SetHandled();
+			func(static_cast<T&>(_event));
+			return true;
+		}
+		return false;
+	}
+
+private:
+    Event& _event;
+};
+
 #pragma region Window Events
 class WindowClose : public Event
 {
 public:
     WindowClose() {};
-    ~WindowClose() {};
 };
 
 class WindowResize : public Event
 {
 public:
-	WindowResize() {};
+	WindowResize(int x, int y) : _width(x), _height(y) {};
 
+    inline int GetSizeX() const { return _width; }
+    inline int GetSizeY() const { return _height; }
+
+private:
+    int _width;
+	int _height;
 };
 
 class WindowMoved : public Event
@@ -105,7 +128,7 @@ class KeyEvent : public Event
 public:
 	int GetKeyCode() const { return _keyCode; }
 
-	virtual const EventCategory GetCategory() const override { return EventCategory::Keyboard; }
+	//  virtual const EventCategory GetCategory() const override { return EventCategory::Keyboard; }
 
 protected:
     KeyEvent(int keyCode) : _keyCode(keyCode) {}
@@ -173,18 +196,18 @@ protected:
 class MouseButtonDown : public MouseButtonEvent
 {
 public:
-    MouseButtonDown() {};
+    MouseButtonDown(int button) : MouseButtonEvent(button) {};
 };
 
 class MouseButtonHold : public MouseButtonEvent
 {
 public:
-    MouseButtonHold() {};
+    MouseButtonHold(int button) : MouseButtonEvent(button) {};
 };
 
 class MouseButtonUp : public MouseButtonEvent
 {
 public:
-	MouseButtonUp() {};
+	MouseButtonUp(int button) : MouseButtonEvent(button) {};
 };
 #pragma endregion
