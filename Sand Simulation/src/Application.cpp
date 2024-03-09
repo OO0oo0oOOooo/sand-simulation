@@ -10,10 +10,13 @@
 #include "Window.h"
 #include "Input.h"
 #include "Renderer.h"
+#include "Time.h"
+
 #include "Brush.h"
 #include "World.h"
 
-#include "Time.h"
+//#include "Events/Event.h"
+#include "Events/EventManager.h"
 
 unsigned int windowWidth = 1920;
 unsigned int windowHeight = 1080;
@@ -34,6 +37,7 @@ int main(void)
 
     ctpl::thread_pool* threadPool = new ctpl::thread_pool(4);
     Renderer* renderer = new Renderer(windowWidth, windowHeight);
+    EventManager* eventManager = new EventManager();
     World* world = new World(threadPool);
     Brush* brush = new Brush();
     
@@ -46,13 +50,19 @@ int main(void)
     ImGui_ImplGlfw_InitForOpenGL(glwindow, true);
     ImGui_ImplOpenGL3_Init("#version 430");
 
+    EventHandler paintElement = []() { std::cout << "Paint" << std::endl; };
+    EventManager::MouseDownEvent() += paintElement;
+
     while (!glfwWindowShouldClose(glwindow))
     {
         Time::Update();
 
+        if (Input::IsKeyPressed(GLFW_MOUSE_BUTTON_LEFT))
+            eventManager->MouseDownEvent();
+
         // Make this into an event
-        brush->Paint(window, world);
-        brush->SelectElement(window);
+        //brush->Paint(window, world);
+       // brush->SelectElement(window);
 
         glClear(GL_COLOR_BUFFER_BIT);
 
@@ -86,6 +96,7 @@ int main(void)
 
     delete brush;
     delete threadPool;
+    delete eventManager;
     delete renderer;
     delete world;
 
