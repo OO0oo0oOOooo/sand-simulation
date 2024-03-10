@@ -1,4 +1,6 @@
 #include "Input.h"
+#include "Events/EventManager.h"
+
 #include <iostream>
 
 namespace Input {
@@ -62,6 +64,13 @@ namespace Input {
 
 	void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
 	{
+		// Key Pressed
+		EventManager::GetInstance().MouseButtonPressedEvent.NotifyHandlers((int)mousePosition.x, (int)mousePosition.y);
+
+		// Key Hold
+
+		// Key Released
+
 		SetKeyDown(button, action != GLFW_RELEASE);
 	}
 

@@ -15,18 +15,25 @@ public:
 		return instance;
 	}
 
-	static Event MouseDownEvent()
+	/*static Event MouseDownEvent()
 	{
 		return GetInstance()._mouseDownEvent;
-	}
+	}*/
+
+	Event<int, int> MouseButtonPressedEvent;
+	//Event<int, int> MouseButtonReleasedEvent;
+
+	// Event KeyDownEvent;
+	// Event KeyUpEvent;
 
 private:
 	EventManager()
 	{
-		_mouseDownEvent = Event();
+		MouseButtonPressedEvent = Event<int, int>();
+		//MouseButtonReleasedEvent = Event();
 	}
 
-	Event _mouseDownEvent;
+	
 
 	
 };

@@ -2,22 +2,52 @@
 
 #include <vector>
 #include <memory>
+#include <functional>
 
-using EventHandler = void(*)();
-
+template<typename... Args>
 class Event {
-    std::vector<std::unique_ptr<EventHandler>> Handlers;
-
 public:
-    void NotifyHandlers();
-    void AddHandler(const EventHandler& handler);
-    void RemoveHandler(const EventHandler& handler);
+    void NotifyHandlers(Args... args) {
+        for (const auto& handler : Handlers) {
+            handler(args...);
+        }
+    }
 
-    void operator()();
-    Event& operator+=(const EventHandler& handler);
-    Event& operator-=(const EventHandler& handler);
+    void AddHandler(const std::function<void(Args...)>& handler) {
+        Handlers.push_back(handler);
+    }
+
+    void RemoveHandler(const std::function<void(Args...)>& handler) {
+        Handlers.erase(std::remove(Handlers.begin(), Handlers.end(), handler), Handlers.end());
+	}
+
+    /*void operator()(Args... args)
+    {
+		NotifyHandlers(Args... args);
+	}*/
+
+    Event& operator+=(const std::function<void(Args...)>& handler)
+    {
+        AddHandler(handler);
+		return *this;
+    }
+
+    Event& operator-=(const std::function<void(Args...)>& handler)
+    {
+        RemoveHandler(handler);
+        return *this;
+    }
+
+private:
+    
+	std::vector<std::function<void(Args...)>> Handlers;
 };
 
+// void NotifyHandlers();
+// void AddHandler(const EventHandler& handler);
+// void RemoveHandler(const EventHandler& handler);
+
+//std::vector<std::unique_ptr<EventHandler>> Handlers;
 
 
 //

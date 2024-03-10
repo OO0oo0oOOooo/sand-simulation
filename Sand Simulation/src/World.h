@@ -2,8 +2,11 @@
 
 #include "ctpl/ctpl_stl.h"
 #include "Chunk.h"
+//#include "Events/EventManager.h"
 
 class Element;
+
+
 
 class World
 {
@@ -23,6 +26,11 @@ public:
 
 		_debugBordersMesh = new Mesh();
 		DebugDrawInit();
+
+		//EventManager::GetInstance().MouseButtonPressedEvent += EventTest;
+
+		/*EventHandler paintElement = []() { std::cout << "Paint" << std::endl; };
+		EventManager::GetInstance().MouseButtonPressedEvent += paintElement;*/
 	}
 	
 	~World()
