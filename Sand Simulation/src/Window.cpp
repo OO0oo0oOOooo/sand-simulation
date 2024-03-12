@@ -1,4 +1,5 @@
 #include "Window.h"
+#include "Events/EventManager.h"
 
 Window::Window(int width, int height, const char* title)
 	: m_WindowWidth(width), m_WindowHeight(height), m_Title(title), m_AspectRatio(glm::vec2((float)width / 1920.0f, (float)height / 1080.0f))
@@ -21,14 +22,15 @@ Window::Window(int width, int height, const char* title)
 	{
 		glfwTerminate();
 	}
+
+	//EventManager::GetInstance().WindowCloseEvent += Close;
 }
 
-Window::~Window()
-{
-}
+Window::~Window() {}
 
 void Window::Close()
 {
-	if(m_NativeWindow != nullptr)
+	if (m_NativeWindow != nullptr)
 		glfwSetWindowShouldClose(m_NativeWindow, GLFW_TRUE);
 }
+

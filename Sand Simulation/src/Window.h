@@ -7,6 +7,7 @@ class Window {
 public:
 	Window(int width, int height, const char* title);
 	~Window();
+
 	void Close();
 
 	inline int GetWidth() { return m_WindowWidth; }

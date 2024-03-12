@@ -2,54 +2,14 @@
 
 #include "ctpl/ctpl_stl.h"
 #include "Chunk.h"
-//#include "Events/EventManager.h"
 
 class Element;
-
-
 
 class World
 {
 public:
-	World(ctpl::thread_pool* pool) : _threadPool(pool)
-	{
-		for (int x = 0; x < numChunksWidth; x++)
-		{
-			_chunks.push_back(std::vector<Chunk*>());
-
-			for (int y = 0; y < numChunksHeight; y++)
-			{
-				_chunks[x].push_back(new Chunk(this, x * 64, y * 64));
-				//_chunks[glm::vec2(x, y)] = new Chunk(this, x * 64, y * 64);
-			}
-		}
-
-		_debugBordersMesh = new Mesh();
-		DebugDrawInit();
-
-		//EventManager::GetInstance().MouseButtonPressedEvent += EventTest;
-
-		/*EventHandler paintElement = []() { std::cout << "Paint" << std::endl; };
-		EventManager::GetInstance().MouseButtonPressedEvent += paintElement;*/
-	}
-	
-	~World()
-	{
-		/*for (auto& chunk : _chunks)
-		{
-			delete chunk.second;
-		}*/
-
-		for (int x = 0; x < numChunksWidth; x++)
-		{
-			for (int y = 0; y < numChunksHeight; y++)
-			{
-				delete _chunks[x][y];
-			}
-		}
-
-		delete _debugBordersMesh;
-	}
+	World(ctpl::thread_pool* pool);
+	~World();
 
 	void Update(Shader* shader);
 

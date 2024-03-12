@@ -20,10 +20,7 @@
 unsigned int windowWidth = 1920;
 unsigned int windowHeight = 1080;
 
-void EventTest(int x, int y)
-{
-    std::cout << x << " " << y << std::endl;
-}
+
 
 int main(void)
 {
@@ -53,8 +50,6 @@ int main(void)
     ImGui_ImplGlfw_InitForOpenGL(glwindow, true);
     ImGui_ImplOpenGL3_Init("#version 430");
 
-    EventManager::GetInstance().MouseButtonPressedEvent += EventTest;
-
     while (!glfwWindowShouldClose(glwindow))
     {
         Time::Update();
@@ -69,9 +64,6 @@ int main(void)
 
         world->DebugDrawInit();
         world->DebugDraw(renderer->GetShader());
-
-        // This causes a memory leak because it is poorly designed. It recreates the mesh every frame.
-        // world->DrawChunkBorders(renderer->GetShader());
         
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();

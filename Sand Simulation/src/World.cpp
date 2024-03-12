@@ -5,6 +5,45 @@
 #include "Elements/Sand.h"
 #include "Elements/Air.h"
 
+#include "Events/EventManager.h"
+
+void EventTest(int x, int y)
+{
+	std::cout << x << " " << y << std::endl;
+}
+
+World::World(ctpl::thread_pool* pool) : _threadPool(pool)
+{
+	for (int x = 0; x < numChunksWidth; x++)
+	{
+		_chunks.push_back(std::vector<Chunk*>());
+
+		for (int y = 0; y < numChunksHeight; y++)
+		{
+			_chunks[x].push_back(new Chunk(this, x * 64, y * 64));
+			//_chunks[glm::vec2(x, y)] = new Chunk(this, x * 64, y * 64);
+		}
+	}
+
+	_debugBordersMesh = new Mesh();
+	DebugDrawInit();
+
+	EventManager::GetInstance().MouseButtonPressedEvent += EventTest;
+}
+
+World::~World()
+{
+	for (int x = 0; x < numChunksWidth; x++)
+	{
+		for (int y = 0; y < numChunksHeight; y++)
+		{
+			delete _chunks[x][y];
+		}
+	}
+
+	delete _debugBordersMesh;
+}
+
 void CellularAutomata(int id, Chunk* chunk)
 {
 	chunk->Update();

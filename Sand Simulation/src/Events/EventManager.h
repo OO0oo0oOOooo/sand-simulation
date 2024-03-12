@@ -26,6 +26,8 @@ public:
 	// Event KeyDownEvent;
 	// Event KeyUpEvent;
 
+	Event<> WindowCloseEvent;
+
 private:
 	EventManager()
 	{
