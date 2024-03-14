@@ -23,7 +23,7 @@ Window::Window(int width, int height, const char* title)
 		glfwTerminate();
 	}
 
-	//EventManager::GetInstance().WindowCloseEvent += Close;
+	EventManager::GetInstance().WindowCloseEvent += std::bind(&Window::Close, this);
 }
 
 Window::~Window() {}

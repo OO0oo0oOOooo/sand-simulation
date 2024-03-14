@@ -59,6 +59,8 @@ namespace Input {
 	
 	void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 	{
+		// Find/call correct Event with keycode and action
+
 		SetKeyDown(key, action != GLFW_RELEASE);
 	}
 
