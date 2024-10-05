@@ -60,18 +60,26 @@ namespace Input {
 	void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 	{
 		// Find/call correct Event with keycode and action
+		if (key == GLFW_KEY_ESCAPE)
+		{
+			EventManager::GetInstance().WindowCloseEvent();
+		}
 
 		SetKeyDown(key, action != GLFW_RELEASE);
 	}
 
 	void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
 	{
-		// Key Pressed
-		EventManager::GetInstance().MouseButtonPressedEvent.NotifyHandlers((int)mousePosition.x, (int)mousePosition.y);
+		EventManager::GetInstance().MouseButtonEvent(button, action, mousePosition);
 
-		// Key Hold
-
-		// Key Released
+		if (action == GLFW_PRESS)
+		{
+			EventManager::GetInstance().MouseButtonDownEvent(button, mousePosition);
+		}
+		else if (action == GLFW_RELEASE)
+		{
+			EventManager::GetInstance().MouseButtonUpEvent(button, mousePosition);
+		}
 
 		SetKeyDown(button, action != GLFW_RELEASE);
 	}
@@ -86,6 +94,8 @@ namespace Input {
 
 		normalizedMousePosition.x = (float)xpos / width;
 		normalizedMousePosition.y = 1.0f - (float)ypos / height;
+
+		EventManager::GetInstance().MouseMoveEvent(mousePosition);
 	}
 
 	void MouseScrollCallback(GLFWwindow* window, double xoffset, double yoffset)

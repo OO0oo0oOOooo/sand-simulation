@@ -15,15 +15,13 @@
 #include "Brush.h"
 #include "World.h"
 
-#include "Events/EventManager.h"
-
 unsigned int windowWidth = 1920;
 unsigned int windowHeight = 1080;
 
-
-
 int main(void)
 {
+    // InitWindow()
+
     if (!glfwInit())
         return -1;
 
@@ -36,13 +34,9 @@ int main(void)
 
     std::cout << "OpenGL Version: " << glGetString(GL_VERSION) << std::endl;
 
-    ctpl::thread_pool* threadPool = new ctpl::thread_pool(4);
     Renderer* renderer = new Renderer(windowWidth, windowHeight);
-    World* world = new World(threadPool);
-    Brush* brush = new Brush();
-
-    Input::SetupKeyInputs(glwindow);
-
+    
+    // InitImGui()
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO(); (void)io;
@@ -50,21 +44,24 @@ int main(void)
     ImGui_ImplGlfw_InitForOpenGL(glwindow, true);
     ImGui_ImplOpenGL3_Init("#version 430");
 
+    // InitGame()
+    ctpl::thread_pool* threadPool = new ctpl::thread_pool(4);
+    World* world = new World(threadPool);
+    Brush brush(world);
+    Input::SetupKeyInputs(glwindow);
+
     while (!glfwWindowShouldClose(glwindow))
     {
         Time::Update();
-
-        // Make this into an event
-        // brush->Paint(window, world);
-        // brush->SelectElement(window);
-
         glClear(GL_COLOR_BUFFER_BIT);
+
+        brush.Paint();
 
         world->Update(renderer->GetShader());
 
         world->DebugDrawInit();
         world->DebugDraw(renderer->GetShader());
-        
+
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
@@ -85,7 +82,6 @@ int main(void)
         glfwPollEvents();
     }
 
-    delete brush;
     delete threadPool;
     delete renderer;
     delete world;
@@ -93,4 +89,3 @@ int main(void)
     glfwTerminate();
     return 0;
 }
-

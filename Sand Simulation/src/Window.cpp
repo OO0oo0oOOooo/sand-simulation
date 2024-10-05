@@ -26,8 +26,6 @@ Window::Window(int width, int height, const char* title)
 	EventManager::GetInstance().WindowCloseEvent += std::bind(&Window::Close, this);
 }
 
-Window::~Window() {}
-
 void Window::Close()
 {
 	if (m_NativeWindow != nullptr)

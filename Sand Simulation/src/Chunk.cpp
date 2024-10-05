@@ -205,8 +205,6 @@ void Chunk::Update()
 	if (!UpdateState())
 		return;
 
-	std::unordered_map<glm::vec2, bool, KeyHash> hasMoved;
-
 	for (int y = 0; y < chunkSizeInCells; y++)
 	{
 		for (int x = 0; x < chunkSizeInCells; x++)
@@ -216,10 +214,6 @@ void Chunk::Update()
 			Element* element = GetElementAtLocalPosition(position);
 
 			if(element == nullptr)
-				continue;
-
-			glm::ivec2 elementPosition = element->Position;
-			if (hasMoved[elementPosition])
 				continue;
 
 			element->Step(_world);

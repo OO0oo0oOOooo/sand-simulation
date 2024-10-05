@@ -141,6 +141,5 @@ private:
 	//std::unordered_map<glm::ivec2, Chunk*, KeyHash, KeyEqual> _chunks;
 	std::vector<std::vector<Chunk*>> _chunks;
 
-
 	Mesh* _debugBordersMesh;
 };

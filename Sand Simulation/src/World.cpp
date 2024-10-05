@@ -7,11 +7,6 @@
 
 #include "Events/EventManager.h"
 
-void EventTest(int x, int y)
-{
-	std::cout << x << " " << y << std::endl;
-}
-
 World::World(ctpl::thread_pool* pool) : _threadPool(pool)
 {
 	for (int x = 0; x < numChunksWidth; x++)
@@ -27,8 +22,6 @@ World::World(ctpl::thread_pool* pool) : _threadPool(pool)
 
 	_debugBordersMesh = new Mesh();
 	DebugDrawInit();
-
-	EventManager::GetInstance().MouseButtonPressedEvent += EventTest;
 }
 
 World::~World()
@@ -44,10 +37,10 @@ World::~World()
 	delete _debugBordersMesh;
 }
 
-void CellularAutomata(int id, Chunk* chunk)
-{
-	chunk->Update();
-}
+//void CellularAutomata(int id, Chunk* chunk)
+//{
+//	chunk->Update();
+//}
 
 void World::Update(Shader* shader)
 {
@@ -59,9 +52,9 @@ void World::Update(Shader* shader)
 
 			if (chunk != nullptr)
 			{
-				chunk->Update();
 				chunk->UploadMeshData();
 				chunk->DrawMesh(shader);
+				chunk->Update();
 			}
 		}
 	}
@@ -109,11 +102,15 @@ void World::EditElementAtPixel(glm::vec2 position, int element)
 	switch (element)
 	{
 	case 0:
-		SetElementAtWorldPos(cellPos, new Sand({ cellPos.x, cellPos.y }));
+		SetElementAtWorldPos(cellPos, new Air({ cellPos.x, cellPos.y }));
 		break;
 
 	case 3:
 		SetElementAtWorldPos(cellPos, new Sand({ cellPos.x, cellPos.y }));
+		break;
+
+	case 4:
+		SetElementAtWorldPos(cellPos, new Water({ cellPos.x, cellPos.y }));
 		break;
 	}
 }

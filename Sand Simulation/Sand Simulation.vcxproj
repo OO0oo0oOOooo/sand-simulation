@@ -155,7 +155,6 @@
     <ClCompile Include="src\Brush.cpp" />
     <ClCompile Include="src\Cell.cpp" />
     <ClCompile Include="src\Chunk.cpp" />
-    <ClCompile Include="src\Events\Event.cpp" />
     <ClCompile Include="src\IndexBuffer.cpp" />
     <ClCompile Include="src\Input.cpp" />
     <ClCompile Include="src\Mesh.cpp" />

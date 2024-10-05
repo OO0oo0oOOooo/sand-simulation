@@ -1,90 +1,106 @@
 #include "Brush.h"
+#include "Events/EventManager.h"
 
-void Brush::Paint(Window window, World* world)
+Brush::Brush(World* world) : m_World(world)
 {
-	if (Input::IsKeyPressed(GLFW_MOUSE_BUTTON_LEFT))
-	{
-		world->EditElementAtPixel(Input::mousePosition, _selected);
-	}
-
-	if (Input::IsKeyPressed(GLFW_MOUSE_BUTTON_RIGHT))
-	{
-		world->EditElementAtPixel(Input::mousePosition, 0);
-
-	}
+	EventManager::GetInstance().MouseButtonDownEvent += std::bind(&Brush::BeginPaint, this, std::placeholders::_1, std::placeholders::_2);
+	EventManager::GetInstance().MouseButtonUpEvent += std::bind(&Brush::EndPaint, this, std::placeholders::_1, std::placeholders::_2);
+	//EventManager::GetInstance().MouseMoveEvent += std::bind(&Brush::Paint, this, std::placeholders::_1);
 }
 
-void Brush::SelectElement(Window window)
+void Brush::BeginPaint(int key, glm::vec2 position)
 {
-	if (Input::IsKeyPressed(GLFW_KEY_ESCAPE))
-	{
-		window.Close();
-	}
-
-	//if (Input::IsKeyPressed(GLFW_KEY_1))
-	//{
-	//	selected = 1;
-	//}
-
-	//if (Input::IsKeyPressed(GLFW_KEY_2))
-	//{
-	//	selected = 2;
-	//}
-
-	if (Input::IsKeyPressed(GLFW_KEY_3))
-	{
-		_selected = 3;
-	}
-
-	//if (Input::IsKeyPressed(GLFW_KEY_4))
-	//{
-	//	selected = 4;
-	//}
-
-	//if (Input::IsKeyPressed(GLFW_KEY_5))
-	//{
-	//	selected = 5;
-	//}
-
-	//if (Input::IsKeyPressed(GLFW_KEY_6))
-	//{
-	//	selected = 6;
-	//}
+	if(key == 0)
+		m_Draw = true;
+	else if(key == 1)
+		m_Erase = true;
 }
 
-void Brush::ChangeBrush()
+void Brush::EndPaint(int key, glm::vec2 position)
 {
-	if (Input::IsKeyPressed(GLFW_KEY_TAB))
-	{
-		_brushType++;
-	}
-
-	if (_brushType > 1)
-		_brushType = 0;
-	
+	if (key == 0)
+		m_Draw = false;
+	else if (key == 1)
+		m_Erase = false;
 }
 
-void Brush::ChangeBrushSize()
+void Brush::Paint()
 {
-	int mouseScroll = Input::mouseScroll.y;
+	// Check if on canvas
 
-	if (Input::mouseScroll.y > mouseScroll)
-	{
-		_brushSize++;
-	}
-
-	if (Input::mouseScroll.y < mouseScroll)
-	{
-		_brushSize--;
-	}
-
-	if (_brushSize > 10)
-		_brushSize = 10;
-
-	if (_brushSize < 0)
-		_brushSize = 1;
-
+	if(m_Draw)
+		m_World->EditElementAtPixel(Input::mousePosition, m_Selected);
+	else if(m_Erase)
+		m_World->EditElementAtPixel(Input::mousePosition, 0);
 }
+
+//void Brush::SelectElement(Window window)
+//{
+//	//if (Input::IsKeyPressed(GLFW_KEY_1))
+//	//{
+//	//	selected = 1;
+//	//}
+//
+//	//if (Input::IsKeyPressed(GLFW_KEY_2))
+//	//{
+//	//	selected = 2;
+//	//}
+//
+//	//if (Input::IsKeyPressed(GLFW_KEY_3))
+//	//{
+//	//	m_Selected = 3;
+//	//}
+//
+//	//if (Input::IsKeyPressed(GLFW_KEY_4))
+//	//{
+//	//	selected = 4;
+//	//}
+//
+//	//if (Input::IsKeyPressed(GLFW_KEY_5))
+//	//{
+//	//	selected = 5;
+//	//}
+//
+//	//if (Input::IsKeyPressed(GLFW_KEY_6))
+//	//{
+//	//	selected = 6;
+//	//}
+//}
+
+
+//void Brush::ChangeBrush()
+//{
+//	if (Input::IsKeyPressed(GLFW_KEY_TAB))
+//	{
+//		_brushType++;
+//	}
+//
+//	if (_brushType > 1)
+//		_brushType = 0;
+//	
+//}
+//
+//void Brush::ChangeBrushSize()
+//{
+//	int mouseScroll = Input::mouseScroll.y;
+//
+//	if (Input::mouseScroll.y > mouseScroll)
+//	{
+//		_brushSize++;
+//	}
+//
+//	if (Input::mouseScroll.y < mouseScroll)
+//	{
+//		_brushSize--;
+//	}
+//
+//	if (_brushSize > 10)
+//		_brushSize = 10;
+//
+//	if (_brushSize < 0)
+//		_brushSize = 1;
+//
+//}
 
 
 // SelectBrush

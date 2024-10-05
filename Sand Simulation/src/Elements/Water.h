@@ -5,8 +5,13 @@
 class Water : public Liquid
 {
 public:
-	Water() {}
-	~Water() {}
+	Water(glm::vec2 pos = glm::vec2(0, 0)) : Liquid()
+	{
+		ID = 4;
+		Position = pos;
+		Velocity = { 0, 0 };
+		Color = glm::vec4(0.2f, 0.5f, 0.8f, 0.6f);
+	}
 
 	void Step(World* world) override
 	{

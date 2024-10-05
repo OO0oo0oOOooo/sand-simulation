@@ -16,9 +16,6 @@ enum class ElementType
 class Element
 {
 public:
-	Element() {}
-	~Element() {}
-
 	virtual void Step(World* world)
 	{
 		return;
@@ -34,7 +31,7 @@ public:
 		return false;
 	}
 
-	virtual bool  DarkenColor()
+	virtual bool DarkenColor()
 	{
 		return false;
 	}
@@ -96,5 +93,3 @@ public:
 private:
 
 };
-
-//

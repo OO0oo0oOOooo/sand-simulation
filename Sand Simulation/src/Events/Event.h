@@ -1,8 +1,8 @@
 #pragma once
 
+#include <functional>
 #include <vector>
 #include <memory>
-#include <functional>
 
 template<typename... Args>
 class Event {
@@ -19,17 +19,17 @@ public:
 
     void RemoveHandler(const std::function<void(Args...)>& handler) {
         Handlers.erase(std::remove(Handlers.begin(), Handlers.end(), handler), Handlers.end());
-	}
+    }
 
-    /*void operator()(Args... args)
+    void operator()(Args... args)
     {
-		NotifyHandlers(Args... args);
-	}*/
+    	NotifyHandlers(args...);
+    }
 
     Event& operator+=(const std::function<void(Args...)>& handler)
     {
         AddHandler(handler);
-		return *this;
+        return *this;
     }
 
     Event& operator-=(const std::function<void(Args...)>& handler)
@@ -39,8 +39,8 @@ public:
     }
 
 private:
-    
-	std::vector<std::function<void(Args...)>> Handlers;
+
+    std::vector<std::function<void(Args...)>> Handlers;
 };
 
 // void NotifyHandlers();
@@ -48,8 +48,6 @@ private:
 // void RemoveHandler(const EventHandler& handler);
 
 //std::vector<std::unique_ptr<EventHandler>> Handlers;
-
-
 //
 //#include <string>
 //
@@ -122,55 +120,6 @@ private:
 //    int _width;
 //	int _height;
 //};
-//
-//class WindowMoved : public Event
-//{
-//public:
-//    WindowMoved() {};
-//
-//};
-//
-//class WindowFocus : public Event
-//{
-//public:
-//	WindowFocus() {};
-//
-//};
-//
-//class WindowLostFocus : public Event
-//{
-//public:
-//	WindowLostFocus() {};
-//
-//};
-//
-//
-//
-//#pragma endregion
-//
-//
-//#pragma region Application Events
-//class ApplicationTick : public Event
-//{
-//public:
-//    ApplicationTick() {};
-//    ~ApplicationTick() {};
-//};
-//
-//class ApplicationUpdate : public Event
-//{
-//public:
-//    ApplicationUpdate() {};
-//    ~ApplicationUpdate() {};
-//};
-//
-//class ApplicationRender : public Event
-//{
-//public:
-//    ApplicationRender() {};
-//    ~ApplicationRender() {};
-//};
-//#pragma endregion
 //
 //
 //#pragma region Key Events

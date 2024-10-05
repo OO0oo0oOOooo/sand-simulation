@@ -13,23 +13,23 @@ enum BrushType
 class Brush
 {
 public:
-	Brush()
-	{
-		_selected = 3;
-		_brushSize = 1;
-		_brushType = 0;
-	}
+	Brush(World* world);
 
-	~Brush(){}
+	void BeginPaint(int key, glm::vec2 position);
+	void EndPaint(int key, glm::vec2 position);
+	void Paint();
 
-	void Paint(Window window, World* world);
-	void SelectElement(Window window);
-
-	void ChangeBrush();
-	void ChangeBrushSize();
+	//void SelectElement(Window window);
+	//void ChangeBrush();
+	//void ChangeBrushSize();
 
 private:
-	int _selected;
-	int _brushSize;
-	int _brushType;
+	int m_Selected = 3;
+	int m_BrushSize = 1;
+	int m_BrushType = 0;
+
+	bool m_Draw = false;
+	bool m_Erase = false;
+
+	World* m_World;
 };
