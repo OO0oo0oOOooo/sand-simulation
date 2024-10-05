@@ -30,6 +30,5 @@ private:
 	int m_WindowHeight;
 	const char* m_Title;
 	GLFWwindow* m_NativeWindow;
-
 	glm::vec2 m_AspectRatio;
 };

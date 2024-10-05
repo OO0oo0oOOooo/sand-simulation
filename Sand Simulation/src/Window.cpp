@@ -11,17 +11,17 @@ Window::Window(int width, int height, const char* title)
 
 	GLFWmonitor* monitor = glfwGetPrimaryMonitor(); //nullptr;
 	m_NativeWindow = glfwCreateWindow(width, height, title, monitor, NULL);
+	if (!m_NativeWindow)
+	{
+		glfwTerminate();
+	}
+
 	glfwMakeContextCurrent(m_NativeWindow);
 	//glfwSwapInterval(0);
 
 	glfwSetWindowUserPointer(m_NativeWindow, this);
 
 	glfwSetFramebufferSizeCallback(m_NativeWindow, framebuffer_size_callback);
-
-	if (!m_NativeWindow)
-	{
-		glfwTerminate();
-	}
 
 	EventManager::GetInstance().WindowCloseEvent += std::bind(&Window::Close, this);
 }

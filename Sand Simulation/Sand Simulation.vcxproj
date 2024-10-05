@@ -175,6 +175,7 @@
     <ClCompile Include="src\World.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Application.h" />
     <ClInclude Include="src\Brush.h" />
     <ClInclude Include="src\CellInteractions.h" />
     <ClInclude Include="src\Chunk.h" />
@@ -184,6 +185,7 @@
     <ClInclude Include="src\Elements\Steam.h" />
     <ClInclude Include="src\Elements\Empty.h" />
     <ClInclude Include="src\Elements\Water.h" />
+    <ClInclude Include="src\EntryPoint.h" />
     <ClInclude Include="src\Events\Event.h" />
     <ClInclude Include="src\Events\EventManager.h" />
     <ClInclude Include="src\IndexBuffer.h" />

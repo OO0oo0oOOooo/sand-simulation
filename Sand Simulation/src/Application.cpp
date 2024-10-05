@@ -20,8 +20,6 @@ unsigned int windowHeight = 1080;
 
 int main(void)
 {
-    // InitWindow()
-
     if (!glfwInit())
         return -1;
 
@@ -36,7 +34,7 @@ int main(void)
 
     Renderer* renderer = new Renderer(windowWidth, windowHeight);
     
-    // InitImGui()
+    // ImGui
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO(); (void)io;
@@ -44,7 +42,7 @@ int main(void)
     ImGui_ImplGlfw_InitForOpenGL(glwindow, true);
     ImGui_ImplOpenGL3_Init("#version 430");
 
-    // InitGame()
+    // Game
     ctpl::thread_pool* threadPool = new ctpl::thread_pool(4);
     World* world = new World(threadPool);
     Brush brush(world);
@@ -88,4 +86,54 @@ int main(void)
 
     glfwTerminate();
     return 0;
+}
+
+#include "Application.h"
+
+Application::Application() : m_Window(windowWidth, windowHeight, "Sand Simulation")
+{
+    InitGLFW();
+    InitImGui();
+
+}
+
+Application::~Application()
+{
+    glfwTerminate();
+}
+
+void Application::Run()
+{
+    while (!glfwWindowShouldClose(m_Window.GetNativeWindow()))
+    {
+
+    }
+}
+
+void Application::InitGLFW()
+{
+    if (!glfwInit())
+    {
+        std::cerr << "Failed to initialize GLFW" << std::endl;
+        exit(EXIT_FAILURE);
+    }
+
+    GLenum err = glewInit();
+    if (GLEW_OK != err)
+    {
+        std::cout << "Error: " << glewGetErrorString(err) << std::endl;
+        exit(EXIT_FAILURE);
+    }
+
+    std::cout << "OpenGL Version: " << glGetString(GL_VERSION) << std::endl;
+}
+
+void Application::InitImGui()
+{
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    ImGui::StyleColorsDark();
+    ImGui_ImplGlfw_InitForOpenGL(m_Window.GetNativeWindow(), true);
+    ImGui_ImplOpenGL3_Init("#version 430");
 }

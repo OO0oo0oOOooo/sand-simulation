@@ -24,7 +24,7 @@ public:
 	//void ChangeBrushSize();
 
 private:
-	int m_Selected = 3;
+	int m_Selected = 4;
 	int m_BrushSize = 1;
 	int m_BrushType = 0;
 

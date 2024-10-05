@@ -21,7 +21,7 @@ public:
 		glm::vec2 currentPosition = Position;
 		glm::vec2 targetPosition = currentPosition + vel;
 		
-		glm::vec2 lastStep = currentPosition;
+		glm::ivec2 lastStep = currentPosition;
 		
 		int cX = currentPosition.x;
 		int cY = currentPosition.y;
@@ -59,58 +59,84 @@ public:
 				xIncrease = shorterSideIncrease;
 			}
 
-			int currentY = cY + (yIncrease * yMod);
-			int currentX = cX + (xIncrease * xMod);
+			int stepY = cY + (yIncrease * yMod);
+			int stepX = cX + (xIncrease * xMod);
 
-			glm::ivec2 step = { currentX, currentY };
-		
+			glm::ivec2 step = { stepX, stepY };
+
 			Element* stepEle = world->GetElementAtWorldPos(step);
 
-			if (stepEle == nullptr) return;
-		
-			if (stepEle->ID == 0)
+			if (stepEle != nullptr && stepEle->ID == 0)
 			{
 				Velocity = vel;
-		
 				world->SetElementAtWorldPos(lastStep, stepEle);
 				world->SetElementAtWorldPos(step, this);
-		
 				lastStep = step;
 			}
 			else
 			{
 				Velocity = { 0, 0 };
 
-				Element* elementB = world->GetElementAtWorldPos(step + glm::ivec2(0, -1));
-				Element* elementBR = world->GetElementAtWorldPos(step + glm::ivec2(1, -1));
-				Element* elementBL = world->GetElementAtWorldPos(step + glm::ivec2(-1, -1));
-
-				if (elementB != nullptr && elementB->ID == 0)
+				if (rand() % 2)
 				{
-					world->SetElementAtWorldPos(step, elementB);
-					world->SetElementAtWorldPos(step + glm::ivec2(0, -1), stepEle);
+					Element* elementBR = world->GetElementAtWorldPos(lastStep + glm::ivec2(1, -1));
+					if (elementBR != nullptr && elementBR->ID == 0)
+					{
+						world->SetElementAtWorldPos(lastStep, elementBR);
+						world->SetElementAtWorldPos(lastStep + glm::ivec2(1, -1), this);
+					}
 				}
-				else if (elementBR != nullptr && elementBR->ID == 0)
+				else
 				{
-					world->SetElementAtWorldPos(step, elementBR);
-					world->SetElementAtWorldPos(step + glm::ivec2(1, -1), stepEle);
+					Element* elementBL = world->GetElementAtWorldPos(lastStep + glm::ivec2(-1, -1));
+					if (elementBL != nullptr && elementBL->ID == 0)
+					{
+						world->SetElementAtWorldPos(lastStep, elementBL);
+						world->SetElementAtWorldPos(lastStep + glm::ivec2(-1, -1), this);
+					}
 				}
-				else if (elementBL != nullptr && elementBL->ID == 0)
-				{
-					world->SetElementAtWorldPos(step, elementBL);
-					world->SetElementAtWorldPos(step + glm::ivec2(-1, -1), stepEle);
-				}
-
 				break;
 			}
+
+			
+			
+			//Element* stepEle = world->GetElementAtWorldPos(step);
+			//if (stepEle == nullptr) return;
+			//if (stepEle->ID == 0)
+			//{
+			//	Velocity = vel;
+			//	world->SetElementAtWorldPos(lastStep, stepEle);
+			//	world->SetElementAtWorldPos(step, this);
+			//	lastStep = step;
+			//}
+			//else
+			//{
+			//	Velocity = { 0, 0 };
+			//	Element* elementB = world->GetElementAtWorldPos(step + glm::ivec2(0, -1));
+			//	Element* elementBR = world->GetElementAtWorldPos(step + glm::ivec2(1, -1));
+			//	Element* elementBL = world->GetElementAtWorldPos(step + glm::ivec2(-1, -1));
+			//	if (elementB != nullptr && elementB->ID == 0)
+			//	{
+			//		world->SetElementAtWorldPos(step, elementB);
+			//		world->SetElementAtWorldPos(step + glm::ivec2(0, -1), stepEle);
+			//	}
+			//	else if (elementBR != nullptr && elementBR->ID == 0)
+			//	{
+			//		world->SetElementAtWorldPos(step, elementBR);
+			//		world->SetElementAtWorldPos(step + glm::ivec2(1, -1), stepEle);
+			//	}
+			//	else if (elementBL != nullptr && elementBL->ID == 0)
+			//	{
+			//		world->SetElementAtWorldPos(step, elementBL);
+			//		world->SetElementAtWorldPos(step + glm::ivec2(-1, -1), stepEle);
+			//	}
+			//	break;
+			//}
 		}
 	}
 
-	/*
-	void Step(World* world) override
+	void StepConditions(World* world, glm::ivec2 pos)
 	{
-		glm::ivec2 pos = Position;
-
 		Element* element = world->GetElementAtWorldPos(pos);
 		Element* elementB = world->GetElementAtWorldPos(pos + glm::ivec2(0, -1));
 		Element* elementBR = world->GetElementAtWorldPos(pos + glm::ivec2(1, -1));
@@ -132,5 +158,4 @@ public:
 			world->SetElementAtWorldPos(pos + glm::ivec2(-1, -1), element);
 		}
 	}
-	*/
 };
