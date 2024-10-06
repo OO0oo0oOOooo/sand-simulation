@@ -5,7 +5,7 @@
 
 class Window {
 public:
-	Window(int width, int height, const char* title);
+	Window(glm::uvec2 windowSize, const char* title);
 	void Close();
 
 	inline int GetWidth() { return m_WindowWidth; }

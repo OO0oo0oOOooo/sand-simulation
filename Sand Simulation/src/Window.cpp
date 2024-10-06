@@ -1,8 +1,8 @@
 #include "Window.h"
 #include "Events/EventManager.h"
 
-Window::Window(int width, int height, const char* title)
-	: m_WindowWidth(width), m_WindowHeight(height), m_Title(title), m_AspectRatio(glm::vec2((float)width / 1920.0f, (float)height / 1080.0f))
+Window::Window(glm::uvec2 windowSize, const char* title)
+	: m_WindowWidth(windowSize.x), m_WindowHeight(windowSize.y), m_Title(title), m_AspectRatio(glm::vec2((float)windowSize.x / 1920.0f, (float)windowSize.y / 1080.0f))
 {
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
@@ -10,7 +10,7 @@ Window::Window(int width, int height, const char* title)
 	glfwWindowHint(GLFW_SCALE_TO_MONITOR, GLFW_TRUE);
 
 	GLFWmonitor* monitor = glfwGetPrimaryMonitor(); //nullptr;
-	m_NativeWindow = glfwCreateWindow(width, height, title, monitor, NULL);
+	m_NativeWindow = glfwCreateWindow(windowSize.x, windowSize.y, title, monitor, NULL);
 	if (!m_NativeWindow)
 	{
 		glfwTerminate();

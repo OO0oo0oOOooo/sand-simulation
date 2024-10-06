@@ -155,6 +155,7 @@
     <ClCompile Include="src\Brush.cpp" />
     <ClCompile Include="src\Cell.cpp" />
     <ClCompile Include="src\Chunk.cpp" />
+    <ClCompile Include="src\EntryPoint.cpp" />
     <ClCompile Include="src\IndexBuffer.cpp" />
     <ClCompile Include="src\Input.cpp" />
     <ClCompile Include="src\Mesh.cpp" />
@@ -185,7 +186,6 @@
     <ClInclude Include="src\Elements\Steam.h" />
     <ClInclude Include="src\Elements\Empty.h" />
     <ClInclude Include="src\Elements\Water.h" />
-    <ClInclude Include="src\EntryPoint.h" />
     <ClInclude Include="src\Events\Event.h" />
     <ClInclude Include="src\Events\EventManager.h" />
     <ClInclude Include="src\IndexBuffer.h" />

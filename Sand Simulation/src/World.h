@@ -8,7 +8,7 @@ class Element;
 class World
 {
 public:
-	World(ctpl::thread_pool* pool);
+	World();
 	~World();
 
 	void Update(Shader* shader);
@@ -19,8 +19,8 @@ public:
 		{
 			for (int y = 0; y < numChunksHeight; y++)
 			{
-				_chunks[x][y]->UploadMeshData();
-				_chunks[x][y]->DrawMesh(shader);
+				m_Chunks[x][y]->UploadMeshData();
+				m_Chunks[x][y]->DrawMesh(shader);
 			}
 		}
 
@@ -33,7 +33,7 @@ public:
 
 	inline void DebugDrawInit()
 	{
-		_debugBordersMesh->Clear();
+		m_DebugBordersMesh->Clear();
 		int padding = 1;
 
 		for (int x = 0; x < numChunksWidth; x++)
@@ -41,7 +41,7 @@ public:
 			for (int y = 0; y < numChunksHeight; y++)
 			{
 				//Chunk* chunk = _chunks[glm::vec2(x, y)];
-				Chunk* chunk = _chunks[x][y];
+				Chunk* chunk = m_Chunks[x][y];
 
 				if (chunk == nullptr)
 					return;
@@ -65,25 +65,25 @@ public:
 
 				for (int i = 0; i < 8; i++)
 				{
-					_debugBordersMesh->indices.push_back(indices[i] + _debugBordersMesh->vertices.size());
+					m_DebugBordersMesh->indices.push_back(indices[i] + m_DebugBordersMesh->vertices.size());
 				}
 
 				for (int i = 0; i < 4; i++)
 				{
-					_debugBordersMesh->vertices.push_back(vertices[i]);
+					m_DebugBordersMesh->vertices.push_back(vertices[i]);
 				}
 
 				
 			}
 		}
 
-		_debugBordersMesh->UploadVBOData();
-		_debugBordersMesh->UploadIBOData();
+		m_DebugBordersMesh->UploadVBOData();
+		m_DebugBordersMesh->UploadIBOData();
 	}
 
 	inline void DebugDraw(Shader* shader)
 	{
-		_debugBordersMesh->DrawLine(shader);
+		m_DebugBordersMesh->DrawLine(shader);
 	}
 
 	inline glm::ivec2 PixelToCellPos(glm::vec2 position)
@@ -100,7 +100,7 @@ public:
 		glm::ivec2 chunkPos = { (position.x / chunkSizeInCells), (position.y / chunkSizeInCells) };
 
 		//return _chunks[chunkPos];
-		return _chunks[chunkPos.x][chunkPos.y];
+		return m_Chunks[chunkPos.x][chunkPos.y];
 	}
 
 	inline Element* GetElementAtWorldPos(glm::ivec2 position)
@@ -137,9 +137,9 @@ public:
 
 private:
 
-	ctpl::thread_pool* _threadPool;
+	ctpl::thread_pool* m_ThreadPool;
 	//std::unordered_map<glm::ivec2, Chunk*, KeyHash, KeyEqual> _chunks;
-	std::vector<std::vector<Chunk*>> _chunks;
+	std::vector<std::vector<Chunk*>> m_Chunks;
 
-	Mesh* _debugBordersMesh;
+	Mesh* m_DebugBordersMesh;
 };

@@ -8,6 +8,12 @@
 #include <GLFW/glfw3.h>
 
 #include "Window.h"
+#include "Input.h"
+#include "Renderer.h"
+
+#include "Time.h"
+#include "World.h"
+#include "Brush.h"
 
 class Application
 {
@@ -16,12 +22,12 @@ public:
 	~Application();
 
 	void Run();
-	void InitGLFW();
-	void InitImGui();
 
 private:
-	Window m_Window;
-	//Renderer m_Renderer;
-	//Game m_Game;
-	//glm::uvec2 m_WindowStartSize;
+	Window* m_Window;
+	Renderer* m_Renderer;
+	World* m_World;
+	Brush* m_Brush;
+
+	glm::uvec2 m_WindowStartSize = { 1920, 1080 };
 };

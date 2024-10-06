@@ -7,20 +7,20 @@
 
 #include "Events/EventManager.h"
 
-World::World(ctpl::thread_pool* pool) : _threadPool(pool)
+World::World()
 {
 	for (int x = 0; x < numChunksWidth; x++)
 	{
-		_chunks.push_back(std::vector<Chunk*>());
+		m_Chunks.push_back(std::vector<Chunk*>());
 
 		for (int y = 0; y < numChunksHeight; y++)
 		{
-			_chunks[x].push_back(new Chunk(this, x * 64, y * 64));
+			m_Chunks[x].push_back(new Chunk(this, x * 64, y * 64));
 			//_chunks[glm::vec2(x, y)] = new Chunk(this, x * 64, y * 64);
 		}
 	}
 
-	_debugBordersMesh = new Mesh();
+	m_DebugBordersMesh = new Mesh();
 	DebugDrawInit();
 }
 
@@ -30,11 +30,11 @@ World::~World()
 	{
 		for (int y = 0; y < numChunksHeight; y++)
 		{
-			delete _chunks[x][y];
+			delete m_Chunks[x][y];
 		}
 	}
 
-	delete _debugBordersMesh;
+	delete m_DebugBordersMesh;
 }
 
 //void CellularAutomata(int id, Chunk* chunk)
@@ -48,7 +48,7 @@ void World::Update(Shader* shader)
 	{
 		for (int x = 0; x < numChunksWidth; x++)
 		{
-			Chunk* chunk = _chunks[x][y];
+			Chunk* chunk = m_Chunks[x][y];
 
 			if (chunk != nullptr)
 			{
