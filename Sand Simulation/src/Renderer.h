@@ -8,22 +8,23 @@
 
 #include "Shader.h"
 #include "Mesh.h"
-
-#include "Cell.h"
+#include "Window.h"
 
 
 class Renderer
 {
 public:
-	Renderer(int windowWidth, int windowHeight);
+	Renderer(Window* window);
 	~Renderer();
 
 	void Clear() const;
+	void Render();
 	void Draw();
 
-	inline Shader* GetShader() { return shader; }
+	inline Shader* GetShader() { return m_Shader; }
 	
 private:
-	Mesh* mesh;
-	Shader* shader;
+	Window* m_Window;
+	Mesh* m_Mesh;
+	Shader* m_Shader;
 };

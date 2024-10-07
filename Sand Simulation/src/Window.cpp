@@ -1,4 +1,5 @@
 #include "Window.h"
+#include "Input.h"
 #include "Events/EventManager.h"
 
 Window::Window(glm::uvec2 windowSize, const char* title)
@@ -24,6 +25,8 @@ Window::Window(glm::uvec2 windowSize, const char* title)
 	glfwSetFramebufferSizeCallback(m_NativeWindow, framebuffer_size_callback);
 
 	EventManager::GetInstance().WindowCloseEvent += std::bind(&Window::Close, this);
+
+	Input::SetupKeyInputs(GetNativeWindow());
 }
 
 void Window::Close()

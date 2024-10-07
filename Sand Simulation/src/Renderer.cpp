@@ -1,29 +1,29 @@
 #include "Renderer.h"
 
-Renderer::Renderer(int windowWidth, int windowHeight)
+Renderer::Renderer(Window* window) : m_Window(window)
 {
-    mesh = new Mesh();
-    shader = new Shader();
+    m_Mesh = new Mesh();
+    m_Shader = new Shader();
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    glm::mat4 proj = glm::ortho(0.0f, (float)windowWidth, 0.0f, (float)windowHeight, -1.0f, 1.0f);
+    glm::mat4 proj = glm::ortho(0.0f, (float)m_Window->GetWidth(), 0.0f, (float)m_Window->GetHeight(), -1.0f, 1.0f);
     glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f));
     glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f));
 
     glm::mat4 VP = proj * view;
 
-    shader->Bind();
-    shader->SetUniformMat4f("u_ViewProjection", VP);
-    shader->SetUniformMat4f("u_Transform", model);
-    shader->SetUniform4f("u_Color", glm::vec4(0.0f, 0.0f, 0.0f, 0.0f));
+    m_Shader->Bind();
+    m_Shader->SetUniformMat4f("u_ViewProjection", VP);
+    m_Shader->SetUniformMat4f("u_Transform", model);
+    m_Shader->SetUniform4f("u_Color", glm::vec4(0.0f, 0.0f, 0.0f, 0.0f));
 }
 
 Renderer::~Renderer()
 {
-    delete mesh;
-    delete shader;
+    delete m_Mesh;
+    delete m_Shader;
 }
 
 void Renderer::Clear() const
@@ -31,7 +31,16 @@ void Renderer::Clear() const
 	glClear(GL_COLOR_BUFFER_BIT);
 }
 
+void Renderer::Render()
+{
+    glClear(GL_COLOR_BUFFER_BIT);
+
+
+
+    glfwSwapBuffers(m_Window->GetNativeWindow());
+}
+
 void Renderer::Draw()
 {
-    mesh->Draw(shader);
+    m_Mesh->Draw(m_Shader);
 }
