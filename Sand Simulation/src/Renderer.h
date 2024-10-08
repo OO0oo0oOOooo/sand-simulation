@@ -10,14 +10,12 @@
 #include "Mesh.h"
 #include "Window.h"
 
-
 class Renderer
 {
 public:
 	Renderer(Window* window);
 	~Renderer();
 
-	void Clear() const;
 	void Render();
 	void Draw();
 

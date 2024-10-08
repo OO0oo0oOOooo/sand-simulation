@@ -2,25 +2,7 @@
 
 Application::Application()
 {
-    if (!glfwInit())
-    {
-        std::cerr << "Failed to initialize GLFW" << std::endl;
-        assert(false);
-        exit(EXIT_FAILURE);
-    }
-
     m_Window = new Window(m_WindowStartSize, "Sand Simulation");
-
-    GLenum err = glewInit();
-    if (GLEW_OK != err)
-    {
-        std::cout << "Error: " << glewGetErrorString(err) << std::endl;
-        assert(false);
-        exit(EXIT_FAILURE);
-    }
-
-    std::cout << "OpenGL Version: " << glGetString(GL_VERSION) << std::endl;
-
     m_Renderer = new Renderer(m_Window);
     m_World = new World();
     m_Brush = new Brush(m_World);
@@ -47,13 +29,13 @@ void Application::Run()
 
     while (!glfwWindowShouldClose(m_Window->GetNativeWindow()))
     {
+        m_Renderer->Render();
+
         Time::Update();
-        //glClear(GL_COLOR_BUFFER_BIT);
 
         m_Brush->Paint();
 
         m_World->Update(m_Renderer->GetShader());
-
         m_World->DebugDrawInit();
         m_World->DebugDraw(m_Renderer->GetShader());
 
@@ -73,7 +55,6 @@ void Application::Run()
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-        //glfwSwapBuffers(m_Window->GetNativeWindow());
-        glfwPollEvents();
+        m_Window->OnUpdate();
     }
 }

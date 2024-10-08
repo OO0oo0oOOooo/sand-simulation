@@ -9,6 +9,7 @@ namespace Input {
 	glm::vec2 worldMousePosition = { 0.0f, 0.0f };
 	glm::vec2 mouseScroll = { 0.0f, 0.0f };
 
+	/*
 	std::map<int, bool> m_Keys;
 	std::vector<int> m_KeysToMonitor = {
 		GLFW_KEY_W,
@@ -44,6 +45,8 @@ namespace Input {
 		GLFW_MOUSE_BUTTON_6,
 	};
 
+	
+	
 	void SetupKeyInputs(GLFWwindow* window)
 	{
 		for (int key : m_KeysToMonitor)
@@ -123,4 +126,6 @@ namespace Input {
 			it->second = isDown;
 		}
 	}
+
+	*/
 }

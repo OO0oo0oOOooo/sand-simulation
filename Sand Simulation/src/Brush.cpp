@@ -3,12 +3,17 @@
 
 Brush::Brush(World* world) : m_World(world)
 {
-	EventManager::GetInstance().MouseButtonDownEvent += std::bind(&Brush::BeginPaint, this, std::placeholders::_1, std::placeholders::_2);
-	EventManager::GetInstance().MouseButtonUpEvent += std::bind(&Brush::EndPaint, this, std::placeholders::_1, std::placeholders::_2);
-	//EventManager::GetInstance().MouseMoveEvent += std::bind(&Brush::Paint, this, std::placeholders::_1);
+	EventManager::GetInstance().MouseButtonDownEvent += std::bind(&Brush::BeginPaint, this, std::placeholders::_1);
+	EventManager::GetInstance().MouseButtonUpEvent += std::bind(&Brush::EndPaint, this, std::placeholders::_1);
+	EventManager::GetInstance().MouseMoveEvent += std::bind(&Brush::UpdateMousePosition, this, std::placeholders::_1, std::placeholders::_2); //std::bind(&Brush::Paint, this, std::placeholders::_1);
 }
 
-void Brush::BeginPaint(int key, glm::vec2 position)
+void Brush::UpdateMousePosition(int x, int y)
+{
+	m_MousePosition = { x, y };
+}
+
+void Brush::BeginPaint(int key)
 {
 	if(key == 0)
 		m_Draw = true;
@@ -16,7 +21,7 @@ void Brush::BeginPaint(int key, glm::vec2 position)
 		m_Erase = true;
 }
 
-void Brush::EndPaint(int key, glm::vec2 position)
+void Brush::EndPaint(int key)
 {
 	if (key == 0)
 		m_Draw = false;
@@ -26,12 +31,10 @@ void Brush::EndPaint(int key, glm::vec2 position)
 
 void Brush::Paint()
 {
-	// Check if on canvas
-
 	if(m_Draw)
-		m_World->EditElementAtPixel(Input::mousePosition, m_Selected);
+		m_World->EditElementAtPixel(m_MousePosition, m_Selected);
 	else if(m_Erase)
-		m_World->EditElementAtPixel(Input::mousePosition, 0);
+		m_World->EditElementAtPixel(m_MousePosition, 0);
 }
 
 //void Brush::SelectElement(Window window)

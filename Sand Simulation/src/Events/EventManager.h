@@ -14,16 +14,22 @@ public:
 		return instance;
 	}
 
-	Event<int, int, glm::vec2> MouseButtonEvent; // button: 0 = left, 1 = right | action: 1 = down, 0 = up | position: x, y
-	Event<int, glm::vec2> MouseButtonDownEvent;
-	Event<int, glm::vec2> MouseButtonUpEvent;
-	Event<int> MouseButtonHeldEvent;
-	Event<glm::vec2> MouseMoveEvent;
+	Event<int, int> WindowResizeEvent;
+	Event<> WindowCloseEvent;
 
+	Event<double, double> MouseMoveEvent;
+	Event<double, double> MouseScrollEvent;
+
+	Event<int, int, int> MouseButtonEvent; // button: 0 = left, 1 = right | action: 1 = down, 0 = up, 2 = repeat | mods: modifier keys
+	Event<int> MouseButtonDownEvent;
+	Event<int> MouseButtonUpEvent;
+	Event<int> MouseButtonRepeatEvent;
+
+
+	Event<int, int, int, int> KeyEvent; // key: key code | scancode: key code | action: 1 = down, 0 = up, 2 = repeat | mods: modifier keys
 	Event<int> KeyDownEvent;
 	Event<int> KeyUpEvent;
-
-	Event<> WindowCloseEvent;
+	Event<int> KeyRepeatEvent;
 
 	Event<> UpdateWorldEvent;
 	Event<int, int> UpdateChunkEvent;

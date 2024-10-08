@@ -26,18 +26,9 @@ Renderer::~Renderer()
     delete m_Shader;
 }
 
-void Renderer::Clear() const
-{
-	glClear(GL_COLOR_BUFFER_BIT);
-}
-
 void Renderer::Render()
 {
     glClear(GL_COLOR_BUFFER_BIT);
-
-
-
-    glfwSwapBuffers(m_Window->GetNativeWindow());
 }
 
 void Renderer::Draw()
