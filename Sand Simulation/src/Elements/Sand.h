@@ -1,6 +1,161 @@
 #pragma once
 
 #include "Element.h"
+#include "../Chunk.h"
+
+class Sand : public Solid
+{
+public:
+	Sand(int px, int py)
+	{
+		Id = 3;
+		Position = { px, py };
+		Color = { 230, 178, 51, 255 };
+	}
+	
+	void Step(Chunk* chunk) override
+	{
+		//Element element = chunk->GetElement(Position.x, Position.y);
+		//Element elementB = chunk->GetElement(Position.x, Position.y - 1);
+
+		//if (elementB.Id == 0)
+		//{
+		//	chunk->SetElement(Position.x, Position.y, elementB);
+		//	chunk->SetElement(Position.x, Position.y - 1, element);
+		//}
+
+		//Element element = chunk->GetElement(Position.x, Position.y);
+		//Element elementB = chunk->GetElement(Position.x, Position.y - 1);
+		//Element elementBR = chunk->GetElement(Position.x + 1, Position.y - 1);
+		//Element elementBL = chunk->GetElement(Position.x - 1, Position.y - 1);
+
+		//if (elementB.Id == 0)
+		//{
+		//	chunk->SetElement(Position.x, Position.y, elementB);
+		//	chunk->SetElement(Position.x, Position.y - 1, element);
+		//}
+		//else if (elementBR.Id == 0)
+		//{
+		//	chunk->SetElement(Position.x, Position.y, elementBR);
+		//	chunk->SetElement(Position.x + 1, Position.y - 1, element);
+		//}
+		//else if (elementBL.Id == 0)
+		//{
+		//	chunk->SetElement(Position.x, Position.y, elementBL);
+		//	chunk->SetElement(Position.x - 1, Position.y - 1, element);
+		//}
+	}
+
+	/*
+	void Step(Chunk* chunk) 
+	{
+		Element element = chunk->GetElement(Position.x, Position.y);
+		Element elementB = chunk->GetElement(Position.x, Position.y - 1);
+		Element elementBR = chunk->GetElement(Position.x + 1, Position.y - 1);
+		Element elementBL = chunk->GetElement(Position.x - 1, Position.y - 1);
+
+		if (elementB.Id == 0)
+		{
+			chunk->SetElement(Position.x, Position.y, elementB);
+			chunk->SetElement(Position.x, Position.y - 1, element);
+		}
+		else if (elementBR.Id == 0)
+		{
+			chunk->SetElement(Position.x, Position.y, elementBR);
+			chunk->SetElement(Position.x + 1, Position.y - 1, element);
+		}
+		else if (elementBL.Id == 0)
+		{
+			chunk->SetElement(Position.x, Position.y, elementBL);
+			chunk->SetElement(Position.x - 1, Position.y - 1, element);
+		}
+	}
+	*/
+
+	/*
+	std::array<int, 9> Step(std::array<int, 9> neighbours)
+	{
+		std::array<int, 9> newNeighbours = neighbours;
+
+		const int& TL = neighbours[0];
+		const int& T = neighbours[1];
+		const int& TR = neighbours[2];
+		const int& ML = neighbours[3];
+		const int& M = neighbours[4];
+		const int& MR = neighbours[5];
+		const int& BL = neighbours[6];
+		const int& B = neighbours[7];
+		const int& BR = neighbours[8];
+
+		if (!B)
+		{
+			newNeighbours[4] = 0;
+			newNeighbours[7] = 1;
+		}
+		else if (!BR)
+		{
+			newNeighbours[4] = 0;
+			newNeighbours[8] = 1;
+		}
+		else if (!BL)
+		{
+			newNeighbours[4] = 0;
+			newNeighbours[6] = 1;
+
+		}
+
+		return newNeighbours;
+	}*/
+
+	/*std::array<int, 9> Step(std::array<int, 9> neighbours)
+	{
+		std::array<int, 9> newNeighbours = neighbours;
+
+		const int &TL = neighbours[0];
+		const int &T = neighbours[1];
+		const int &TR = neighbours[2];
+		const int &ML = neighbours[3];
+		const int &M = neighbours[4];
+		const int &MR = neighbours[5];
+		const int &BL = neighbours[6];
+		const int &B = neighbours[7];
+		const int &BR = neighbours[8];
+
+		if (!B)
+		{
+			newNeighbours[4] = 0;
+			newNeighbours[7] = 1;
+		}
+		else if (!BR)
+		{
+			newNeighbours[4] = 0;
+			newNeighbours[8] = 1;
+		}
+		else if (!BL)
+		{
+			newNeighbours[4] = 0;
+			newNeighbours[6] = 1;
+
+		}
+
+		return newNeighbours;
+	}*/
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+#include "Element.h"
 
 class Sand : public Solid
 {
@@ -159,3 +314,4 @@ public:
 		}
 	}
 };
+*/

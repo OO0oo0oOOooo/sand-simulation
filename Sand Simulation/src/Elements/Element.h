@@ -1,25 +1,14 @@
 #pragma once
 
-#include "../World.h"
+#include "glm/glm.hpp"
+#include "glm/gtc/type_precision.hpp"
 
-enum class ElementType
-{
-	Air,
-	Stone,
-	Dirt,
-	Sand,
-	Water,
-	Lava,
-	Empty,
-};
+class Chunk;
 
 class Element
 {
 public:
-	virtual void Step(World* world)
-	{
-		return;
-	}
+	virtual void Step(Chunk* chunk) { return; }
 
 	virtual bool ActOnOther()
 	{
@@ -36,13 +25,11 @@ public:
 		return false;
 	}
 
-	int ID = 0;
-	glm::vec2 Position = { 0, 0 };
-	glm::vec2 Velocity = { 0, 0 };
-	glm::vec4 Color = { 0, 0, 0, 0 };
-
-private:
-
+public:
+	std::uint8_t Id = 0;
+	glm::i8vec2 Position = { 0, 0 };
+	glm::i8vec2 Velocity = { 0, 0 };
+	glm::u8vec4 Color = { 0, 0, 0, 0 };
 };
 
 
@@ -60,7 +47,6 @@ private:
 
 
 class Solid : public Element
-
 {
 public:
 	Solid() {}

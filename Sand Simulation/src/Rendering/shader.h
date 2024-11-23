@@ -5,15 +5,19 @@
 
 #include <glm/glm.hpp>
 
+#include <string>
+#include <fstream>
+#include <sstream>
+
 class Shader {
 public:
-	Shader();
+	Shader(std::string fileName);
 	~Shader();
 
 	void Bind();
 	void Unbind();
 
-	unsigned int CompileShader(unsigned int type, const char* filePath);
+	std::pair<std::string, std::string> ReadFile(std::string filePath);
 
 	void SetUniform1f(const char* name, float value);
 	void SetUniform2f(const char* name, glm::vec2 value);

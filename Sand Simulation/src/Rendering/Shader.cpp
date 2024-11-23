@@ -1,42 +1,51 @@
 #include "shader.h"
 
-Shader::Shader()
+#include <iostream>
+
+Shader::Shader(std::string fileName)
 {
+    /*
     const char* vertexShaderSource = R"(
-		#version 430 core
+	#version 430 core
 
-		layout (location = 0) in vec3 a_Position;
-		layout (location = 1) in vec4 a_Color;
+	layout (location = 0) in vec3 a_Position;
+	layout (location = 1) in vec4 a_Color;
 
-        uniform mat4 u_ViewProjection;
-        uniform mat4 u_Transform;
+    uniform mat4 u_ViewProjection;
+    uniform mat4 u_Transform;
 
-        out vec3 v_Position;
-        out vec4 v_Color;
+    out vec3 v_Position;
+    out vec4 v_Color;
 
-		void main()
-		{
-			v_Position = a_Position;
-			v_Color = a_Color;
-			gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);
-		}
-	)";
+	void main()
+	{
+		v_Position = a_Position;
+		v_Color = a_Color;
+		gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);
+	}
+    )";
 
     const char* fragmentShaderSource = R"(
-        #version 430 core
-        
-        uniform vec4 u_Color;
+    #version 430 core
+       
+    uniform vec4 u_Color;
 
-        out vec4 FragColor;
+    out vec4 FragColor;
 
-        in vec3 v_Position;
-		in vec4 v_Color;
+    in vec3 v_Position;
+    in vec4 v_Color;
 
-        void main()
-        {
-           FragColor = v_Color;
-        }
+    void main()
+    {
+        FragColor = v_Color;
+    }
     )";
+    */
+
+    std::pair<std::string, std::string> str = ReadFile("src/Shaders/" + fileName + ".glsl");
+
+    const char* vertexShaderSource = str.first.c_str();
+    const char* fragmentShaderSource = str.second.c_str();
 
     unsigned int vertexShader;
     vertexShader = glCreateShader(GL_VERTEX_SHADER);
@@ -77,9 +86,45 @@ void Shader::Unbind()
 	glUseProgram(0);
 }
 
-unsigned int Shader::CompileShader(unsigned int type, const char* filePath)
+std::pair<std::string, std::string> Shader::ReadFile(std::string filePath)
 {
-    return 0;
+    std::ifstream file(filePath);
+    std::stringstream vertexShader, fragmentShader;
+    std::string line;
+
+    bool isVertexShader = false;
+    bool isFragmentShader = false;
+
+    if(!file.is_open())
+        std::cerr << "Error opening shader file: " << filePath << std::endl;
+
+    while (std::getline(file, line))
+    {
+        if (line == "#Vertex Shader")
+        {
+            isVertexShader = true;
+            isFragmentShader = false;
+            continue;
+        }
+        else if(line == "#Fragment Shader")
+        {
+            isVertexShader = false;
+            isFragmentShader = true;
+            continue;
+        }
+
+        if (isVertexShader)
+        {
+            vertexShader << line << "\n";
+        }
+        else if (isFragmentShader)
+        {
+            fragmentShader << line << "\n";
+        }
+    }
+
+    file.close();
+    return std::make_pair(vertexShader.str(), fragmentShader.str());
 }
 
 void Shader::SetUniform1f(const char* name, float value)

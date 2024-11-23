@@ -1,7 +1,8 @@
+
+/*
 #pragma once
 
 #include "World.h"
-#include "Input.h"
 #include "Window.h"
 
 enum BrushType
@@ -35,3 +36,4 @@ private:
 
 	World* m_World;
 };
+*/

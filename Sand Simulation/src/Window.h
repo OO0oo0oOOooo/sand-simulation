@@ -11,7 +11,7 @@
 
 class Window {
 public:
-	Window(glm::uvec2 windowSize, const char* title);
+	Window();
 	~Window();
 	
 	void OnUpdate();
@@ -26,8 +26,8 @@ private:
 	void Init();
 	void Shutdown();
 
-	int m_WindowWidth;
-	int m_WindowHeight;
-	const char* m_Title;
+	int m_WindowWidth = 1920;
+	int m_WindowHeight = 1080;
+	const char* m_Title = "Sand Simulation";
 	GLFWwindow* m_NativeWindow;
 };

@@ -1,139 +1,107 @@
 #include "World.h"
-#include "Elements/Element.h"
-#include "Elements/Empty.h"
-#include "Elements/Water.h"
-#include "Elements/Sand.h"
-#include "Elements/Air.h"
-
 #include "Events/EventManager.h"
 
-World::World()
+const glm::ivec2 neighbourLUT[] = 
 {
-	for (int x = 0; x < numChunksWidth; x++)
-	{
-		m_Chunks.push_back(std::vector<Chunk*>());
+	glm::ivec2(-1, -1),
+	glm::ivec2( 0, -1),
+	glm::ivec2( 1, -1),
+	glm::ivec2(-1,  0),
+	glm::ivec2( 0,  0),
+	glm::ivec2( 1,  0),
+	glm::ivec2(-1,  1),
+	glm::ivec2( 0,  1),
+	glm::ivec2( 1,  1),
+};
 
-		for (int y = 0; y < numChunksHeight; y++)
+World::World(GameObject* obj) : Component(obj)
+{
+	//EventManager::GetInstance().EditElementAtWorldPosition += std::bind(&World::EditElementAtWorldPosition, this, std::placeholders::_1, std::placeholders::_2);
+	EventManager::GetInstance().MouseButtonDownEvent += std::bind(&World::MouseDown, this, std::placeholders::_1);
+	EventManager::GetInstance().MouseButtonUpEvent += std::bind(&World::MouseUp, this, std::placeholders::_1);
+	EventManager::GetInstance().MouseMoveEvent += std::bind(&World::MouseMoved, this, std::placeholders::_1, std::placeholders::_2);
+
+	m_Chunks.reserve(WORLD_WIDTH * WORLD_HEIGHT);
+	
+	for (int y = 0; y < WORLD_HEIGHT; y++)
+	{
+		for (int x = 0; x < WORLD_WIDTH; x++)
 		{
-			m_Chunks[x].push_back(new Chunk(this, x * 64, y * 64));
-			//_chunks[glm::vec2(x, y)] = new Chunk(this, x * 64, y * 64);
+			GameObject* gameObject = new GameObject();
+			gameObject->transform.SetPosition({ (x * 64) * CELL_SIZE_IN_PIXELS, (y * 64) * CELL_SIZE_IN_PIXELS, 0 });
+
+			Mesh* meshComponent = new Mesh(gameObject);
+			gameObject->AddComponent(meshComponent);
+
+			Material* materialComponent = new Material(gameObject);
+			gameObject->AddComponent(materialComponent);
+
+			Chunk* chunkComponent = new Chunk(gameObject);
+			gameObject->AddComponent(chunkComponent);
+
+			m_Chunks.emplace_back(chunkComponent);
+
+			//TODO: GameObjects should add themselves to the scene
+			EventManager::GetInstance().AddGameObjectToScene(gameObject);
 		}
 	}
 
-	m_DebugBordersMesh = new Mesh();
-	DebugDrawInit();
-}
-
-World::~World()
-{
-	for (int x = 0; x < numChunksWidth; x++)
+	for (int y = 0; y < WORLD_HEIGHT; y++)
 	{
-		for (int y = 0; y < numChunksHeight; y++)
+		for (int x = 0; x < WORLD_WIDTH; x++)
 		{
-			delete m_Chunks[x][y];
-		}
-	}
-
-	delete m_DebugBordersMesh;
-}
-
-//void CellularAutomata(int id, Chunk* chunk)
-//{
-//	chunk->Update();
-//}
-
-void World::Update(Shader* shader)
-{
-	for (int y = 0; y < numChunksHeight; y++)
-	{
-		for (int x = 0; x < numChunksWidth; x++)
-		{
-			Chunk* chunk = m_Chunks[x][y];
-
-			if (chunk != nullptr)
+			for (int i = 0; i < 8; i++)
 			{
-				chunk->UploadMeshData();
-				chunk->DrawMesh(shader);
-				chunk->Update();
-			}
-		}
-	}
-
-	/*
-	for (int pass = 0; pass < 4; ++pass)
-	{
-		std::vector<std::pair<std::future<void>, Chunk*>> futures;
-
-		for (int y = 0; y < numChunksHeight; y++)
-		{
-			for (int x = 0; x < numChunksWidth; x++)
-			{
-				if ((x + y + pass) % 4 == 0)
+				if (!IsOutOfBounds(x + neighbourLUT[i].x, y + neighbourLUT[i].y))
 				{
-					//Chunk* chunk = _chunks[{x, y}];
-					Chunk* chunk = _chunks[x][y];
-
-					if (chunk != nullptr)
-					{
-						futures.push_back(std::make_pair(_threadPool->push(CellularAutomata, chunk), chunk));
-					}
+					m_Chunks[GetIndex(x, y)]->Neighbours[i] = m_Chunks[GetIndex(x + neighbourLUT[i].x, y + neighbourLUT[i].y)];
 				}
-
 			}
 		}
-
-		for (auto& f : futures)
-		{
-			f.first.get();
-			f.second->UploadMeshData();
-			f.second->DrawMesh(shader);
-		}
-	}
-	*/
-}
-
-void World::EditElementAtPixel(glm::vec2 position, int element)
-{
-	if (position.x < 0 || position.x > 1920 || position.y < 0 || position.y > 1080)
-		return;
-
-	glm::ivec2 cellPos = PixelToCellPos(position);
-
-	switch (element)
-	{
-	case 0:
-		SetElementAtWorldPos(cellPos, new Air({ cellPos.x, cellPos.y }));
-		break;
-
-	case 3:
-		SetElementAtWorldPos(cellPos, new Sand({ cellPos.x, cellPos.y }));
-		break;
-
-	case 4:
-		SetElementAtWorldPos(cellPos, new Water({ cellPos.x, cellPos.y }));
-		break;
 	}
 }
 
-void World::MoveElement(glm::ivec2 from, glm::ivec2 to)
+void World::Update() 
 {
-	Element* element = GetElementAtWorldPos(from);
-
-	if (element == nullptr)
-		return;
-
-	SetElementAtWorldPos(from, new Air(from));
-	SetElementAtWorldPos(to, element);
+	if (m_CanPaint)
+		EditElementAtPixel(m_X, m_Y);
 }
 
-void World::SwapElements(glm::ivec2 oldPos, glm::ivec2 newPos)
+void World::EditElementAtPixel(int x, int y)
 {
-	Element* element1 = GetElementAtWorldPos(oldPos);
-	Element* element2 = GetElementAtWorldPos(newPos);
-
-	if (element1 == nullptr || element2 == nullptr)
+	// TODO should get pixel width and height from window
+	if (x < 0 || x > 1919 || y < 0 || y > 1079)
 		return;
 
-	SetElementAtWorldPos(oldPos, element2);
-	SetElementAtWorldPos(newPos, element1);
+	// Get world pos from pixel pos
+	int wX = x / CELL_SIZE_IN_PIXELS;
+	int wY = y / CELL_SIZE_IN_PIXELS;
+
+	// Get chunk from world pos
+	int cX = wX / CHUNK_WIDTH;
+	int cY = wY / CHUNK_HEIGHT;
+
+	// Get local position
+	int lX = wX - (cX * CHUNK_WIDTH);
+	int lY = wY - (cY * CHUNK_HEIGHT);
+
+	m_Chunks[GetIndex(cX, cY)]->TempSetSand(lX, lY);
+}
+
+void World::MouseDown(int button)
+{
+	if(button == 0)
+		m_CanPaint = true;
+}
+
+void World::MouseUp(int button)
+{
+	if (button == 0)
+		m_CanPaint = false;
+}
+
+void World::MouseMoved(double x, double y)
+{
+	m_X = (int)x;
+	m_Y = (int)y;
 }

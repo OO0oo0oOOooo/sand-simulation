@@ -1,3 +1,10 @@
+
+
+
+
+
+/*
+
 #include "Brush.h"
 #include "Events/EventManager.h"
 
@@ -28,14 +35,16 @@ void Brush::EndPaint(int key)
 	else if (key == 1)
 		m_Erase = false;
 }
+*/
 
-void Brush::Paint()
-{
-	if(m_Draw)
-		m_World->EditElementAtPixel(m_MousePosition, m_Selected);
-	else if(m_Erase)
-		m_World->EditElementAtPixel(m_MousePosition, 0);
-}
+
+//void Brush::Paint()
+//{
+//	if(m_Draw)
+//		m_World->EditElementAtPixel(m_MousePosition, m_Selected);
+//	else if(m_Erase)
+//		m_World->EditElementAtPixel(m_MousePosition, 0);
+//}
 
 //void Brush::SelectElement(Window window)
 //{

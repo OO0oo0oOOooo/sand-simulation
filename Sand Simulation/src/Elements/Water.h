@@ -1,5 +1,8 @@
 #pragma once
 
+/*
+
+
 #include "Element.h"
 
 class Water : public Liquid
@@ -80,21 +83,21 @@ public:
 				Element* elementBR = world->GetElementAtWorldPos(lastStep + glm::ivec2(1, 0));
 				Element* elementBL = world->GetElementAtWorldPos(lastStep + glm::ivec2(-1, 0));
 
-				/*if (elementBR != nullptr && elementBL != nullptr && elementBR->ID == 0 && elementBL->ID == 0)
-				{
-					Velocity = { ((rand() % 7) - 3) * 10 * Time::deltaTime, ((rand() % 7) - 3) * 10 * Time::deltaTime };
-				}
+				//if (elementBR != nullptr && elementBL != nullptr && elementBR->ID == 0 && elementBL->ID == 0)
+				//{
+				//	Velocity = { ((rand() % 7) - 3) * 10 * Time::deltaTime, ((rand() % 7) - 3) * 10 * Time::deltaTime };
+				//}
 
-				if (elementBR != nullptr && elementBR->ID != 0)
-				{
-					Velocity = { ((rand() % 3)) * 100 * Time::deltaTime, 0 };
-				}
+				//if (elementBR != nullptr && elementBR->ID != 0)
+				//{
+				//	Velocity = { ((rand() % 3)) * 100 * Time::deltaTime, 0 };
+				//}
 
-				if (elementBL != nullptr && elementBL->ID != 0)
-				{
-					Velocity = { -((rand() % 3)) * 100 * Time::deltaTime, 0 };
-				}
-				*/
+				//if (elementBL != nullptr && elementBL->ID != 0)
+				//{
+				//	Velocity = { -((rand() % 3)) * 100 * Time::deltaTime, 0 };
+				//}
+				//
 				
 				
 				if (rand() % 2)
@@ -121,32 +124,34 @@ public:
 		}
 	}
 
-	/*void Step(World* world) override
-	{
-		glm::ivec2 pos = Position;
+	//void Step(World* world) override
+	//{
+	//	glm::ivec2 pos = Position;
 
-		Element* element = world->GetElementAtWorldPos(pos);
-		Element* elementB = world->GetElementAtWorldPos(pos + glm::ivec2(0, -1));
-		Element* elementBR = world->GetElementAtWorldPos(pos + glm::ivec2(1, 0));
-		Element* elementBL = world->GetElementAtWorldPos(pos + glm::ivec2(-1, 0));
+	//	Element* element = world->GetElementAtWorldPos(pos);
+	//	Element* elementB = world->GetElementAtWorldPos(pos + glm::ivec2(0, -1));
+	//	Element* elementBR = world->GetElementAtWorldPos(pos + glm::ivec2(1, 0));
+	//	Element* elementBL = world->GetElementAtWorldPos(pos + glm::ivec2(-1, 0));
 
-		if (elementB != nullptr && elementB->ID == 0)
-		{
-			world->SetElementAtWorldPos(pos, elementB);
-			world->SetElementAtWorldPos(pos + glm::ivec2(0, -1), element);
-		}
-		else if (elementBR != nullptr && elementBR->ID == 0)
-		{
-			world->SetElementAtWorldPos(pos, elementBR);
-			world->SetElementAtWorldPos(pos + glm::ivec2(1, 0), element);
-		}
-		else if (elementBL != nullptr && elementBL->ID == 0)
-		{
-			world->SetElementAtWorldPos(pos, elementBL);
-			world->SetElementAtWorldPos(pos + glm::ivec2(-1, 0), element);
-		}
-	}*/
+	//	if (elementB != nullptr && elementB->ID == 0)
+	//	{
+	//		world->SetElementAtWorldPos(pos, elementB);
+	//		world->SetElementAtWorldPos(pos + glm::ivec2(0, -1), element);
+	//	}
+	//	else if (elementBR != nullptr && elementBR->ID == 0)
+	//	{
+	//		world->SetElementAtWorldPos(pos, elementBR);
+	//		world->SetElementAtWorldPos(pos + glm::ivec2(1, 0), element);
+	//	}
+	//	else if (elementBL != nullptr && elementBL->ID == 0)
+	//	{
+	//		world->SetElementAtWorldPos(pos, elementBL);
+	//		world->SetElementAtWorldPos(pos + glm::ivec2(-1, 0), element);
+	//	}
+	//}
 
 private:
 
 };
+
+*/

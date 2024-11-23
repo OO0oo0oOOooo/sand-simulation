@@ -3,18 +3,15 @@
 #include "GL/glew.h"
 #include "glm/glm.hpp"
 
-#include <vector>
+#include "Vertex.h"
 
-struct Vertex {
-	glm::vec3 position;
-	glm::vec4 color;
-	// glm::vec2 uv;
-};
+#include <vector>
 
 class VertexBuffer
 {
 public:
 	VertexBuffer(std::vector<Vertex>& vertices);
+	VertexBuffer();
 	~VertexBuffer();
 
 	void Bind();

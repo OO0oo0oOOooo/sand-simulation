@@ -2,6 +2,8 @@
 
 #include "Event.h"
 
+#include "../GameObject.h"
+
 class EventManager
 {
 public:
@@ -33,4 +35,9 @@ public:
 
 	Event<> UpdateWorldEvent;
 	Event<int, int> UpdateChunkEvent;
+
+	Event<GameObject*> AddGameObjectToScene;
+
+	Event<int, int> EditElementAtWorldPosition;
+
 };

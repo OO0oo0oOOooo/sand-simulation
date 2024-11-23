@@ -1,11 +1,10 @@
 #pragma once
 
 #include "Window.h"
-#include "Renderer.h"
+#include "Rendering/Renderer.h"
+#include "Rendering/Scene.h"
 
 #include "Time.h"
-#include "World.h"
-#include "Brush.h"
 
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_glfw.h"
@@ -20,10 +19,8 @@ public:
 	void Run();
 
 private:
-	Window* m_Window;
-	Renderer* m_Renderer;
-	World* m_World;
-	Brush* m_Brush;
-
-	glm::uvec2 m_WindowStartSize = { 1920, 1080 };
+	Window m_Window;
+	Renderer m_Renderer;
+	Scene m_Scene;
+	//Brush m_Brush;
 };

@@ -1,11 +1,8 @@
 #include "Window.h"
 
-Window::Window(glm::uvec2 windowSize, const char* title)
-	: m_WindowWidth(windowSize.x), m_WindowHeight(windowSize.y), m_Title(title)
+Window::Window()
 {
 	Init();
-
-	//EventManager::GetInstance().WindowCloseEvent += std::bind(&Window::Close, this);
 }
 
 Window::~Window()
@@ -27,7 +24,7 @@ void Window::Init()
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_SCALE_TO_MONITOR, GLFW_TRUE);
 
-	GLFWmonitor* monitor = glfwGetPrimaryMonitor(); //nullptr;
+	GLFWmonitor* monitor = nullptr; // glfwGetPrimaryMonitor();
 	m_NativeWindow = glfwCreateWindow(m_WindowWidth, m_WindowHeight, m_Title, monitor, NULL);
 	if (!m_NativeWindow)
 	{
@@ -62,6 +59,8 @@ void Window::Init()
 
 	glfwSetKeyCallback(m_NativeWindow, [](GLFWwindow* window, int key, int scancode, int action, int mods) 
 	{
+		Window* win = static_cast<Window*>(glfwGetWindowUserPointer(window));
+
 		EventManager::GetInstance().KeyEvent(key, scancode, action, mods);
 
 		switch (action)
@@ -75,6 +74,11 @@ void Window::Init()
 		case GLFW_REPEAT:
 			EventManager::GetInstance().KeyRepeatEvent(key);
 			break;
+		}
+
+		if (key == GLFW_KEY_ESCAPE)
+		{
+			win->Close();
 		}
 	});
 
