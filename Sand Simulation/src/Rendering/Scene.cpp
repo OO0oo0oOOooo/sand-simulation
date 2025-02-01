@@ -40,7 +40,7 @@ void Scene::Update()
 	}
 }
 
-void Scene::Draw()
+void Scene::SubmitToRenderer()
 {
 	for (GameObject* gameObject : m_GameObjects)
 	{

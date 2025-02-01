@@ -3,6 +3,8 @@
 #include "Chunk.h"
 #include <vector>
 
+#include <functional>
+
 class World : public Component
 {
 public:
@@ -16,15 +18,25 @@ public:
 	void MouseUp(int button);
 	void MouseMoved(double x, double y);
 
-private:
-	int GetIndex(int x, int y) { return y * WORLD_WIDTH + x; }
-	bool IsOutOfBounds(int x, int y) { return x < 0 || x >= WORLD_WIDTH || y < 0 || y >= WORLD_HEIGHT; }
+	Cell GetCell(glm::ivec2 worldPos);
+	void SetCell(glm::ivec2 worldPos, Cell cell);
 
 private:
+	int GetIndex(int x, int y) { return y * m_WorldWidth + x; }
+	int GetIndex(glm::vec2 pos) { return pos.y * m_WorldWidth + pos.x; }
+	bool IsOutOfBounds(int x, int y) { return x < 0 || x >= m_WorldWidth || y < 0 || y >= m_WorldHeight; }
+
+private:
+	const unsigned int m_WorldWidth = 6;
+	const unsigned int m_WorldHeight = 4;
+	const unsigned int m_ChunkWidth = 64;
+	const unsigned int m_ChunkHeight = 64;
+	int m_Scale = 5;
+
 	std::vector<Chunk*> m_Chunks;
 
 	// TODO: refactor this out when it becomes nessisary
-	bool m_CanPaint = false;
-	int m_X = 0;
+	int m_X = 0; // Mouse X, Y
 	int m_Y = 0;
+	bool m_CanPaint = false;
 };

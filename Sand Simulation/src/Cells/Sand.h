@@ -1,7 +1,6 @@
 #pragma once
 
-#include "Element.h"
-#include "../Chunk.h"
+#include "Cell.h"
 
 class Sand : public Solid
 {
@@ -13,17 +12,8 @@ public:
 		Color = { 230, 178, 51, 255 };
 	}
 	
-	void Step(Chunk* chunk) override
+	void Step() override
 	{
-		//Element element = chunk->GetElement(Position.x, Position.y);
-		//Element elementB = chunk->GetElement(Position.x, Position.y - 1);
-
-		//if (elementB.Id == 0)
-		//{
-		//	chunk->SetElement(Position.x, Position.y, elementB);
-		//	chunk->SetElement(Position.x, Position.y - 1, element);
-		//}
-
 		//Element element = chunk->GetElement(Position.x, Position.y);
 		//Element elementB = chunk->GetElement(Position.x, Position.y - 1);
 		//Element elementBR = chunk->GetElement(Position.x + 1, Position.y - 1);

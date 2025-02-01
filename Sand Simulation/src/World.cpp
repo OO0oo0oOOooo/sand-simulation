@@ -1,34 +1,36 @@
 #include "World.h"
 #include "Events/EventManager.h"
 
-const glm::ivec2 neighbourLUT[] = 
+glm::ivec2 neighborPositions[9] =
 {
 	glm::ivec2(-1, -1),
-	glm::ivec2( 0, -1),
-	glm::ivec2( 1, -1),
-	glm::ivec2(-1,  0),
-	glm::ivec2( 0,  0),
-	glm::ivec2( 1,  0),
-	glm::ivec2(-1,  1),
-	glm::ivec2( 0,  1),
-	glm::ivec2( 1,  1),
+	glm::ivec2(0, -1),
+	glm::ivec2(1, -1),
+
+	glm::ivec2(-1, 0),
+	glm::ivec2(0, 0),
+	glm::ivec2(1, 0),
+
+	glm::ivec2(-1, 1),
+	glm::ivec2(0, 1),
+	glm::ivec2(1, 1),
+
 };
 
 World::World(GameObject* obj) : Component(obj)
 {
-	//EventManager::GetInstance().EditElementAtWorldPosition += std::bind(&World::EditElementAtWorldPosition, this, std::placeholders::_1, std::placeholders::_2);
 	EventManager::GetInstance().MouseButtonDownEvent += std::bind(&World::MouseDown, this, std::placeholders::_1);
 	EventManager::GetInstance().MouseButtonUpEvent += std::bind(&World::MouseUp, this, std::placeholders::_1);
 	EventManager::GetInstance().MouseMoveEvent += std::bind(&World::MouseMoved, this, std::placeholders::_1, std::placeholders::_2);
 
-	m_Chunks.reserve(WORLD_WIDTH * WORLD_HEIGHT);
+	m_Chunks.reserve(m_WorldWidth * m_WorldHeight);
 	
-	for (int y = 0; y < WORLD_HEIGHT; y++)
+	for (int y = 0; y < m_WorldHeight; y++)
 	{
-		for (int x = 0; x < WORLD_WIDTH; x++)
+		for (int x = 0; x < m_WorldWidth; x++)
 		{
-			GameObject* gameObject = new GameObject();
-			gameObject->transform.SetPosition({ (x * 64) * CELL_SIZE_IN_PIXELS, (y * 64) * CELL_SIZE_IN_PIXELS, 0 });
+			GameObject* gameObject = new GameObject(); // left off here
+			gameObject->transform.SetPosition({ (x * m_ChunkWidth) * m_Scale, (y * m_ChunkHeight) * m_Scale, 0 });
 
 			Mesh* meshComponent = new Mesh(gameObject);
 			gameObject->AddComponent(meshComponent);
@@ -36,7 +38,7 @@ World::World(GameObject* obj) : Component(obj)
 			Material* materialComponent = new Material(gameObject);
 			gameObject->AddComponent(materialComponent);
 
-			Chunk* chunkComponent = new Chunk(gameObject);
+			Chunk* chunkComponent = new Chunk(gameObject, m_ChunkWidth, m_ChunkHeight, m_Scale, x, y);
 			gameObject->AddComponent(chunkComponent);
 
 			m_Chunks.emplace_back(chunkComponent);
@@ -46,22 +48,28 @@ World::World(GameObject* obj) : Component(obj)
 		}
 	}
 
-	for (int y = 0; y < WORLD_HEIGHT; y++)
+	for (int x = 0; x < m_WorldWidth; x++)
 	{
-		for (int x = 0; x < WORLD_WIDTH; x++)
+		for (int y = 0; y < m_WorldHeight; y++)
 		{
-			for (int i = 0; i < 8; i++)
+			for (int i = 0; i <= 8; i++)
 			{
-				if (!IsOutOfBounds(x + neighbourLUT[i].x, y + neighbourLUT[i].y))
+				int nx = x + neighborPositions[i].x;
+				int ny = y + neighborPositions[i].y;
+
+				if (nx < 0 || ny < 0 || nx >= m_WorldWidth || ny >= m_WorldHeight)
 				{
-					m_Chunks[GetIndex(x, y)]->Neighbours[i] = m_Chunks[GetIndex(x + neighbourLUT[i].x, y + neighbourLUT[i].y)];
+					m_Chunks[GetIndex(x, y)]->m_Neighbor[i] = nullptr;
+					continue;
 				}
+
+				m_Chunks[GetIndex(x, y)]->m_Neighbor[i] = m_Chunks[ny * m_WorldWidth + nx];
 			}
 		}
 	}
 }
 
-void World::Update() 
+void World::Update()
 {
 	if (m_CanPaint)
 		EditElementAtPixel(m_X, m_Y);
@@ -74,23 +82,23 @@ void World::EditElementAtPixel(int x, int y)
 		return;
 
 	// Get world pos from pixel pos
-	int wX = x / CELL_SIZE_IN_PIXELS;
-	int wY = y / CELL_SIZE_IN_PIXELS;
+	int wX = x / m_Scale;
+	int wY = y / m_Scale;
 
 	// Get chunk from world pos
-	int cX = wX / CHUNK_WIDTH;
-	int cY = wY / CHUNK_HEIGHT;
+	int cX = wX / m_ChunkWidth;
+	int cY = wY / m_ChunkHeight;
 
 	// Get local position
-	int lX = wX - (cX * CHUNK_WIDTH);
-	int lY = wY - (cY * CHUNK_HEIGHT);
+	int lX = wX - (cX * m_ChunkWidth);
+	int lY = wY - (cY * m_ChunkHeight);
 
 	m_Chunks[GetIndex(cX, cY)]->TempSetSand(lX, lY);
 }
 
 void World::MouseDown(int button)
 {
-	if(button == 0)
+	if (button == 0)
 		m_CanPaint = true;
 }
 
@@ -104,4 +112,32 @@ void World::MouseMoved(double x, double y)
 {
 	m_X = (int)x;
 	m_Y = (int)y;
+}
+
+Cell World::GetCell(glm::ivec2 worldPos)
+{
+	int wX = worldPos.x;
+	int wY = worldPos.y;
+
+	int cX = wX / m_ChunkWidth;
+	int cY = wY / m_ChunkHeight;
+
+	int lX = wX - (cX * m_ChunkWidth);
+	int lY = wY - (cY * m_ChunkHeight);
+
+	return m_Chunks[GetIndex(cX, cY)]->GetCell(lX, lY);
+}
+
+void World::SetCell(glm::ivec2 worldPos, Cell cell)
+{
+	int wX = worldPos.x;
+	int wY = worldPos.y;
+
+	int cX = wX / m_ChunkWidth;
+	int cY = wY / m_ChunkHeight;
+
+	int lX = wX - (cX * m_ChunkWidth);
+	int lY = wY - (cY * m_ChunkHeight);
+
+	m_Chunks[GetIndex(cX, cY)]->SetCell(lX, lY, cell);
 }

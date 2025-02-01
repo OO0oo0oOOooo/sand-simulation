@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Element.h"
+#include "Cell.h"
 
 class Empty : public Solid
 {

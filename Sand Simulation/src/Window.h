@@ -19,6 +19,9 @@ public:
 
 	inline int GetWidth() { return m_WindowWidth; }
 	inline int GetHeight() { return m_WindowHeight; }
+	inline void SetWidth(int w) { m_WindowWidth = w; }
+	inline void SetHeight(int h) { m_WindowHeight = h; }
+
 	inline const char* GetTitle() { return m_Title; }
 	inline GLFWwindow* GetNativeWindow() { return m_NativeWindow; }
 

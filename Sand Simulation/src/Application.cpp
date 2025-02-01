@@ -9,7 +9,7 @@ Application::~Application()
 
 void Application::Run()
 {
-    m_Scene.Draw();
+    m_Scene.SubmitToRenderer();
     m_Scene.Start();
 
     IMGUI_CHECKVERSION();

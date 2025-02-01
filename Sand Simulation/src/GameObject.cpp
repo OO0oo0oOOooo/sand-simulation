@@ -1,6 +1,6 @@
 #include "GameObject.h"
 
-GameObject::GameObject()
+GameObject::GameObject() 
 {
     //Todo: Add transform as components then cache maybe
 }

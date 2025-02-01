@@ -7,14 +7,13 @@
 // View and Projection matrices
 
 // FOV
-// Aspect ratio
-// Near and Far planes
-
 // Camera class
 class Camera
 {
 public:
 	Camera();
+
+	inline void SetWindowSize(int w, int h) { m_ProjectionMatrix = glm::ortho(0.0f, (float)w, 0.0f, (float)h, m_NearPlane, m_FarPlane); }
 
 	//void SetPosition(glm::vec3 position);
 	//void SetRotation(glm::vec3 rotation);

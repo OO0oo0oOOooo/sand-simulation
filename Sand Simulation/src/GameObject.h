@@ -1,5 +1,6 @@
 #pragma once
 
+//#include "Rendering/Scene.h"
 #include "Components/Transform.h"
 #include <vector>
 #include <iostream>
@@ -10,7 +11,7 @@ class GameObject;
 class Component
 {
 public:
-    Component(GameObject* gameObject) : gameObject(gameObject) {}
+    Component(GameObject* gameObject) : gameObject(gameObject) {};
 
     virtual void Start() {};
     virtual void Update() {};

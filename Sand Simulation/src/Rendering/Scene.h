@@ -16,7 +16,7 @@ public:
 	void Start();
 	void Update();
 
-	void Draw();
+	void SubmitToRenderer();
 
 private:
 	std::vector<GameObject*> m_GameObjects;

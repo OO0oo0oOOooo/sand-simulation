@@ -43,12 +43,18 @@ void Window::Init()
 
 	std::cout << "OpenGL Version: " << glGetString(GL_VERSION) << std::endl;
 
+
 	// Callbacks
 	glfwSetWindowUserPointer(m_NativeWindow, this);
 	//glfwSwapInterval(0); // VSync
 
 	glfwSetWindowSizeCallback(m_NativeWindow, [](GLFWwindow* window, int width, int height)
 	{
+		Window* win = static_cast<Window*>(glfwGetWindowUserPointer(window));
+		win->SetHeight(height);
+		win->SetWidth(width);
+		glViewport(0, 0, width, height);
+
 		EventManager::GetInstance().WindowResizeEvent(width, height);
 	});
 

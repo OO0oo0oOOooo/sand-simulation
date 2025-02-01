@@ -153,6 +153,8 @@
   <ItemGroup>
     <ClCompile Include="src\Application.cpp" />
     <ClCompile Include="src\Brush.cpp" />
+    <ClCompile Include="src\Cells\Cell.cpp" />
+    <ClCompile Include="src\Cells\CellCommands.cpp" />
     <ClCompile Include="src\Components\MeshRenderer.cpp" />
     <ClCompile Include="src\GameObject.cpp" />
     <ClCompile Include="src\Rendering\Camera.cpp" />
@@ -183,29 +185,29 @@
   <ItemGroup>
     <ClInclude Include="src\Application.h" />
     <ClInclude Include="src\Brush.h" />
+    <ClInclude Include="src\Cells\CellCommands.h" />
     <ClInclude Include="src\Components\MeshRenderer.h" />
     <ClInclude Include="src\GameObject.h" />
     <ClInclude Include="src\Rendering\Camera.h" />
     <ClInclude Include="src\Chunk.h" />
     <ClInclude Include="src\ChunkData.h" />
-    <ClInclude Include="src\Elements\Air.h" />
-    <ClInclude Include="src\Elements\Element.h" />
-    <ClInclude Include="src\Elements\Empty.h" />
-    <ClInclude Include="src\Elements\Water.h" />
+    <ClInclude Include="src\Cells\Air.h" />
+    <ClInclude Include="src\Cells\Cell.h" />
+    <ClInclude Include="src\Cells\Empty.h" />
+    <ClInclude Include="src\Cells\Water.h" />
     <ClInclude Include="src\Events\Event.h" />
     <ClInclude Include="src\Events\EventManager.h" />
     <ClInclude Include="src\Rendering\IndexBuffer.h" />
     <ClInclude Include="src\Components\Material.h" />
     <ClInclude Include="src\Components\Mesh.h" />
     <ClInclude Include="src\Rendering\Renderer.h" />
-    <ClInclude Include="src\Elements\Sand.h" />
+    <ClInclude Include="src\Cells\Sand.h" />
     <ClInclude Include="src\Rendering\Scene.h" />
     <ClInclude Include="src\Rendering\shader.h" />
     <ClInclude Include="src\Rendering\Vertex.h" />
     <ClInclude Include="src\Rendering\VertexArray.h" />
     <ClInclude Include="src\Time.h" />
     <ClInclude Include="src\Components\Transform.h" />
-    <ClInclude Include="src\Utils.h" />
     <ClInclude Include="src\vendor\glm\common.hpp" />
     <ClInclude Include="src\vendor\glm\detail\compute_common.hpp" />
     <ClInclude Include="src\vendor\glm\detail\compute_vector_relational.hpp" />

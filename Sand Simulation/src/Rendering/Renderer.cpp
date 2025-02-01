@@ -7,11 +7,6 @@ Renderer::Renderer(GLFWwindow* window) : m_Window(window)
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
-void Renderer::SetViewport(int width, int height)
-{
-	glViewport(0, 0, width, height);
-}
-
 //Todo: Gameobjects that want to be rendered need the MeshRenderer component, this component will comunicate with the renderer.
 // Currently the scene is checking all GameObjects if they have a mesh then creating a batch here if they do.
 void Renderer::NewBatch(Material* material, VertexArray* vertexArray, Transform* transform)
