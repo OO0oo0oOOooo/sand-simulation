@@ -2,7 +2,7 @@
 
 #include "Window.h"
 #include "Rendering/Renderer.h"
-#include "Rendering/Scene.h"
+#include "Scene/Scene.h"
 
 #include "Time.h"
 

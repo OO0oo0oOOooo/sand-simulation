@@ -10,6 +10,7 @@
 #include "Camera.h"
 
 #include "../Components/Material.h"
+#include "../Components/Transform.h"
 #include "VertexArray.h"
 
 struct Batch

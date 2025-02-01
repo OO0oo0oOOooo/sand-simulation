@@ -1,5 +1,5 @@
 #include "World.h"
-#include "Events/EventManager.h"
+#include "../Events/EventManager.h" //Todo Refactor this out
 
 glm::ivec2 neighborPositions[9] =
 {
@@ -29,22 +29,10 @@ World::World(GameObject* obj) : Component(obj)
 	{
 		for (int x = 0; x < m_WorldWidth; x++)
 		{
-			GameObject* gameObject = new GameObject(); // left off here
-			gameObject->transform.SetPosition({ (x * m_ChunkWidth) * m_Scale, (y * m_ChunkHeight) * m_Scale, 0 });
-
 			Mesh* meshComponent = new Mesh(gameObject);
-			gameObject->AddComponent(meshComponent);
-
 			Material* materialComponent = new Material(gameObject);
-			gameObject->AddComponent(materialComponent);
-
 			Chunk* chunkComponent = new Chunk(gameObject, m_ChunkWidth, m_ChunkHeight, m_Scale, x, y);
-			gameObject->AddComponent(chunkComponent);
-
 			m_Chunks.emplace_back(chunkComponent);
-
-			//TODO: GameObjects should add themselves to the scene
-			EventManager::GetInstance().AddGameObjectToScene(gameObject);
 		}
 	}
 

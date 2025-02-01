@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../GameObject.h"
+#include "../Scene/GameObject.h"
 #include "../Rendering/VertexArray.h"
 #include "../Rendering/Vertex.h"
 #include <vector>

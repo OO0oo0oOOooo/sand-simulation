@@ -1,9 +1,13 @@
 #pragma once
 
+#include "../Scene/GameObject.h"
+#include "../Components/Mesh.h"
+#include "../Components/Material.h"
+
 #include "Chunk.h"
 #include <vector>
 
-#include <functional>
+#include <functional> // Todo: remove
 
 class World : public Component
 {
@@ -35,7 +39,7 @@ private:
 
 	std::vector<Chunk*> m_Chunks;
 
-	// TODO: refactor this out when it becomes nessisary
+	// TODO: remove all below
 	int m_X = 0; // Mouse X, Y
 	int m_Y = 0;
 	bool m_CanPaint = false;

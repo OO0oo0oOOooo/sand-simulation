@@ -1,12 +1,8 @@
 #include "Scene.h"
-
-//Todo: need a better way to build scene
-#include "../World.h"
+#include "../Game/World.h"
 
 Scene::Scene(Renderer* renderer) : m_Renderer(renderer)
 {
-	EventManager::GetInstance().AddGameObjectToScene += std::bind(&Scene::AddGameObject, this, std::placeholders::_1);
-
 	GameObject* gameObjectWorld = new GameObject();
 	World* world = new World(gameObjectWorld);
 

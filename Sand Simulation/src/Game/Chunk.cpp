@@ -1,10 +1,8 @@
 #include "Chunk.h"
-
 #include <algorithm>
 
-Chunk::Chunk(GameObject* obj, int width, int height, int scale, int x, int y) : Component(obj), m_Width(width), m_Height(height), m_Scale(scale), m_X(x), m_Y(y)
+Chunk::Chunk(int width, int height, int scale, int x, int y) : m_Width(width), m_Height(height), m_Scale(scale), m_X(x), m_Y(y)
 {
-	m_Mesh = gameObject->GetComponent<Mesh>();
 	if (m_Mesh == nullptr)
 		return;
 

@@ -1,18 +1,12 @@
 #pragma once
 
-//#include "Components/Component.h"
-
-#include "GameObject.h"
-#include "Components/Mesh.h"
-#include "Components/Material.h"
-
-#include "ChunkData.h"
 #include "Cells/Cell.h"
+#include <vector>
 
-class Chunk : public Component
+class Chunk
 {
 public:
-	Chunk(GameObject* obj, int width, int height, int scale, int x, int y);
+	Chunk(int width, int height, int scale, int x, int y);
 
 	void Start();
 	void Update();

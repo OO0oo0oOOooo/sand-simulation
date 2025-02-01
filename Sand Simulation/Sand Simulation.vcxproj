@@ -152,19 +152,19 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\Application.cpp" />
-    <ClCompile Include="src\Brush.cpp" />
-    <ClCompile Include="src\Cells\Cell.cpp" />
-    <ClCompile Include="src\Cells\CellCommands.cpp" />
+    <ClCompile Include="src\Game\Brush.cpp" />
+    <ClCompile Include="src\Game\Cells\Cell.cpp" />
+    <ClCompile Include="src\Game\Cells\CellCommands.cpp" />
     <ClCompile Include="src\Components\MeshRenderer.cpp" />
-    <ClCompile Include="src\GameObject.cpp" />
+    <ClCompile Include="src\Scene\GameObject.cpp" />
     <ClCompile Include="src\Rendering\Camera.cpp" />
-    <ClCompile Include="src\Chunk.cpp" />
+    <ClCompile Include="src\Game\Chunk.cpp" />
     <ClCompile Include="src\EntryPoint.cpp" />
     <ClCompile Include="src\Rendering\IndexBuffer.cpp" />
     <ClCompile Include="src\Components\Material.cpp" />
     <ClCompile Include="src\Components\Mesh.cpp" />
     <ClCompile Include="src\Rendering\Renderer.cpp" />
-    <ClCompile Include="src\Rendering\Scene.cpp" />
+    <ClCompile Include="src\Scene\Scene.cpp" />
     <ClCompile Include="src\Rendering\Shader.cpp" />
     <ClCompile Include="src\Rendering\VertexArray.cpp" />
     <ClCompile Include="src\Time.cpp" />
@@ -180,29 +180,24 @@
     <ClCompile Include="src\vendor\stb_image\stb_image.cpp" />
     <ClCompile Include="src\Rendering\VertexBuffer.cpp" />
     <ClCompile Include="src\Window.cpp" />
-    <ClCompile Include="src\World.cpp" />
+    <ClCompile Include="src\Game\World.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Application.h" />
-    <ClInclude Include="src\Brush.h" />
-    <ClInclude Include="src\Cells\CellCommands.h" />
+    <ClInclude Include="src\Game\Brush.h" />
+    <ClInclude Include="src\Game\Cells\CellCommands.h" />
     <ClInclude Include="src\Components\MeshRenderer.h" />
-    <ClInclude Include="src\GameObject.h" />
+    <ClInclude Include="src\Scene\GameObject.h" />
     <ClInclude Include="src\Rendering\Camera.h" />
-    <ClInclude Include="src\Chunk.h" />
-    <ClInclude Include="src\ChunkData.h" />
-    <ClInclude Include="src\Cells\Air.h" />
-    <ClInclude Include="src\Cells\Cell.h" />
-    <ClInclude Include="src\Cells\Empty.h" />
-    <ClInclude Include="src\Cells\Water.h" />
+    <ClInclude Include="src\Game\Chunk.h" />
+    <ClInclude Include="src\Game\Cells\Cell.h" />
     <ClInclude Include="src\Events\Event.h" />
     <ClInclude Include="src\Events\EventManager.h" />
     <ClInclude Include="src\Rendering\IndexBuffer.h" />
     <ClInclude Include="src\Components\Material.h" />
     <ClInclude Include="src\Components\Mesh.h" />
     <ClInclude Include="src\Rendering\Renderer.h" />
-    <ClInclude Include="src\Cells\Sand.h" />
-    <ClInclude Include="src\Rendering\Scene.h" />
+    <ClInclude Include="src\Scene\Scene.h" />
     <ClInclude Include="src\Rendering\shader.h" />
     <ClInclude Include="src\Rendering\Vertex.h" />
     <ClInclude Include="src\Rendering\VertexArray.h" />
@@ -502,7 +497,7 @@
     <ClInclude Include="src\vendor\stb_image\stb_image.h" />
     <ClInclude Include="src\Rendering\VertexBuffer.h" />
     <ClInclude Include="src\Window.h" />
-    <ClInclude Include="src\World.h" />
+    <ClInclude Include="src\Game\World.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\Shaders\default_shader.glsl" />

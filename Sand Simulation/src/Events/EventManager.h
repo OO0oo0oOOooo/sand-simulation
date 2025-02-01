@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Event.h"
-#include "../GameObject.h"
 
 class EventManager
 {
@@ -34,8 +33,6 @@ public:
 
 	Event<> UpdateWorldEvent;
 	Event<int, int> UpdateChunkEvent;
-
-	Event<GameObject*> AddGameObjectToScene; // Todo: Remove this after chunks are no longer gameobjects
 
 	Event<int, int> EditElementAtWorldPosition; // Todo: Refactor painting and remove this
 };
