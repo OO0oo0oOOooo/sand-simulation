@@ -9,15 +9,17 @@
 #include "../Window.h"
 #include "Camera.h"
 
-#include "../Components/Material.h"
-#include "../Components/Transform.h"
+#include "../Core/Components/Material.h"
+#include "../Core/Components/Transform.h"
 #include "VertexArray.h"
+
+#include <memory>
 
 struct Batch
 {
-	Material* material;
-	VertexArray* vertexArray;
-	Transform* transform;
+	std::weak_ptr<Material> material;
+	std::weak_ptr<VertexArray> vertexArray;
+	std::weak_ptr<Transform> transform;
 };
 
 class Renderer
@@ -30,9 +32,9 @@ public:
 	//void BeginScene();
 	//void EndScene();
 
-	void NewBatch(Material* material, VertexArray* vertexArray, Transform* transform);
+	void NewBatch(std::weak_ptr<Material> material, std::weak_ptr<VertexArray> vertexArray, std::weak_ptr<Transform> transform);
 
-	void Render();
+	void RenderBatches();
 
 	Camera* GetCamera() { return &m_Camera; }
 

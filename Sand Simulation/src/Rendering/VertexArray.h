@@ -15,7 +15,6 @@ public:
     void Unbind();
 
     void UploadBufferData(std::vector<Vertex> verts, std::vector<unsigned int> indices);
-    void UploadBufferSubData(std::vector<Vertex> verts, std::vector<unsigned int> indices, int offsetV, int offsetI);
 
     void SetVertexBuffer(VertexBuffer* vb);
     void SetIndexBuffer(IndexBuffer* ib);

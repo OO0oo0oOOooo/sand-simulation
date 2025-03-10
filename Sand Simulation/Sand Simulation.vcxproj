@@ -152,23 +152,24 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\Application.cpp" />
+    <ClCompile Include="src\Core\Components\Transform.cpp" />
     <ClCompile Include="src\Game\Brush.cpp" />
     <ClCompile Include="src\Game\Cells\Cell.cpp" />
     <ClCompile Include="src\Game\Cells\CellCommands.cpp" />
-    <ClCompile Include="src\Components\MeshRenderer.cpp" />
-    <ClCompile Include="src\Scene\GameObject.cpp" />
+    <ClCompile Include="src\Core\Components\MeshRenderer.cpp" />
+    <ClCompile Include="src\Rendering\Texture.cpp" />
+    <ClCompile Include="src\Core\GameObject.cpp" />
     <ClCompile Include="src\Rendering\Camera.cpp" />
     <ClCompile Include="src\Game\Chunk.cpp" />
     <ClCompile Include="src\EntryPoint.cpp" />
     <ClCompile Include="src\Rendering\IndexBuffer.cpp" />
-    <ClCompile Include="src\Components\Material.cpp" />
-    <ClCompile Include="src\Components\Mesh.cpp" />
+    <ClCompile Include="src\Core\Components\Material.cpp" />
+    <ClCompile Include="src\Core\Components\Mesh.cpp" />
     <ClCompile Include="src\Rendering\Renderer.cpp" />
-    <ClCompile Include="src\Scene\Scene.cpp" />
+    <ClCompile Include="src\Core\Scene.cpp" />
     <ClCompile Include="src\Rendering\Shader.cpp" />
     <ClCompile Include="src\Rendering\VertexArray.cpp" />
     <ClCompile Include="src\Time.cpp" />
-    <ClCompile Include="src\Components\Transform.cpp" />
     <ClCompile Include="src\vendor\glm\detail\glm.cpp" />
     <ClCompile Include="src\vendor\imgui\imgui.cpp" />
     <ClCompile Include="src\vendor\imgui\imgui_demo.cpp" />
@@ -184,25 +185,27 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Application.h" />
+    <ClInclude Include="src\Core\Components\Transform.h" />
     <ClInclude Include="src\Game\Brush.h" />
     <ClInclude Include="src\Game\Cells\CellCommands.h" />
-    <ClInclude Include="src\Components\MeshRenderer.h" />
-    <ClInclude Include="src\Scene\GameObject.h" />
+    <ClInclude Include="src\Core\Components\MeshRenderer.h" />
+    <ClInclude Include="src\Rendering\ResourceManager.h" />
+    <ClInclude Include="src\Rendering\Texture.h" />
+    <ClInclude Include="src\Core\GameObject.h" />
     <ClInclude Include="src\Rendering\Camera.h" />
     <ClInclude Include="src\Game\Chunk.h" />
     <ClInclude Include="src\Game\Cells\Cell.h" />
     <ClInclude Include="src\Events\Event.h" />
     <ClInclude Include="src\Events\EventManager.h" />
     <ClInclude Include="src\Rendering\IndexBuffer.h" />
-    <ClInclude Include="src\Components\Material.h" />
-    <ClInclude Include="src\Components\Mesh.h" />
+    <ClInclude Include="src\Core\Components\Material.h" />
+    <ClInclude Include="src\Core\Components\Mesh.h" />
     <ClInclude Include="src\Rendering\Renderer.h" />
-    <ClInclude Include="src\Scene\Scene.h" />
+    <ClInclude Include="src\Core\Scene.h" />
     <ClInclude Include="src\Rendering\shader.h" />
     <ClInclude Include="src\Rendering\Vertex.h" />
     <ClInclude Include="src\Rendering\VertexArray.h" />
     <ClInclude Include="src\Time.h" />
-    <ClInclude Include="src\Components\Transform.h" />
     <ClInclude Include="src\vendor\glm\common.hpp" />
     <ClInclude Include="src\vendor\glm\detail\compute_common.hpp" />
     <ClInclude Include="src\vendor\glm\detail\compute_vector_relational.hpp" />
@@ -500,6 +503,7 @@
     <ClInclude Include="src\Game\World.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="src\Shaders\default_shader1.glsl" />
     <None Include="src\Shaders\default_shader.glsl" />
     <None Include="src\vendor\glm\detail\func_common.inl" />
     <None Include="src\vendor\glm\detail\func_common_simd.inl" />
@@ -637,6 +641,9 @@
     <None Include="src\vendor\glm\gtx\vector_angle.inl" />
     <None Include="src\vendor\glm\gtx\vector_query.inl" />
     <None Include="src\vendor\glm\gtx\wrap.inl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="src\Todo.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

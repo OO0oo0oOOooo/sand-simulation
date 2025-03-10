@@ -1,11 +1,17 @@
 #pragma once
 
+#include "../Core/GameObject.h"
+
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-class Transform
+#include <memory>
+
+class Transform : public Component 
 {
 public:
+	Transform(GameObject* obj);
+	
 	glm::mat4 GetModelMatrix() { return m_ModelMatrix; }
 	glm::vec3 Position() { return glm::vec3(m_ModelMatrix[3]); }
 	// glm::vec3 GetRotation();
@@ -22,21 +28,3 @@ public:
 private:
 	glm::mat4 m_ModelMatrix = glm::mat4(1.0f);
 };
-
-
-/*
-#include "Component.h"
-
-class Transform : public Component {
-public:
-	Transform(GameObject* gameObject) : Component(gameObject) {}
-
-	// ... transform properties and methods ...
-
-	glm::mat4 GetModelMatrix() { return m_ModelMatrix; }
-
-private:
-	glm::mat4 m_ModelMatrix = glm::mat4(1.0f);
-
-};
-*/

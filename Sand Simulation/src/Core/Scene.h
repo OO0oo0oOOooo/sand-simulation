@@ -2,7 +2,9 @@
 
 #include "GameObject.h"
 #include "../Rendering/Renderer.h"
+
 #include <vector>
+#include <memory>
 
 class Scene
 {
@@ -10,8 +12,8 @@ public:
 	//Scene() = default;
 	Scene(Renderer* renderer);
 
-	void AddGameObject(GameObject* gameObject);
-	void RemoveGameObject(GameObject* gameObject);
+	void AddGameObject(std::shared_ptr<GameObject> gameObject);
+	void RemoveGameObject(std::shared_ptr<GameObject> gameObject);
 
 	void Start();
 	void Update();
@@ -19,7 +21,8 @@ public:
 	void SubmitToRenderer();
 
 private:
-	std::vector<GameObject*> m_GameObjects;
+	std::vector<std::shared_ptr<GameObject>> m_GameObjects;
+	//std::vector<GameObject*> m_GameObjects;
 
 	// Todo: Refactor this out
 	Renderer* m_Renderer;

@@ -22,7 +22,7 @@ void Application::Run()
     while (!glfwWindowShouldClose(m_Window.GetNativeWindow()))
     {
         Time::Update();
-        m_Renderer.Render();
+        m_Renderer.RenderBatches();
         m_Scene.Update();
 
         ImGui_ImplOpenGL3_NewFrame();

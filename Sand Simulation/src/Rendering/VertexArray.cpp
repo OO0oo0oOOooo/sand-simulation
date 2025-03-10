@@ -2,8 +2,6 @@
 
 VertexArray::VertexArray()
 {
-    //glGenVertexArrays(1, m_RendererID);
-
     m_RendererID = new unsigned int;
     m_VertexBuffer = new VertexBuffer();
     m_IndexBuffer = new IndexBuffer();
@@ -16,6 +14,9 @@ VertexArray::VertexArray()
 
     glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const void*)12);
     glEnableVertexAttribArray(1);
+
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const void*)28);
+    glEnableVertexAttribArray(2);
 }
 
 VertexArray::~VertexArray()
@@ -30,14 +31,12 @@ VertexArray::~VertexArray()
 void VertexArray::Bind()
 {
     glBindVertexArray(*m_RendererID);
-    //m_VertexBuffer->Bind();
     m_IndexBuffer->Bind();
 }
 
 void VertexArray::Unbind()
 {
     glBindVertexArray(0);
-    //m_VertexBuffer->Unbind();
     m_IndexBuffer->Unbind();
 }
 
@@ -45,12 +44,6 @@ void VertexArray::UploadBufferData(std::vector<Vertex> verts, std::vector<unsign
 {
     m_VertexBuffer->UpdateData(verts);
     m_IndexBuffer->UpdateData(indices);
-}
-
-void VertexArray::UploadBufferSubData(std::vector<Vertex> verts, std::vector<unsigned int> indices, int offsetV, int offsetI)
-{
-	m_VertexBuffer->UpdateSubData(verts.data(), verts.size() * sizeof(Vertex), offsetV);
-	m_IndexBuffer->UpdateSubData(indices.data(), indices.size() * sizeof(unsigned int), offsetI);
 }
 
 void VertexArray::SetVertexBuffer(VertexBuffer* vb)

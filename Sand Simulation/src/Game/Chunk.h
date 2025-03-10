@@ -35,6 +35,8 @@ public:
 	
 	std::vector <std::tuple<Chunk*, unsigned int, unsigned int>> m_MoveList;
 
+	unsigned char* textureData = new unsigned char[m_Width * m_Height * 4]; // cells * rgba
+
 private:
 	int GetIndex(int x, int y)
 	{
@@ -49,7 +51,7 @@ private:
 	bool IsEmpty(int x, int y) { if (GetCell(x, y).id == 0) return true; else return false; }
 
 	bool UpdateState();
-	void SetCellColor(int x, int y, glm::u8vec4 color);
+	//void SetCellColor(int x, int y, glm::u8vec4 color);
 
 	void Commit();
 
@@ -60,7 +62,8 @@ private:
 private:
 
 	Cell m_Cells[4096];
-	Mesh* m_Mesh;
+	
+	// Image buffer
 
 	bool m_ShouldUpdate = false;
 	bool m_ShouldUpdateNextFrame = false;

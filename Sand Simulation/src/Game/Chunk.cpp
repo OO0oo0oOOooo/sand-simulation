@@ -3,46 +3,52 @@
 
 Chunk::Chunk(int width, int height, int scale, int x, int y) : m_Width(width), m_Height(height), m_Scale(scale), m_X(x), m_Y(y)
 {
-	if (m_Mesh == nullptr)
-		return;
+	//if (m_Mesh == nullptr)
+	//	return;
 
 	// Init cells with "Air"
 	for (int y = 0; y < m_Height; y++)
 	{
 		for (int x = 0; x < m_Width; x++)
 		{
+			int index = GetIndex(x, y) * 4;
+
 			m_Cells[GetIndex(x, y)] = { 0, { x, y }, { 0, 0 }, { 0, 0, 0, 0 } };
+			textureData[index + 0] = 0;
+			textureData[index + 1] = 0;
+			textureData[index + 2] = 0;
+			textureData[index + 3] = 0;
 		}
 	}
 
 	// Build mesh
-	m_Mesh->Clear();
-	m_Mesh->Vertices.resize(4096 * 4);
-	m_Mesh->Indices.resize(4096 * 6);
-
-	for (int x = 0; x < m_Width; x++)
-	{
-		for (int y = 0; y < m_Height; y++)
-		{
-			int cellIndex = GetIndex(x, y);
-			int baseVertexIndex = (cellIndex) * 4;
-			int baseIndexIndex = (cellIndex) * 6;
-			Cell cell = m_Cells[cellIndex];
-
-			for (int i = 0; i < 4; i++)
-			{
-				m_Mesh->Vertices[baseVertexIndex + i].position = (glm::vec3(x, y, 0) + vertexPositions[i]) * (float)m_Scale;
-				m_Mesh->Vertices[baseVertexIndex + i].color = glm::vec4{ cell.color.x / 255.0f, cell.color.y / 255.0f, cell.color.z / 255.0f, cell.color.w / 255.0f };
-			}
-
-			for (int i = 0; i < 6; i++)
-			{
-				m_Mesh->Indices[baseIndexIndex + i] = meshTriangles[i] + baseVertexIndex;
-			}
-		}
-	}
-
-	m_Mesh->UploadData();
+	//	m_Mesh->Clear();
+	//	m_Mesh->Vertices.resize(4096 * 4);
+	//	m_Mesh->Indices.resize(4096 * 6);
+	//
+	//	for (int x = 0; x < m_Width; x++)
+	//	{
+	//		for (int y = 0; y < m_Height; y++)
+	//		{
+	//			int cellIndex = GetIndex(x, y);
+	//			int baseVertexIndex = (cellIndex) * 4;
+	//			int baseIndexIndex = (cellIndex) * 6;
+	//			Cell cell = m_Cells[cellIndex];
+	//
+	//			for (int i = 0; i < 4; i++)
+	//			{
+	//				m_Mesh->Vertices[baseVertexIndex + i].position = (glm::vec3(x, y, 0) + vertexPositions[i]) * (float)m_Scale;
+	//				m_Mesh->Vertices[baseVertexIndex + i].color = glm::vec4{ cell.color.x / 255.0f, cell.color.y / 255.0f, cell.color.z / 255.0f, cell.color.w / 255.0f };
+	//			}
+	//
+	//			for (int i = 0; i < 6; i++)
+	//			{
+	//				m_Mesh->Indices[baseIndexIndex + i] = meshTriangles[i] + baseVertexIndex;
+	//			}
+	//		}
+	//	}
+	//
+	//	m_Mesh->UploadData();
 }
 
 void Chunk::Start() {}
@@ -66,7 +72,7 @@ void Chunk::Update()
 
 	Commit();
 
-	m_Mesh->UploadData();
+	//	m_Mesh->UploadData();
 }
 
 
@@ -261,15 +267,8 @@ void Chunk::SetCell(int x, int y, Cell cell)
 		return;
 	}
 
-	m_Cells[GetIndex(x, y)].id = cell.id;
-	//m_CellMap[GetIndex(x, y)].position = cell.position;
-	m_Cells[GetIndex(x, y)].velocity = cell.velocity;
-	m_Cells[GetIndex(x, y)].color = cell.color;
-
-	SetCellColor(x, y, cell.color);
-
-	//Todo: If on the boarder then update neighbours as well
-	m_ShouldUpdateNextFrame = true;
+	int index = GetIndex(x, y);
+	SetCell(index, cell);
 }
 
 void Chunk::SetCell(int index, Cell cell)
@@ -279,8 +278,15 @@ void Chunk::SetCell(int index, Cell cell)
 	m_Cells[index].velocity = cell.velocity;
 	m_Cells[index].color = cell.color;
 
-	glm::vec2 pos = m_Cells[index].position;
-	SetCellColor(pos.x, pos.y, cell.color);
+	int textureIndex = index * 4;
+	textureData[textureIndex + 0] = cell.color.r;
+	textureData[textureIndex + 1] = cell.color.g;
+	textureData[textureIndex + 2] = cell.color.b;
+	textureData[textureIndex + 3] = cell.color.a;
+
+
+	//glm::vec2 pos = m_Cells[index].position;
+	//SetCellColor(pos.x, pos.y, cell.color);
 
 	//Todo: If on the boarder then update neighbours as well
 	m_ShouldUpdateNextFrame = true;
@@ -350,14 +356,14 @@ bool Chunk::UpdateState()
 	return m_ShouldUpdate;
 }
 
-void Chunk::SetCellColor(int x, int y, glm::u8vec4 color)
-{
-	int baseVertexIndex = GetIndex(x, y) * 4;
-
-	for (int i = 0; i < 4; i++)
-	{
-		m_Mesh->Vertices[baseVertexIndex + i].color = glm::vec4{ color.x / 255.0f, color.y / 255.0f, color.z / 255.0f, color.w / 255.0f };
-	}
-}
+//void Chunk::SetCellColor(int x, int y, glm::u8vec4 color)
+//{
+//	int baseVertexIndex = GetIndex(x, y) * 4;
+//
+//	for (int i = 0; i < 4; i++)
+//	{
+//		m_Mesh->Vertices[baseVertexIndex + i].color = glm::vec4{ color.x / 255.0f, color.y / 255.0f, color.z / 255.0f, color.w / 255.0f };
+//	}
+//}
 
 
