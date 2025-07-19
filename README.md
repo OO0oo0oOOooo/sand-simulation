@@ -80,7 +80,7 @@ Follow these steps to compile the source code:
 
 ### FOR WINDOWS
 
-I haven't tested or documented the build process on Windows yet. However, it *should* work with popular compilers like **MSVC (Visual Studio)** or **MinGW**. I think double clicking the executable will not work unless its in the same folder as 'resources' and will be fixed soon. I recommend running the executable as instructed in [🎮 How to Run](#-how-to-build)
+I haven't tested or documented the build process on Windows yet. However, it *should* work with popular compilers like **MSVC (Visual Studio)** or **MinGW**. I think double clicking the executable will not work unless its in the same folder as 'resources' and will be fixed soon. I recommend running the executable as instructed in [🎮 How to Run](#-how-to-run)
 
 ## 🎮 How to Run
 
