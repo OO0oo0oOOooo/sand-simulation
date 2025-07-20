@@ -1,6 +1,8 @@
 #include "shader.h"
 
 #include <iostream>
+#include <fstream>
+#include <sstream>
 
 Shader::Shader(std::string fileName)
 {

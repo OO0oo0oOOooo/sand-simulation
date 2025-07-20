@@ -25,7 +25,6 @@ public:
 	Event<int> MouseButtonUpEvent;
 	Event<int> MouseButtonRepeatEvent;
 
-
 	Event<int, int, int, int> KeyEvent; // key: key code | scancode: key code | action: 1 = down, 0 = up, 2 = repeat | mods: modifier keys
 	Event<int> KeyDownEvent;
 	Event<int> KeyUpEvent;
@@ -34,5 +33,5 @@ public:
 	Event<> UpdateWorldEvent;
 	Event<int, int> UpdateChunkEvent;
 
-	Event<int, int> EditElementAtWorldPosition; // Todo: Refactor painting and remove this
+	Event<int, int> EditElementAtWorldPosition; // TODO: Refactor painting and remove this
 };

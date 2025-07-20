@@ -1,5 +1,5 @@
 #include "World.h"
-#include "../Events/EventManager.h" //Todo Refactor this out
+#include "../Events/EventManager.h" // TODO: Refactor this out
 
 glm::ivec2 neighborPositions[9] =
 {
@@ -103,7 +103,7 @@ void World::Update()
 
 void World::EditElementAtPixel(int x, int y)
 {
-	// TODO should get pixel width and height from window
+	// TODO: should get pixel width and height from window
 	if (x < 0 || x > 1919 || y < 0 || y > 1079)
 		return;
 

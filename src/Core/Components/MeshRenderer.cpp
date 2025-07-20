@@ -2,7 +2,7 @@
 
 MeshRenderer::MeshRenderer(GameObject* obj) : Component(obj)
 {
-	// Init
+	// TODO: Init
 }
 
 void MeshRenderer::SetMesh(std::shared_ptr<Mesh> mesh)

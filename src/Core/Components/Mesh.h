@@ -14,7 +14,6 @@ public:
 
     void Clear();
     void ClearBuffers();
-
     void UploadData();
 
     std::shared_ptr<VertexArray> GetVertexArray() const { return m_VertexArray; }

@@ -3,11 +3,6 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-// Position
-// View and Projection matrices
-
-// FOV
-// Camera class
 class Camera
 {
 public:

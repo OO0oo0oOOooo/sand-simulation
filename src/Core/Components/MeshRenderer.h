@@ -1,13 +1,13 @@
 #pragma once
 
 #include "../GameObject.h"
-#include "../../Rendering/Renderer.h"
+// #include "../../Rendering/Renderer.h"
 #include "Mesh.h"
 #include "Material.h"
 
 #include <memory>
 
-//todo: this should communicate with the renderer instead of the scene doing it
+// TODO: this should communicate with the renderer instead of the scene doing it
 
 class MeshRenderer : public Component
 {

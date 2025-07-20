@@ -8,8 +8,6 @@
 #include <vector>
 #include <memory>
 
-#include <functional> // Todo: remove after brush moved out
-
 class World : public Component
 {
 public:

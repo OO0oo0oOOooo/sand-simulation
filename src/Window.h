@@ -3,12 +3,6 @@
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
 
-#include "glm/glm.hpp"
-
-#include "Events/EventManager.h"
-
-#include <iostream>
-
 class Window {
 public:
 	Window();

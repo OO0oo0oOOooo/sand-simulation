@@ -24,10 +24,10 @@ private:
 	std::vector<std::shared_ptr<GameObject>> m_GameObjects;
 	//std::vector<GameObject*> m_GameObjects;
 
-	// Todo: Refactor this out
+	// TODO: Refactor this out
 	Renderer* m_Renderer;
 
-	// Todo: Scene should have a default camera for when there is no gameobject with a camera component in the scene
+	// TODO: Scene should have a default camera for when there is no gameobject with a camera component in the scene
 	// Camera m_MainCamera
 };
 
@@ -42,7 +42,7 @@ private:
 
 
 /*
-	Todo: Scene Manager
+	TODO: Scene Manager
 	- Manages all scenes
 	- Creates scenes
 	- Deletes scenes

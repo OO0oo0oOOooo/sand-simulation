@@ -2,7 +2,7 @@
 
 Renderer::Renderer(GLFWwindow* window) : m_Window(window) {}
 
-//Todo: Gameobjects that want to be rendered need the MeshRenderer component, this component will comunicate with the renderer.
+// TODO: Gameobjects that want to be rendered need the MeshRenderer component, this component will comunicate with the renderer.
 // Currently the scene is checking all GameObjects if they have a mesh then creating a batch here if they do.
 void Renderer::NewBatch(std::weak_ptr<Material> material, std::weak_ptr<VertexArray> vertexArray, std::weak_ptr<Transform> transform)
 {

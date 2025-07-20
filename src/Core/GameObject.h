@@ -1,7 +1,7 @@
 #pragma once
 
-// Todo: make gameobjects able to refrence the scene
-//#include "Rendering/Scene.h"
+// TODO: make gameobjects able to refrence the scene
+// #include "Rendering/Scene.h"
 
 #include <vector>
 #include <memory>

@@ -1,5 +1,9 @@
 #include "Window.h"
 
+#include <assert.h>
+#include "Events/EventManager.h"
+#include <iostream>
+
 Window::Window()
 {
 	Init();

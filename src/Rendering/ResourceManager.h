@@ -12,7 +12,6 @@ public:
 	virtual ~Resource() = default;
 };
 
-//Todo: use filename as name in resource map
 class ResourceManager 
 {
 public:
@@ -37,10 +36,9 @@ public:
 	Texture* GetTexture(const std::string& name);
 	Material* GetMaterial(const std::string& name);
 
-private:	
+private:
 	std::map<std::string, std::shared_ptr<Resource>> m_Resources;
-	//std::map<std::string, std::shared_ptr<Mesh>> Meshes;
-	//std::map<std::string, std::shared_ptr<Texture>> Textures;
-	//std::map<std::string, std::shared_ptr<Material>> Materials;
-
+	// std::map<std::string, std::shared_ptr<Mesh>> Meshes;
+	// std::map<std::string, std::shared_ptr<Texture>> Textures;
+	// std::map<std::string, std::shared_ptr<Material>> Materials;
 };

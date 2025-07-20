@@ -5,8 +5,8 @@
 #include "glm/glm.hpp"
 #include "glm/gtc/type_precision.hpp"
 
-class Chunk;
-class Cell;
+// class Chunk;
+// class Cell;
 
 // void SandStep(Chunk* c, Cell cell);
 

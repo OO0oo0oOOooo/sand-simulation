@@ -241,7 +241,7 @@ void Chunk::SetCell(int index, Cell cell)
 	textureData[textureIndex + 2] = cell.color.b;
 	textureData[textureIndex + 3] = cell.color.a;
 
-	//TODO: If on the boarder then update neighbours as well
+	// TODO: If on the boarder then update neighbours as well
 	m_ShouldUpdateNextFrame = true;
 }
 
@@ -260,8 +260,7 @@ void Chunk::Commit()
 	std::sort(m_MoveList.begin(), m_MoveList.end(), [](auto& a, auto& b) { return std::get<2>(a) < std::get<2>(b); } );
 	
 	size_t iprev = 0;
-	m_MoveList.emplace_back(nullptr, -1, -1); // to catch final move
-
+	m_MoveList.emplace_back(nullptr, -1, -1);
 	for (size_t i = 0; i < m_MoveList.size() - 1; i++) {
 		if (std::get<2>(m_MoveList[i + 1]) != std::get<2>(m_MoveList[i])) {
 			size_t rand = iprev;
