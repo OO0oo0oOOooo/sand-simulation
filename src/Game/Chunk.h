@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Cells/Cell.h"
+#include "Cell.h"
 #include <vector>
 
 class Chunk

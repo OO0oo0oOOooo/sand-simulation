@@ -3,10 +3,6 @@
 
 Chunk::Chunk(int width, int height, int scale, int x, int y) : m_Width(width), m_Height(height), m_Scale(scale), m_X(x), m_Y(y)
 {
-	//if (m_Mesh == nullptr)
-	//	return;
-
-	// Init cells with "Air"
 	for (int y = 0; y < m_Height; y++)
 	{
 		for (int x = 0; x < m_Width; x++)
@@ -20,35 +16,6 @@ Chunk::Chunk(int width, int height, int scale, int x, int y) : m_Width(width), m
 			textureData[index + 3] = 0;
 		}
 	}
-
-	// Build mesh
-	//	m_Mesh->Clear();
-	//	m_Mesh->Vertices.resize(4096 * 4);
-	//	m_Mesh->Indices.resize(4096 * 6);
-	//
-	//	for (int x = 0; x < m_Width; x++)
-	//	{
-	//		for (int y = 0; y < m_Height; y++)
-	//		{
-	//			int cellIndex = GetIndex(x, y);
-	//			int baseVertexIndex = (cellIndex) * 4;
-	//			int baseIndexIndex = (cellIndex) * 6;
-	//			Cell cell = m_Cells[cellIndex];
-	//
-	//			for (int i = 0; i < 4; i++)
-	//			{
-	//				m_Mesh->Vertices[baseVertexIndex + i].position = (glm::vec3(x, y, 0) + vertexPositions[i]) * (float)m_Scale;
-	//				m_Mesh->Vertices[baseVertexIndex + i].color = glm::vec4{ cell.color.x / 255.0f, cell.color.y / 255.0f, cell.color.z / 255.0f, cell.color.w / 255.0f };
-	//			}
-	//
-	//			for (int i = 0; i < 6; i++)
-	//			{
-	//				m_Mesh->Indices[baseIndexIndex + i] = meshTriangles[i] + baseVertexIndex;
-	//			}
-	//		}
-	//	}
-	//
-	//	m_Mesh->UploadData();
 }
 
 void Chunk::Start() {}
@@ -64,24 +31,14 @@ void Chunk::Update()
 		{
 			Cell cell = GetCell(x, y);
 
-				 if (cell.id == 3 && MoveDown(x, y, cell)) {}
+			if (cell.id == 3 && MoveDown(x, y, cell)) {}
 			else if (cell.id == 3 && MoveDownSide(x, y, cell)) {}
 			else if (cell.id == 3 && MoveSide(x, y, cell)) {}
 		}
 	}
 
 	Commit();
-
-	//	m_Mesh->UploadData();
 }
-
-
-
-
-
-
-
-
 
 bool Chunk::MoveDown(int x, int y, Cell cell)
 {
@@ -284,17 +241,12 @@ void Chunk::SetCell(int index, Cell cell)
 	textureData[textureIndex + 2] = cell.color.b;
 	textureData[textureIndex + 3] = cell.color.a;
 
-
-	//glm::vec2 pos = m_Cells[index].position;
-	//SetCellColor(pos.x, pos.y, cell.color);
-
-	//Todo: If on the boarder then update neighbours as well
+	//TODO: If on the boarder then update neighbours as well
 	m_ShouldUpdateNextFrame = true;
 }
 
 void Chunk::Commit()
 {
-	// Remove moves with destination occupied
 	for (size_t i = 0; i < m_MoveList.size(); i++)
 	{
 		if (m_Cells[std::get<2>(m_MoveList[i])].id != 0)
@@ -305,10 +257,8 @@ void Chunk::Commit()
 		}
 	}
 
-	// sort from lowest index to highest
 	std::sort(m_MoveList.begin(), m_MoveList.end(), [](auto& a, auto& b) { return std::get<2>(a) < std::get<2>(b); } );
 	
-	// pick random
 	size_t iprev = 0;
 	m_MoveList.emplace_back(nullptr, -1, -1); // to catch final move
 
@@ -337,11 +287,6 @@ void Chunk::Commit()
 
 
 
-
-
-
-
-
 void Chunk::TempSetSand(int x, int y)
 {
 	Cell cell{ 3, { x, y }, {0, 0}, { 230, 178, 51, 255 } };
@@ -355,15 +300,3 @@ bool Chunk::UpdateState()
 
 	return m_ShouldUpdate;
 }
-
-//void Chunk::SetCellColor(int x, int y, glm::u8vec4 color)
-//{
-//	int baseVertexIndex = GetIndex(x, y) * 4;
-//
-//	for (int i = 0; i < 4; i++)
-//	{
-//		m_Mesh->Vertices[baseVertexIndex + i].color = glm::vec4{ color.x / 255.0f, color.y / 255.0f, color.z / 255.0f, color.w / 255.0f };
-//	}
-//}
-
-
