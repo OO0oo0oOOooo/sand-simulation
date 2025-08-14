@@ -1,44 +1,51 @@
 #pragma once
 
-#include "../Core/Components/Mesh.h"
-#include "../Core/Components/Material.h"
+#include "ArenaLinear.h"
+#include "ResourceHandle.h"
+#include "Mesh.h"
+#include "Shader.h"
 #include "Texture.h"
+#include "Material.h"
+#include "Vertex.h"
 
-#include <map>
-
-class Resource
-{
-public:
-	virtual ~Resource() = default;
+struct ResourceSlot {
+    void* data;
+    uint16_t version;
 };
 
-class ResourceManager 
-{
-public:
-	ResourceManager();
-	~ResourceManager();
+class ResourceManager {
+   public:
+    static void Init();
+    static void Shutdown();
 
-	void Init();
-	void Shutdown();
+    static ResourceManager* GetResourceManager();
 
-	void Load();
-	void Unload();
+    void* GetResource(resource_handle handle);
+    mesh* GetMesh(resource_handle handle);
+    shader* GetShader(resource_handle handle);
+    texture* GetTexture(resource_handle handle);
+    material* GetMaterial(resource_handle handle);
 
-	Texture* LoadMesh(const std::string& path, const std::string& name);
-	Texture* LoadTexture(const std::string& path, const std::string& name);
-	Texture* LoadMaterial(const std::string& path, const std::string& name);
+    resource_handle CreateMesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices);
+    resource_handle CreateTexture(int width, int height);
+    resource_handle CreateMaterial(resource_handle shaderHandle, resource_handle textureHandle);
 
-	Mesh* CreateMesh(const std::string& name);
-	Texture* CreateTexture(const std::string& name);
-	Material* CreateMaterial(const std::string& name);
+    resource_handle LoadShader(std::string fileName);
 
-	Mesh* GetMesh(const std::string name);
-	Texture* GetTexture(const std::string& name);
-	Material* GetMaterial(const std::string& name);
+    // void UnloadMesh(resource_handle handle);
+    // void UnloadShader(resource_handle handle);
+    // void UnloadTexture(resource_handle handle);
+    // void UnloadMaterial(resource_handle handle);
 
-private:
-	std::map<std::string, std::shared_ptr<Resource>> m_Resources;
-	// std::map<std::string, std::shared_ptr<Mesh>> Meshes;
-	// std::map<std::string, std::shared_ptr<Texture>> Textures;
-	// std::map<std::string, std::shared_ptr<Material>> Materials;
+    ResourceManager(const ResourceManager&) = delete;
+    ResourceManager& operator=(const ResourceManager&) = delete;
+   private:
+    ResourceManager() = default;
+    ~ResourceManager() = default;
+
+    arena_linear arena;
+    arena_linear arena_texture_buffer;
+    arena_linear arena_mesh_buffer;
+    ResourceSlot slots[1000] = {0};
+    uint16_t next_handle = 1;
 };

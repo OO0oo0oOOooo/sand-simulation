@@ -1,71 +1,38 @@
 #pragma once
 
-#include "GameObject.h"
-#include "../Rendering/Renderer.h"
+#include "src/Core/Components/Camera.h"
+#include "src/Rendering/Renderer.h"
 
-#include <vector>
-#include <memory>
+#include "src/Util/SparseSet.h"
+#include "src/Core/Components/Renderable.h"
+#include "src/Core/Components/Transform.h"
 
-class Scene
-{
-public:
-	//Scene() = default;
-	Scene(Renderer* renderer);
+class Scene {
+   public:
+    Scene() = default;
+    ~Scene() = default;
 
-	void AddGameObject(std::shared_ptr<GameObject> gameObject);
-	void RemoveGameObject(std::shared_ptr<GameObject> gameObject);
+    void Start();
+    void Update();
+    void Render(Renderer* renderer);
 
-	void Start();
-	void Update();
+    uint32_t CreateEntity();
+    void DeleteEntity(uint32_t entity);
 
-	void SubmitToRenderer();
+    void AddTransform(uint32_t ent, const transform component);
+    void RemoveTransform(uint32_t ent);
+    transform* GetTransform(uint32_t ent);
 
-private:
-	std::vector<std::shared_ptr<GameObject>> m_GameObjects;
-	//std::vector<GameObject*> m_GameObjects;
+    void AddRenderable(uint32_t ent, const renderable& component);
+    void RemoveRenderable(uint32_t ent);
+    renderable* GetRenderable(uint32_t ent);
 
-	// TODO: Refactor this out
-	Renderer* m_Renderer;
+   private:
+    Camera m_ActiveCamera;
 
-	// TODO: Scene should have a default camera for when there is no gameobject with a camera component in the scene
-	// Camera m_MainCamera
+    uint32_t m_NextEntityID = 1;
+    std::vector<uint32_t> m_Entities;
+
+    SparseSet<transform> m_Transforms;
+    SparseSet<renderable> m_Renderables;
 };
-
-
-
-
-
-
-
-
-
-
-
-/*
-	TODO: Scene Manager
-	- Manages all scenes
-	- Creates scenes
-	- Deletes scenes
-	- Loads scenes
-	- Gets active scene
-
-class SceneManager
-{
-public:
-	SceneManager(const SceneManager&) = delete;
-	SceneManager() = default;
-
-	void LoadScene(int sceneId) {}
-
-	void CreateScene() { m_Scenes.emplace_back(new Scene(this)); }
-	void DeleteScene(int sceneId) { m_Scenes.erase(m_Scenes.begin() + sceneId); }
-
-	static Scene* GetActiveScene() { return m_ActiveScene; }
-
-private:
-	Scene* m_ActiveScene;
-	std::vector<Scene*> m_Scenes;
-
-	Renderer* m_Renderer = nullptr;
-}; 
-*/

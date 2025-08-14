@@ -1,60 +1,92 @@
 #include "Scene.h"
-#include "../Game/World.h"
 
-Scene::Scene(Renderer* renderer) : m_Renderer(renderer)
-{
-	std::shared_ptr<GameObject> gameObjectWorld = std::make_shared<GameObject>();
+#include "glm/fwd.hpp"
+#include "src/Core/Components/Transform.h"
+#include "src/Rendering/Material.h"
+#include "src/Rendering/Mesh.h"
+#include "src/Rendering/RenderCommand.h"
+#include "src/Rendering/ResourceManager.h"
 
-	gameObjectWorld->AddComponent<Transform>();
-	gameObjectWorld->AddComponent<Mesh>();
-	gameObjectWorld->AddComponent<Material>();
-	gameObjectWorld->AddComponent<World>();
+void Scene::Start() {}
+void Scene::Update() {}
 
-	AddGameObject(gameObjectWorld);
+void Scene::Render(Renderer* renderer) {
+    ResourceManager* rm = ResourceManager::GetResourceManager();
+
+    uint32_t entity = m_Entities[0];
+    transform* transform = GetTransform(entity);
+    renderable* render_comp = GetRenderable(entity);
+
+    assert(transform);
+    assert(render_comp);
+
+    if (transform && render_comp) {
+        mesh* mesh = rm->GetMesh(render_comp->mesh_handle);
+        material* material = rm->GetMaterial(render_comp->material_handle);
+
+        assert(mesh);
+        assert(material);
+
+        render_command cmd = mesh_create_render_command(mesh);
+
+        glm::mat4 vp = m_ActiveCamera.GetViewProjectionMatrix();
+        glm::mat4 m = transform_get_matrix(transform);
+        material_bind(material, vp, m);
+        renderer->RenderMesh(cmd);
+    }
+
+    // for (uint32_t entity : m_Entities) {
+    // }
 }
 
-void Scene::AddGameObject(std::shared_ptr<GameObject> gameObject)
-{
-	m_GameObjects.push_back(gameObject);
+uint32_t Scene::CreateEntity() {
+    uint32_t entity = m_NextEntityID++;
+    m_Entities.push_back(entity);
+    return entity;
 }
 
-void Scene::RemoveGameObject(std::shared_ptr<GameObject> gameObject)
-{
-	m_GameObjects.erase(std::remove(m_GameObjects.begin(), m_GameObjects.end(), gameObject), m_GameObjects.end());
+void Scene::DeleteEntity(uint32_t entity) {
+    m_Transforms.Remove(entity);
+    m_Renderables.Remove(entity);
+    m_Entities.erase(std::remove(m_Entities.begin(), m_Entities.end(), entity), m_Entities.end());
 }
 
-void Scene::Start()
-{
-	for (std::shared_ptr<GameObject> gameObject : m_GameObjects)
-	{
-		gameObject->Start();
-	}
+void Scene::AddTransform(uint32_t ent, const transform component) {
+    if (!m_Transforms.Contains(ent)) {
+        m_Transforms.Insert(ent, component);
+    }
 }
 
-void Scene::Update()
-{
-	for (std::shared_ptr<GameObject> gameObject : m_GameObjects)
-	{
-		gameObject->Update();
-	}
+void Scene::RemoveTransform(uint32_t ent) {
+    if (m_Transforms.Contains(ent)) {
+        m_Transforms.Remove(ent);
+    }
 }
 
-void Scene::SubmitToRenderer()
-{
-	for (std::shared_ptr<GameObject> gameObject : m_GameObjects)
-	{
-		std::shared_ptr<Transform> transform = gameObject->GetComponent<Transform>();
-		if (transform == nullptr)
-			continue;
+transform* Scene::GetTransform(uint32_t ent) {
+    if (m_Transforms.Contains(ent)) {
+        return &m_Transforms.Get(ent);
+    }
 
-		std::shared_ptr<Mesh> mesh = gameObject->GetComponent<Mesh>();
-		if (mesh == nullptr)
-			continue;
+    return nullptr;
+}
 
-		std::shared_ptr<Material> material = gameObject->GetComponent<Material>();
-		if (material == nullptr)
-			continue;
+void Scene::AddRenderable(uint32_t ent, const renderable& component) {
+    if (!m_Renderables.Contains(ent)) {
+        m_Renderables.Insert(ent, component);
+    }
+}
 
-		m_Renderer->NewBatch(material, mesh->GetVertexArray(), transform); 
-	}
+void Scene::RemoveRenderable(uint32_t ent) {
+    if (m_Renderables.Contains(ent)) {
+        m_Renderables.Remove(ent);
+    }
+}
+
+renderable* Scene::GetRenderable(uint32_t ent) {
+    if (m_Renderables.Contains(ent)) {
+        return &m_Renderables.Get(ent);
+    }
+
+    return nullptr;
 }

@@ -1,19 +1,18 @@
 #pragma once
 
-#include "Window.h"
 #include "Rendering/Renderer.h"
-#include "Core/Scene.h"
+#include "Window.h"
+#include "src/Core/SceneManager.h"
 
-class Application
-{
-public:
-	Application();
-	~Application();
+class Application {
+   public:
+    Application();
+    ~Application();
 
-	void Run();
+    void Run();
 
-private:
-	Window m_Window;
-	Renderer m_Renderer;
-	Scene m_Scene;
+   private:
+    Window m_Window;
+    Renderer m_Renderer;
+    SceneManager m_SceneManager;
 };

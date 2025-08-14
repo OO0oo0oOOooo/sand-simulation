@@ -1,27 +1,17 @@
 #pragma once
 
-#include "../GameObject.h"
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
+// #include <glm/glm.hpp>
+#include <glm/gtx/quaternion.hpp>
 
-class Transform : public Component 
-{
-public:
-	Transform(GameObject* obj);
-	
-	glm::mat4 GetModelMatrix() { return m_ModelMatrix; }
-	glm::vec3 Position() { return glm::vec3(m_ModelMatrix[3]); }
-	// glm::vec3 GetRotation();
-	// glm::vec3 GetScale();
+struct transform {
+    glm::vec3 position = {0.0f, 0.0f, 0.0f};
+    glm::quat rotation = {1.0f, 0.0f, 0.0f, 0.0f};
+    glm::vec3 scale    = {1.0f, 1.0f, 1.0f};
 
-	void SetModelMatrix(glm::mat4 modelMatrix) { m_ModelMatrix = modelMatrix; }
-	void SetPosition(glm::vec3 position) { m_ModelMatrix = glm::translate(m_ModelMatrix, position); }
-	// void SetRotation(glm::vec3 rotation)
-	// void SetScale(glm::vec3 scale) { m_ModelMatrix = glm::scale(m_ModelMatrix, scale); }
-
-	// void TransformToLocalSpace(glm::vec3 position);
-	// void TransformToWorldSpace(glm::vec3 position);
-
-private:
-	glm::mat4 m_ModelMatrix = glm::mat4(1.0f);
+    glm::mat4 cached_matrix = glm::mat4(1.0f);
+    bool matrix_dirty = true;
 };
+
+glm::mat4 transform_get_matrix(transform* transform);
+glm::vec3 transform_to_local_space(transform* transform, const glm::vec3& world_position);
+glm::vec3 transform_to_world_space(transform* transform, const glm::vec3& local_position);

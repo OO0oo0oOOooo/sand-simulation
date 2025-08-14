@@ -1,12 +1,10 @@
 #pragma once
 
 #include <functional>
-#include <vector>
-#include <memory>
 
-template<typename... Args>
+template <typename... Args>
 class Event {
-public:
+   public:
     void NotifyHandlers(Args... args) {
         for (const auto& handler : Handlers) {
             handler(args...);
@@ -21,25 +19,21 @@ public:
         Handlers.erase(std::remove(Handlers.begin(), Handlers.end(), handler), Handlers.end());
     }
 
-    void operator()(Args... args)
-    {
-    	NotifyHandlers(args...);
+    void operator()(Args... args) {
+        NotifyHandlers(args...);
     }
 
-    Event& operator+=(const std::function<void(Args...)>& handler)
-    {
+    Event& operator+=(const std::function<void(Args...)>& handler) {
         AddHandler(handler);
         return *this;
     }
 
-    Event& operator-=(const std::function<void(Args...)>& handler)
-    {
+    Event& operator-=(const std::function<void(Args...)>& handler) {
         RemoveHandler(handler);
         return *this;
     }
 
-private:
-
+   private:
     std::vector<std::function<void(Args...)>> Handlers;
 };
 

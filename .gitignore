@@ -366,3 +366,11 @@ FodyWeavers.xsd
 build/
 bin/
 out/
+
+# LSP configuration (system-specific paths)
+.clangd
+
+# Development Files
+.dev/
+docs/
+archived/

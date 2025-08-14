@@ -1,58 +1,50 @@
 #include "Renderer.h"
 
-Renderer::Renderer(GLFWwindow* window) : m_Window(window) {}
+#include "Vertex.h"
 
-// TODO: Gameobjects that want to be rendered need the MeshRenderer component, this component will comunicate with the renderer.
-// Currently the scene is checking all GameObjects if they have a mesh then creating a batch here if they do.
-void Renderer::NewBatch(std::weak_ptr<Material> material, std::weak_ptr<VertexArray> vertexArray, std::weak_ptr<Transform> transform)
-{
-    Batch batch;
-    batch.material = material;
-    batch.vertexArray = vertexArray;
-    batch.transform = transform;
-
-    m_Batches.push_back(batch);
+Renderer::Renderer(GLFWwindow* window) : m_Window(window) {
+    glGenVertexArrays(1, &m_DummyVAO);
+    glBindVertexArray(m_DummyVAO);
 }
 
-void Renderer::RenderBatches()
-{
+Renderer::~Renderer() {
+    glDeleteVertexArrays(1, &m_DummyVAO);
+}
+
+void Renderer::RenderMesh(const render_command& cmd) {
+    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
+    glBindBuffer(GL_ARRAY_BUFFER, cmd.vertex_buffer);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, cmd.index_buffer);
 
-    auto it = m_Batches.begin();
-    while (it != m_Batches.end())
-    {
-        auto materialPtr = it->material.lock();
-        auto vertexArrayPtr = it->vertexArray.lock();
-        auto transformPtr = it->transform.lock();
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const void*)0);
+    glEnableVertexAttribArray(0);
 
-        if (materialPtr && vertexArrayPtr && transformPtr)
-        {
-            materialPtr->Bind(m_Camera.GetViewProjectionMatrix(), transformPtr->GetModelMatrix());
-            vertexArrayPtr->Bind();
+    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const void*)12);
+    glEnableVertexAttribArray(1);
 
-            glDrawElements(GL_TRIANGLES, vertexArrayPtr->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
-            it++;
-        }
-        else
-        {
-            it = m_Batches.erase(it);
-        }
-    }
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const void*)28);
+    glEnableVertexAttribArray(2);
+
+    // for (uint32_t i = 0; i < cmd.layout.attribute_count; i++) {
+    //     const auto& attr = cmd.layout.attributes[i];
+    //     glVertexAttribPointer(attr.location, attr.component_count, attr.type, attr.normalized,
+    //                           cmd.layout.stride, (void*)attr.offset);
+    //     glEnableVertexAttribArray(attr.location);
+    // }
+
+    glDrawElements(GL_TRIANGLES, cmd.index_count, GL_UNSIGNED_INT,
+                   (void*)(cmd.index_offset * sizeof(uint32_t)));
 }
 
-//void Renderer::Draw(VertexArray* vertexArray)
-//{
-//    glDrawElements(GL_TRIANGLES, vertexArray->GetIndexBuffer()->GetCount() , GL_UNSIGNED_INT, nullptr);
-//}
+vertex_layout Renderer::CreateStandardLayout() {
+    vertex_layout layout = {};
+    layout.stride = 36 * sizeof(uint8_t);
+    layout.attribute_count = 3;
 
-//void Renderer::Render()
-//{
-//    glClear(GL_COLOR_BUFFER_BIT);
-//
-//    for (size_t i = 0; i < m_Batches.size(); ++i)
-//    {
-//        m_Batches[i].material->Bind(m_Camera.GetViewProjectionMatrix(), m_Batches[i].transform->GetModelMatrix());
-//        m_Batches[i].vertexArray->Bind();
-//        glDrawElements(GL_TRIANGLES, m_Batches[i].vertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
-//    }
-//}
+    layout.attributes[0] = {0, 3, GL_FLOAT, false, 0};
+    layout.attributes[1] = {1, 4, GL_FLOAT, false, 12};
+    layout.attributes[2] = {2, 2, GL_FLOAT, false, 28};
+
+    return layout;
+}
