@@ -1,8 +1,0 @@
-#include "../src/EntryPoint.cpp"
-#include "../src/Application.cpp"
-#include "../src/Window.cpp"
-#include "../src/Time.cpp"
-#include "../src/Core/SceneManager.cpp"
-#include "../src/Core/Scene.cpp"
-#include "../src/Core/Components/Transform.cpp"
-#include "../src/Core/Components/Camera.cpp"
