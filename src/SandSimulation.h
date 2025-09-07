@@ -20,17 +20,27 @@ inline int get_y(int index, int width) {
 
 struct cell {
     uint8_t type = 0;
+    uint32_t color = { 0xFFFFFFFF };
 };
 
 struct chunk {
-    cell cells[256];
+    cell cells[4096];
+    uint32_t pixels[4096];
+    bool isDirty = true;
 };
+
+inline void chunk_init(chunk& c) {
+    for (int i = 0; i < 4096; i++) {
+        c.pixels[i] = c.cells[i].color;
+    }
+
+    c.isDirty = true;
+}
 
 struct world {
     size_t width;
     size_t height;
     size_t chunk_width;
-    std::vector<chunk> chunks;
 };
 
 inline void world_load(std::string line, void* buffer) {
