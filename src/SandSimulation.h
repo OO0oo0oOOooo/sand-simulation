@@ -42,19 +42,3 @@ struct world {
     size_t height;
     size_t chunk_width;
 };
-
-inline void world_load(std::string line, void* buffer) {
-    world w {};
-
-    std::stringstream ss(line);
-    std::string type;
-    ss >> type >> w.width >> w.height;
-
-    memcpy(buffer, &w, sizeof(world));
-}
-
-inline void world_save(const void* data, std::ofstream& file) {
-    const world* w = static_cast<const world*>(data);
-
-    file << "World " << w->width << " " << w->height << "\n";
-}
